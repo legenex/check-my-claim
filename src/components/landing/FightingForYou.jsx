@@ -6,9 +6,11 @@ export default function FightingForYou() {
   const scrollTo = () => document.querySelector("#home")?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <section className="py-20 md:py-28 bg-gradient-to-br from-[#F9E6BB]/20 via-white to-[#E8E8E8]/30 relative overflow-hidden">
-      <div className="absolute top-20 right-10 w-96 h-96 bg-gradient-to-br from-[#EBB63E]/15 to-[#F18913]/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 left-10 w-96 h-96 bg-gradient-to-tl from-[#0C2D5B]/5 to-transparent rounded-full blur-3xl" />
+    <section className="py-20 md:py-28 bg-gradient-to-br from-[#0C2D5B] via-[#001634] to-[#1B2737] relative overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")" }} />
+      <div className="absolute top-20 right-10 w-96 h-96 bg-[#EBB63E]/10 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-20 left-10 w-96 h-96 bg-[#F18913]/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -18,16 +20,16 @@ export default function FightingForYou() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <div className="inline-flex items-center gap-2 bg-[#F18913]/10 text-[#F18913] font-bold text-sm px-4 py-2 rounded-full mb-6">
+            <div className="inline-flex items-center gap-2 bg-[#EBB63E]/20 text-[#EBB63E] font-bold text-sm px-4 py-2 rounded-full mb-6">
               <Shield className="w-4 h-4" />
               YOUR TRUSTED PARTNER
             </div>
 
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0C2D5B] mb-6 leading-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-6 leading-tight">
               We'll Never Stop Fighting For You
             </h2>
 
-            <p className="text-xl text-[#595E64] mb-8 leading-relaxed">
+            <p className="text-xl text-gray-300 mb-8 leading-relaxed">
               We work with only the best attorneys to get you the compensation you deserve.
             </p>
 
@@ -44,12 +46,12 @@ export default function FightingForYou() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="flex items-center gap-4 bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow duration-300"
+                  className="flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all duration-300"
                 >
                   <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[#EBB63E] to-[#F18913] flex items-center justify-center shadow-lg shadow-orange-500/20">
                     <item.icon className="w-6 h-6 text-white" />
                   </div>
-                  <p className="text-[#1B2737] font-medium">{item.text}</p>
+                  <p className="text-white font-medium">{item.text}</p>
                 </motion.div>
               ))}
             </div>
