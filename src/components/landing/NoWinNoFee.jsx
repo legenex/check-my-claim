@@ -43,7 +43,7 @@ export default function NoWinNoFee() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <div className="inline-flex items-center gap-2 bg-[#0C2D5B]/20 text-[#0C2D5B] font-bold text-sm px-4 py-2 rounded-full mb-6">
+            <div className="inline-flex items-center gap-2 bg-[#0C2D5B]/20 text-#F18913 font-bold text-sm px-4 py-2 rounded-full mb-6">
               <Shield className="w-4 h-4" />
               OUR GUARANTEE
             </div>
