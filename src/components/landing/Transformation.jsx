@@ -27,14 +27,14 @@ export default function Transformation() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#EBB63E] to-[#F18913] text-white font-bold text-sm px-5 py-2.5 rounded-full mb-4 shadow-lg">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#2590E6] to-[#1E7ACC] text-white font-bold text-sm px-5 py-2.5 rounded-full mb-4 shadow-lg">
             YOUR JOURNEY TO JUSTICE
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0C2D5B] mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#111E30] mb-4">
             From Confusion to Clarity
           </h2>
           <p className="text-[#595E64] text-xl max-w-3xl mx-auto leading-relaxed">
-            See how Claim Checker transforms your accident recovery experience
+            See how Check My Claim transforms your accident recovery experience
           </p>
         </motion.div>
 
@@ -53,8 +53,8 @@ export default function Transformation() {
                 <XCircle className="w-4 h-4" />
                 BEFORE
               </div>
-              <h3 className="text-2xl lg:text-3xl font-extrabold text-[#0C2D5B] mb-6">
-                Without Claim Checker
+              <h3 className="text-2xl lg:text-3xl font-extrabold text-[#111E30] mb-6">
+                Without Check My Claim
               </h3>
               <ul className="space-y-4">
                 {before.map((item, i) => (
@@ -80,8 +80,8 @@ export default function Transformation() {
                 <CheckCircle className="w-4 h-4" />
                 AFTER
               </div>
-              <h3 className="text-2xl lg:text-3xl font-extrabold text-[#0C2D5B] mb-6">
-                With Claim Checker
+              <h3 className="text-2xl lg:text-3xl font-extrabold text-[#111E30] mb-6">
+                With Check My Claim
               </h3>
               <ul className="space-y-4">
                 {after.map((item, i) => (
@@ -101,17 +101,17 @@ export default function Transformation() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-gradient-to-br from-[#0C2D5B] via-[#001634] to-[#1B2737] rounded-3xl p-10 md:p-12 shadow-2xl"
+            className="bg-gradient-to-br from-[#111E30] via-[#0C1A2A] to-[#1B2737] rounded-3xl p-10 md:p-12 shadow-2xl"
           >
             <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-4">
               Ready to Transform Your Situation?
             </h3>
             <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
-              Join thousands who've found clarity, justice, and compensation through Claim Checker
+              Join thousands who've found clarity, justice, and compensation through Check My Claim
             </p>
             <button
               onClick={scrollTo}
-              className="group bg-gradient-to-r from-[#EBB63E] to-[#F18913] text-white font-bold px-10 py-5 rounded-full hover:shadow-2xl hover:shadow-orange-500/40 transition-all duration-300 hover:scale-105 inline-flex items-center gap-3 text-lg"
+              className="group bg-gradient-to-r from-[#2590E6] to-[#1E7ACC] text-white font-bold px-10 py-5 rounded-full hover:shadow-2xl hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105 inline-flex items-center gap-3 text-lg"
             >
               Start Your Free Claim Check Now
               <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
