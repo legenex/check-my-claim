@@ -6,20 +6,20 @@ const steps = [
   {
     icon: ClipboardList,
     step: "Step 1",
-    title: "Take Our Free Survey",
-    desc: "Answer a few quick questions about your accident to check eligibility.",
+    title: "Complete Our Free Eligibility Check",
+    desc: "Answer a few quick questions about your accident. This service is 100% free with no obligations.",
   },
   {
     icon: Cpu,
     step: "Step 2",
-    title: "Get Instant Insights",
-    desc: "Our AI tool analyzes your case to see if you might qualify for a claim.",
+    title: "Get Your Results Instantly",
+    desc: "Our AI-powered tool analyzes your information to determine if you might qualify for compensation.",
   },
   {
     icon: UserCheck,
     step: "Step 3",
-    title: "Connect to a Lawyer",
-    desc: "If eligible, we match you with the best-suited attorney—no upfront fees.",
+    title: "We Connect You to a Vetted Attorney",
+    desc: "If eligible, we'll match you with a trusted attorney from our network who works on a no win, no fee basis. From there, the attorney takes over your case.",
   },
 ];
 

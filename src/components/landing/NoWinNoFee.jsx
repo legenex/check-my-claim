@@ -20,7 +20,7 @@ export default function NoWinNoFee() {
           >
             <div className="relative rounded-3xl overflow-hidden shadow-2xl">
               <img
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c27e1ee245bcd8cd77386/d7ed8a20f_3.png"
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c27e1ee245bcd8cd77386/4161c762b_Screenshot2026-02-23at122923.png"
                 alt="Professional attorney"
                 className="w-full h-full object-cover"
               />
@@ -50,23 +50,23 @@ export default function NoWinNoFee() {
             </div>
 
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-6 leading-tight">
-              We Don't Get Paid Unless You Do
+              Our Attorneys Don't Get Paid Unless You Do
             </h2>
 
             <p className="text-xl font-bold text-[#EBB63E] mb-6">
-              OUR NO WIN, NO FEE GUARANTEE
+              THE NO WIN, NO FEE GUARANTEE
             </p>
 
             <p className="text-gray-300 leading-relaxed mb-8">
-              We guarantee every client that we will not charge you a cent if we do not secure a positive outcome in your case. If you do win, the bulk of our fees are usually paid by the opposing counsel's client, who was responsible for the accident.
+              Claim Checker connects you with vetted attorneys in our network who work on a "no win, no fee" basis. This means the attorneys we match you with will not charge you a cent if they do not secure a positive outcome in your case. Our role is simple: we provide a free eligibility check and connect you with the right legal professional.
             </p>
 
             <div className="space-y-4 mb-10">
               {[
-                "Complete transparency on all fees from day one",
-                "No hidden costs or surprise bills",
-                "You only pay if we win your case",
-                "Opposing party typically covers legal fees",
+                "Free claim eligibility check—always 100% free",
+                "Connected to attorneys who work on contingency",
+                "Attorneys only get paid if you win your case",
+                "No upfront costs or surprise bills from matched attorneys",
               ].map((item, i) => (
                 <motion.div
                   key={i}

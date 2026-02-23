@@ -5,18 +5,18 @@ import { Zap, MessageSquare, DollarSign, ArrowRight } from "lucide-react";
 const usps = [
   {
     icon: Zap,
-    title: "Fast Approval",
-    desc: "Other law firms can take weeks to return your calls and emails. Simply answer a few questions about your injury to see if we can help.",
+    title: "Fast Eligibility Check",
+    desc: "Get instant results in minutes. Simply answer a few quick questions about your accident to see if you may qualify for compensation.",
   },
   {
     icon: MessageSquare,
-    title: "Simple Case Management",
-    desc: "Check in and see how your case is progressing, message your legal care team, or upload documents right from your phone.",
+    title: "Seamless Attorney Matching",
+    desc: "If eligible, we connect you with the best-suited attorney from our vetted network—no endless searching or cold calling required.",
   },
   {
     icon: DollarSign,
-    title: "Transparent Pricing",
-    desc: "When we win a case, our fee ranges between 15-40% of the verdict or settlement we obtain. If we don't win, you'll never see a bill.",
+    title: "Always 100% Free",
+    desc: "Our claim check service is completely free. We never charge you—our job is simply to check eligibility and connect you with attorneys.",
   },
 ];
 
