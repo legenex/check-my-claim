@@ -47,13 +47,10 @@ export default function AccidentTypes() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {types.map((type, i) => (
-            <motion.div
+            <a
               key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="group bg-white rounded-2xl p-8 text-center border border-gray-100 hover:border-[#0285E9]/30 hover:shadow-xl transition-all duration-500 cursor-pointer"
+              href="https://qualify.checkmyclaim.co/s/mva?utm_source=CMC-Website&utm_campaign=Home-Page&utm_medium=4th-Button"
+              className="group bg-white rounded-2xl p-8 text-center border border-gray-100 hover:border-[#0285E9]/30 hover:shadow-xl transition-all duration-500 cursor-pointer block"
             >
               <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-gradient-to-br from-[#4ba8ee] to-[#0486e9] flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
                 <type.icon className="w-7 h-7 text-white" />
