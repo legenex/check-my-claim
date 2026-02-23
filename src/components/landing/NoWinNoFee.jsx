@@ -63,7 +63,7 @@ export default function NoWinNoFee() {
 
             <div className="space-y-4 mb-10">
               {[
-                "Free claim eligibility check—always 100% free",
+                "Free claim eligibility check, always 100% free",
                 "Connected to attorneys who work on contingency",
                 "Attorneys only get paid if you win your case",
                 "No upfront costs or surprise bills from matched attorneys",
