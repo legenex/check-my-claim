@@ -56,7 +56,7 @@ export default function NoWinNoFee() {
               THE NO WIN, NO FEE GUARANTEE
             </p>
 
-            <p className="text-gray-300 leading-relaxed mb-8">
+            <p className="text-[#595E64] leading-relaxed mb-8">
               Claim Checker connects you with vetted attorneys in our network who work on a "no win, no fee" basis. This means the attorneys we match you with will not charge you a cent if they do not secure a positive outcome in your case. Our role is simple: we provide a free eligibility check and connect you with the right legal professional.
             </p>
 
