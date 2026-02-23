@@ -27,7 +27,7 @@ export default function Transformation() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#EBB63E] to-[#F18913] text-white font-bold text-sm px-5 py-2.5 rounded-full mb-4 shadow-lg">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#EBB63E] to-[#000000] text-white font-bold text-sm px-5 py-2.5 rounded-full mb-4 shadow-lg">
             YOUR JOURNEY TO JUSTICE
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0C2D5B] mb-4">
@@ -101,7 +101,7 @@ export default function Transformation() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-gradient-to-br from-[#0C2D5B] via-[#001634] to-[1B2737] rounded-3xl p-10 md:p-12 shadow-2xl"
+            className="bg-gradient-to-br from-[#0C2D5B] via-[#001634] to-[#1B2737] rounded-3xl p-10 md:p-12 shadow-2xl"
           >
             <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-4">
               Ready to Transform Your Situation?
