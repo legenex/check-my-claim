@@ -1,7 +1,7 @@
 import React from "react";
 import { ArrowRight, Mail, Phone } from "lucide-react";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c27e1ee245bcd8cd77386/e98b03e94_PrimaryLogo_ClaimChecker1.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c27e1ee245bcd8cd77386/afcba8438_DarkMode-PrimaryLogo_ClaimChecker.png";
 
 export default function Footer() {
   const scrollTo = (id) => document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
@@ -32,7 +32,7 @@ export default function Footer() {
         <div className="grid md:grid-cols-3 gap-10">
           {/* Brand */}
           <div>
-            <img src={LOGO_URL} alt="Claim Checker" className="h-8 mb-4" />
+            <img src={LOGO_URL} alt="Claim Checker" className="h-14 mb-4" />
             <p className="text-gray-400 text-sm leading-relaxed">
               Empowering accident victims with free, AI-powered claim checks and connections to top-rated attorneys. No win, no fee.
             </p>
