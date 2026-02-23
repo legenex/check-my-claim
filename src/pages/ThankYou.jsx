@@ -4,7 +4,7 @@ import { CheckCircle, ArrowRight, Clock, Mail, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c27e1ee245bcd8cd77386/e98b03e94_PrimaryLogo_ClaimChecker1.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c27e1ee245bcd8cd77386/a861a8079_DarkMode-PrimaryLogo_ClaimChecker.png";
 
 export default function ThankYou() {
   return (
@@ -86,49 +86,74 @@ export default function ThankYou() {
             transition={{ delay: 0.6 }}
             className="bg-gradient-to-br from-[#EBB63E]/10 to-[#F18913]/10 rounded-2xl p-6 mb-8"
           >
-            <h2 className="text-xl font-bold text-[#0C2D5B] mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-[#0C2D5B] mb-6 text-center flex items-center justify-center gap-2">
               <Clock className="w-6 h-6 text-[#F18913]" />
               Here's What To Expect Next:
             </h2>
-            <div className="space-y-4">
-              {[
-                {
-                  step: "1",
-                  title: "Verification Process",
-                  description: "We'll contact you to confirm your information, connect you with your attorney, and gather cost details!",
-                },
-                {
-                  step: "2",
-                  title: "Attorney Review",
-                  description: "Your attorney will conduct a thorough review based on the information you've supplied.",
-                },
-                {
-                  step: "3",
-                  title: "Case Initiation",
-                  description: "Your case is started by your attorney at no upfront cost, as they work on a no win, no fee basis and only get paid when you do.",
-                },
-                {
-                  step: "4",
-                  title: "Settlement Options",
-                  description: "Your attorney will present your various settlement options and then proceed with the case at no cost to you!",
-                },
-              ].map((item, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.7 + i * 0.1 }}
-                  className="flex gap-4"
-                >
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-[#EBB63E] to-[#F18913] flex items-center justify-center text-white font-bold text-sm">
-                    {item.step}
+            <div className="space-y-6">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.7 }}
+                className="bg-white rounded-xl p-5 shadow-lg border-2 border-[#F18913]"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-[#EBB63E] to-[#F18913] flex items-center justify-center">
+                    <Phone className="w-6 h-6 text-white animate-pulse" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-[#0C2D5B]">{item.title}</h3>
-                    <p className="text-[#595E64] text-sm">{item.description}</p>
+                    <h3 className="font-extrabold text-[#0C2D5B] text-lg mb-2">📞 Step 1: We Will Call You (Next Few Minutes!)</h3>
+                    <p className="text-[#595E64] font-medium">
+                      One of our trusted advisors will call your phone to verify your details and connect you with the right attorney. <strong className="text-[#F18913]">Please answer the call!</strong>
+                    </p>
                   </div>
-                </motion.div>
-              ))}
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.8 }}
+                className="flex gap-4 bg-white rounded-xl p-4"
+              >
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#EBB63E] to-[#F18913] flex items-center justify-center text-white font-bold">
+                  2
+                </div>
+                <div>
+                  <h3 className="font-bold text-[#0C2D5B] mb-1">Attorney Review</h3>
+                  <p className="text-[#595E64] text-sm">Your matched attorney will review your case details thoroughly.</p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.9 }}
+                className="flex gap-4 bg-white rounded-xl p-4"
+              >
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#EBB63E] to-[#F18913] flex items-center justify-center text-white font-bold">
+                  3
+                </div>
+                <div>
+                  <h3 className="font-bold text-[#0C2D5B] mb-1">Case Initiation (No Cost To You)</h3>
+                  <p className="text-[#595E64] text-sm">Your attorney starts your case with zero upfront fees - they only get paid when you win.</p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.0 }}
+                className="flex gap-4 bg-white rounded-xl p-4"
+              >
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#EBB63E] to-[#F18913] flex items-center justify-center text-white font-bold">
+                  4
+                </div>
+                <div>
+                  <h3 className="font-bold text-[#0C2D5B] mb-1">Settlement & Compensation</h3>
+                  <p className="text-[#595E64] text-sm">Your attorney presents settlement options and fights for maximum compensation.</p>
+                </div>
+              </motion.div>
             </div>
           </motion.div>
 
