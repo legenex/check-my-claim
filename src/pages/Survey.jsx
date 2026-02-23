@@ -4,6 +4,9 @@ import Footer from "@/components/Footer";
 import CallBanner from "@/components/survey/CallBanner";
 import SurveyHero from "@/components/survey/SurveyHero";
 import SurveyProcess from "@/components/survey/SurveyProcess";
+import SurveyFightingForYou from "@/components/survey/SurveyFightingForYou";
+import SurveyRecentWins from "@/components/survey/SurveyRecentWins";
+import SurveyGuarantee from "@/components/survey/SurveyGuarantee";
 import SurveyTestimonials from "@/components/survey/SurveyTestimonials";
 import SurveyFAQ from "@/components/survey/SurveyFAQ";
 
@@ -18,6 +21,15 @@ export default function Survey() {
 
       {/* Process Section */}
       <SurveyProcess />
+
+      {/* Fighting For You Section */}
+      <SurveyFightingForYou />
+
+      {/* Recent Wins Section */}
+      <SurveyRecentWins />
+
+      {/* Guarantee Section */}
+      <SurveyGuarantee />
 
       {/* Testimonials Section */}
       <SurveyTestimonials />
