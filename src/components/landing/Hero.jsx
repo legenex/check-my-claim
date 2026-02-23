@@ -51,7 +51,7 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="text-lg md:text-xl text-gray-300 leading-relaxed mb-10 max-w-2xl mx-auto"
           >
-            Unsure if you have a case after an accident? Our AI tool instantly checks if you may qualify for compensation and matches you with the best-suited attorney—at no upfront cost.
+            Unsure if you have a case after an accident? Our AI tool instantly checks if you may qualify for compensation and matches you with the best-suited attorney, at no upfront cost.
           </motion.p>
 
           {/* CTA */}
