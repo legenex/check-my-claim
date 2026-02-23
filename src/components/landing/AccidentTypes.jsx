@@ -53,15 +53,15 @@ export default function AccidentTypes() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="group bg-white rounded-2xl p-8 text-center border border-gray-100 hover:border-[#2590E6]/30 hover:shadow-xl transition-all duration-500 cursor-pointer"
+              className="group bg-white rounded-2xl p-8 text-center border border-gray-100 hover:border-[#0285E9]/30 hover:shadow-xl transition-all duration-500 cursor-pointer"
               onClick={scrollTo}
             >
-              <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-gradient-to-br from-[#2590E6] to-[#1E7ACC] flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+              <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-gradient-to-br from-[#4ba8ee] to-[#0486e9] flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
                 <type.icon className="w-7 h-7 text-white" />
               </div>
               <h3 className="text-lg font-bold text-[#111E30] mb-2">{type.title}</h3>
               <p className="text-[#595E64] text-sm leading-relaxed mb-4">{type.desc}</p>
-              <span className="text-[#2590E6] font-semibold text-sm group-hover:underline">
+              <span className="text-[#0285E9] font-semibold text-sm group-hover:underline">
                 Check Your Claim →
               </span>
             </motion.div>

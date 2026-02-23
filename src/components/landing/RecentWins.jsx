@@ -40,10 +40,10 @@ export default function RecentWins() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.15 }}
-              className="bg-white border border-gray-200 rounded-2xl p-8 text-center hover:border-[#2590E6]/40 hover:shadow-xl transition-all duration-500 group"
+              className="bg-white border border-gray-200 rounded-2xl p-8 text-center hover:border-[#0285E9]/40 hover:shadow-xl transition-all duration-500 group"
             >
-              <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-[#2590E6]/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Trophy className="w-6 h-6 text-[#2590E6]" />
+              <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-[#0285E9]/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Trophy className="w-6 h-6 text-[#0285E9]" />
               </div>
 
               {/* light grey -> dark grey */}
@@ -51,7 +51,7 @@ export default function RecentWins() {
                 Recent Win
               </p>
 
-              <p className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-[#2590E6] to-[#1E7ACC] bg-clip-text text-transparent mb-3">
+              <p className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] bg-clip-text text-transparent mb-3">
                 {win.amount}
               </p>
 
@@ -67,7 +67,7 @@ export default function RecentWins() {
         <div className="text-center">
           <button
             onClick={scrollTo}
-            className="group bg-gradient-to-r from-[#2590E6] to-[#1E7ACC] text-white font-bold px-8 py-4 rounded-full hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-105 inline-flex items-center gap-3"
+            className="group bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-bold px-8 py-4 rounded-full hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-105 inline-flex items-center gap-3"
           >
             Check My Claim Now
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

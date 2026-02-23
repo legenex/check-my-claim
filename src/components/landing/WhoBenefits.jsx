@@ -24,7 +24,7 @@ export default function WhoBenefits() {
             className="relative"
           >
             <div className="bg-gradient-to-br from-[#111E30] to-[#0C1A2A] rounded-3xl p-10 md:p-14 text-center">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-[#2590E6] to-[#1E7ACC] flex items-center justify-center">
+              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-[#4ba8ee] to-[#0486e9] flex items-center justify-center">
                 <CheckCircle className="w-10 h-10 text-white" />
               </div>
               <p className="text-white text-2xl md:text-3xl font-bold mb-3">Free Claim Check</p>
@@ -39,7 +39,7 @@ export default function WhoBenefits() {
             </div>
             {/* Floating badge */}
             <div className="absolute -bottom-4 -right-4 md:bottom-4 md:-right-6 bg-white rounded-2xl shadow-xl px-5 py-3 border border-gray-100">
-              <p className="text-[#2590E6] font-extrabold text-xl">$0</p>
+              <p className="text-[#0285E9] font-extrabold text-xl">$0</p>
               <p className="text-[#595E64] text-xs">Upfront Cost</p>
             </div>
           </motion.div>
@@ -67,7 +67,7 @@ export default function WhoBenefits() {
                   transition={{ delay: i * 0.1 }}
                   className="flex items-start gap-4"
                 >
-                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-br from-[#2590E6] to-[#1E7ACC] flex items-center justify-center mt-0.5">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-br from-[#4ba8ee] to-[#0486e9] flex items-center justify-center mt-0.5">
                     <CheckCircle className="w-4 h-4 text-white" />
                   </div>
                   <p className="text-[#1B2737] text-base leading-relaxed">{b}</p>
@@ -77,7 +77,7 @@ export default function WhoBenefits() {
 
             <button
               onClick={scrollTo}
-              className="group bg-gradient-to-r from-[#2590E6] to-[#1E7ACC] text-white font-bold px-8 py-4 rounded-full hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-105 flex items-center gap-3"
+              className="group bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-bold px-8 py-4 rounded-full hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-105 flex items-center gap-3"
             >
               See If You Qualify Now
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

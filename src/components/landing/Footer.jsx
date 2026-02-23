@@ -1,7 +1,7 @@
 import React from "react";
 import { ArrowRight, Mail, Phone } from "lucide-react";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/76654a39d_CheckMyClaimLogo.png";
+const LOGO_LIGHT_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/530d12638_CheckMyClaimLogoLight.png";
 
 export default function Footer() {
   const scrollTo = (id) => document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
@@ -9,7 +9,7 @@ export default function Footer() {
   return (
     <footer id="contact" className="bg-[#111E30] relative overflow-hidden">
       {/* Final CTA band */}
-      <div className="bg-gradient-to-r from-[#2590E6] to-[#1E7ACC] py-12 md:py-16">
+      <div className="bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] py-12 md:py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4">
             Get the Compensation You Deserve
@@ -32,7 +32,7 @@ export default function Footer() {
         <div className="grid md:grid-cols-3 gap-10">
           {/* Brand */}
           <div>
-            <img src={LOGO_URL} alt="Check My Claim" className="h-14 mb-4" />
+            <img src={LOGO_LIGHT_URL} alt="Check My Claim" className="h-14 mb-4" />
             <p className="text-gray-400 text-sm leading-relaxed">
               Empowering accident victims with free, AI-powered claim checks and connections to top-rated attorneys. No win, no fee.
             </p>
@@ -51,7 +51,7 @@ export default function Footer() {
                 <button
                   key={link.href}
                   onClick={() => scrollTo(link.href)}
-                  className="block text-gray-400 text-sm hover:text-[#2590E6] transition-colors"
+                  className="block text-gray-400 text-sm hover:text-[#0285E9] transition-colors"
                 >
                   {link.label}
                 </button>
@@ -64,11 +64,11 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Contact</h4>
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-gray-400 text-sm">
-                <Mail className="w-4 h-4 text-[#2590E6]" />
+                <Mail className="w-4 h-4 text-[#0285E9]" />
                 support@checkmyclaim.com
               </div>
               <div className="flex items-center gap-3 text-gray-400 text-sm">
-                <Phone className="w-4 h-4 text-[#2590E6]" />
+                <Phone className="w-4 h-4 text-[#0285E9]" />
                 1-800-CLAIM-CK
               </div>
             </div>

@@ -26,8 +26,8 @@ export default function USP() {
   return (
     <section className="py-20 md:py-28 bg-white relative overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-[#2590E6]/20 to-transparent rounded-full -translate-y-48 translate-x-48" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-[#2590E6]/10 to-transparent rounded-full translate-y-48 -translate-x-48" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-[#0285E9]/20 to-transparent rounded-full -translate-y-48 translate-x-48" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-[#0285E9]/10 to-transparent rounded-full translate-y-48 -translate-x-48" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -52,9 +52,9 @@ export default function USP() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.15 }}
-              className="bg-gradient-to-br from-white to-[#F9F9FB] rounded-2xl p-8 border border-gray-100 hover:border-[#2590E6]/30 hover:shadow-xl transition-all duration-500 group"
+              className="bg-gradient-to-br from-white to-[#F9F9FB] rounded-2xl p-8 border border-gray-100 hover:border-[#0285E9]/30 hover:shadow-xl transition-all duration-500 group"
             >
-              <div className="w-14 h-14 mb-6 rounded-2xl bg-gradient-to-br from-[#2590E6] to-[#1E7ACC] flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform duration-500">
+              <div className="w-14 h-14 mb-6 rounded-2xl bg-gradient-to-br from-[#4ba8ee] to-[#0486e9] flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform duration-500">
                 <usp.icon className="w-7 h-7 text-white" />
               </div>
               <h3 className="text-xl font-bold text-[#111E30] mb-3">{usp.title}</h3>
@@ -66,7 +66,7 @@ export default function USP() {
         <div className="text-center">
           <button
             onClick={scrollTo}
-            className="group bg-gradient-to-r from-[#2590E6] to-[#1E7ACC] text-white font-bold px-8 py-4 rounded-full hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-105 inline-flex items-center gap-3"
+            className="group bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-bold px-8 py-4 rounded-full hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-105 inline-flex items-center gap-3"
           >
             Get Started Now
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

@@ -27,7 +27,7 @@ export default function Transformation() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#2590E6] to-[#1E7ACC] text-white font-bold text-sm px-5 py-2.5 rounded-full mb-4 shadow-lg">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-bold text-sm px-5 py-2.5 rounded-full mb-4 shadow-lg">
             YOUR JOURNEY TO JUSTICE
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#111E30] mb-4">
@@ -111,7 +111,7 @@ export default function Transformation() {
             </p>
             <button
               onClick={scrollTo}
-              className="group bg-gradient-to-r from-[#2590E6] to-[#1E7ACC] text-white font-bold px-10 py-5 rounded-full hover:shadow-2xl hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105 inline-flex items-center gap-3 text-lg"
+              className="group bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-bold px-10 py-5 rounded-full hover:shadow-2xl hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105 inline-flex items-center gap-3 text-lg"
             >
               Start Your Free Claim Check Now
               <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
