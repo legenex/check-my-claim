@@ -9,7 +9,7 @@ const reviews = [
     stars: 5,
     text: "I had no clue how to handle my claim after my crash, but they did everything. Start to finish: professional, efficient, and got me the best possible outcome.",
     avatar: "JL",
-    color: "bg-[#0C2D5B]",
+    color: "bg-[#111E30]",
   },
   {
     name: "Dana Hopson",
@@ -17,7 +17,7 @@ const reviews = [
     stars: 5,
     text: "My car was totaled, and I had no idea what to do next. Thanks to Check My Claim, I received compensation fast, and it was more than I expected!",
     avatar: "DH",
-    color: "bg-[#F18913]",
+    color: "bg-[#2590E6]",
   },
   {
     name: "Kyle Benavides",
@@ -25,7 +25,7 @@ const reviews = [
     stars: 4,
     text: "I wasn't sure at first but really check a case turned out to be a blessing! We got connected with top specialists and our claim was handled smoothly.",
     avatar: "KB",
-    color: "bg-[#EBB63E]",
+    color: "bg-[#1E7ACC]",
   },
   {
     name: "Trevon Obral",
@@ -33,7 +33,7 @@ const reviews = [
     stars: 5,
     text: "Got covered for all the damage and had money to spare. Check My Claim came through fast and they were a pleasure to deal with.",
     avatar: "TO",
-    color: "bg-[#0C2D5B]",
+    color: "bg-[#111E30]",
   },
 ];
 
@@ -43,7 +43,7 @@ function StarRating({ count }) {
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}
-          className={`w-4 h-4 ${i < count ? "fill-[#EBB63E] text-[#EBB63E]" : "fill-gray-200 text-gray-200"}`}
+          className={`w-4 h-4 ${i < count ? "fill-[#2590E6] text-[#2590E6]" : "fill-gray-200 text-gray-200"}`}
         />
       ))}
     </div>
@@ -60,7 +60,7 @@ export default function Reviews() {
           viewport={{ once: true }}
           className="text-center mb-14"
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0C2D5B] mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#111E30] mb-4">
             Real Stories, Real Results
           </h2>
           <p className="text-[#595E64] text-lg max-w-2xl mx-auto">
@@ -84,7 +84,7 @@ export default function Reviews() {
                     <span className="text-white text-sm font-bold">{review.avatar}</span>
                   </div>
                   <div>
-                    <p className="font-semibold text-[#0C2D5B] text-sm">{review.name}</p>
+                    <p className="font-semibold text-[#111E30] text-sm">{review.name}</p>
                     <p className="text-xs text-[#595E64]">{review.time}</p>
                   </div>
                 </div>

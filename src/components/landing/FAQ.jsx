@@ -4,20 +4,20 @@ import { ChevronDown } from "lucide-react";
 
 const faqs = [
   {
-    q: "Personal injury lawyer: how does Claim Checker help you find one?",
-    a: "If you are searching for a personal injury lawyer after an accident, Claim Checker helps you start with a quick eligibility check instead of calling random firms. If your case looks like a fit, we connect you with a vetted attorney for a review. Claim Checker is not a law firm and does not provide legal advice.",
+    q: "Personal injury lawyer: how does Check My Claim help you find one?",
+    a: "If you are searching for a personal injury lawyer after an accident, Check My Claim helps you start with a quick eligibility check instead of calling random firms. If your case looks like a fit, we connect you with a vetted attorney for a review. Check My Claim is not a law firm and does not provide legal advice.",
   },
   {
     q: "Personal injury attorney vs personal injury lawyer: what is the difference?",
-    a: "In most states, the terms personal injury attorney and personal injury lawyer are used the same way. What matters is whether the lawyer handles your type of accident and can explain fees and next steps clearly. Claim Checker can help you do a fast claim check and get routed to a vetted attorney if eligible.",
+    a: "In most states, the terms personal injury attorney and personal injury lawyer are used the same way. What matters is whether the lawyer handles your type of accident and can explain fees and next steps clearly. Check My Claim can help you do a fast claim check and get routed to a vetted attorney if eligible.",
   },
   {
     q: "Injury lawyer: when should I talk to one after an accident?",
-    a: "If you have injuries, medical visits, time off work, or an insurance offer that feels low, it is worth getting a legal review. Claim Checker helps you check eligibility quickly and connect with an injury lawyer if your claim qualifies for review.",
+    a: "If you have injuries, medical visits, time off work, or an insurance offer that feels low, it is worth getting a legal review. Check My Claim helps you check eligibility quickly and connect with an injury lawyer if your claim qualifies for review.",
   },
   {
     q: "Lawyer for motor vehicle accident: do I need one to file a claim?",
-    a: "You can often start a claim without a lawyer, but legal review can help if fault is disputed, injuries are serious, or the insurer is delaying or lowballing. Claim Checker helps you do a quick motor vehicle accident claim check and, if eligible, connect you with a vetted lawyer for review.",
+    a: "You can often start a claim without a lawyer, but legal review can help if fault is disputed, injuries are serious, or the insurer is delaying or lowballing. Check My Claim helps you do a quick motor vehicle accident claim check and, if eligible, connect you with a vetted lawyer for review.",
   },
   {
     q: "Motor vehicle accident attorneys: how do I find the right one?",
