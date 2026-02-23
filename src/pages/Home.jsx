@@ -7,6 +7,9 @@ import AccidentTypes from "@/components/landing/AccidentTypes";
 import WhoBenefits from "@/components/landing/WhoBenefits";
 import Transformation from "@/components/landing/Transformation";
 import HowItWorks from "@/components/landing/HowItWorks";
+import USP from "@/components/landing/USP";
+import FightingForYou from "@/components/landing/FightingForYou";
+import NoWinNoFee from "@/components/landing/NoWinNoFee";
 import RecentWins from "@/components/landing/RecentWins";
 import AboutUs from "@/components/landing/AboutUs";
 import FAQ from "@/components/landing/FAQ";
@@ -23,6 +26,9 @@ export default function Home() {
       <WhoBenefits />
       <Transformation />
       <HowItWorks />
+      <USP />
+      <FightingForYou />
+      <NoWinNoFee />
       <RecentWins />
       <AboutUs />
       <FAQ />
