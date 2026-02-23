@@ -40,52 +40,84 @@ export default function ThankYou() {
             transition={{ delay: 0.3 }}
             className="text-3xl md:text-4xl font-extrabold text-[#0C2D5B] text-center mb-4"
           >
-            Thank You for Submitting Your Claim!
+            Congrats!
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="text-[#595E64] text-lg text-center mb-8"
+            className="text-[#0C2D5B] text-xl font-bold text-center mb-4"
           >
-            We've received your information and are working to match you with the perfect attorney for your case.
+            Based On Your Answers, It Appears You May Have A High Value Claim!
+          </motion.p>
+
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.45 }}
+            className="text-[#595E64] text-lg text-center mb-2"
+          >
+            One of our trusted advisors will call you in the next few minutes!
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="bg-gradient-to-r from-[#EBB63E] to-[#F18913] text-white font-bold text-center py-3 px-4 rounded-xl mb-2"
+          >
+            Please Make Sure To Answer your Phone!
+          </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.55 }}
+            className="text-[#595E64] text-sm text-center mb-8 italic"
+          >
+            <strong>PLEASE NOTE:</strong> We cannot proceed with your case without talking to you on the phone and confirming your case details…
           </motion.p>
 
           {/* Next Steps */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 0.6 }}
             className="bg-gradient-to-br from-[#EBB63E]/10 to-[#F18913]/10 rounded-2xl p-6 mb-8"
           >
             <h2 className="text-xl font-bold text-[#0C2D5B] mb-4 flex items-center gap-2">
               <Clock className="w-6 h-6 text-[#F18913]" />
-              What Happens Next?
+              Here's What To Expect Next:
             </h2>
             <div className="space-y-4">
               {[
                 {
                   step: "1",
-                  title: "Review & Analysis",
-                  description: "Our team is reviewing your claim details right now",
+                  title: "Verification Process",
+                  description: "We'll contact you to confirm your information, connect you with your attorney, and gather cost details!",
                 },
                 {
                   step: "2",
-                  title: "Attorney Match",
-                  description: "We'll connect you with a qualified attorney from our network",
+                  title: "Attorney Review",
+                  description: "Your attorney will conduct a thorough review based on the information you've supplied.",
                 },
                 {
                   step: "3",
-                  title: "Direct Contact",
-                  description: "An attorney will reach out within 24-48 hours to discuss your case",
+                  title: "Case Initiation",
+                  description: "Your case is started by your attorney at no upfront cost, as they work on a no win, no fee basis and only get paid when you do.",
+                },
+                {
+                  step: "4",
+                  title: "Settlement Options",
+                  description: "Your attorney will present your various settlement options and then proceed with the case at no cost to you!",
                 },
               ].map((item, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.6 + i * 0.1 }}
+                  transition={{ delay: 0.7 + i * 0.1 }}
                   className="flex gap-4"
                 >
                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-[#EBB63E] to-[#F18913] flex items-center justify-center text-white font-bold text-sm">
@@ -100,33 +132,45 @@ export default function ThankYou() {
             </div>
           </motion.div>
 
-          {/* Contact Info */}
+          {/* More Options */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.9 }}
-            className="bg-[#0C2D5B]/5 rounded-xl p-4 mb-8"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.1 }}
+            className="bg-white border-2 border-[#0C2D5B]/20 rounded-2xl p-6 mb-6"
           >
-            <p className="text-[#0C2D5B] text-sm font-medium text-center mb-2">
-              Need immediate assistance?
+            <h2 className="text-xl font-bold text-[#0C2D5B] mb-2 text-center">
+              Here Are More Options For You!
+            </h2>
+            <p className="text-[#595E64] text-sm text-center italic">
+              <strong>Top Tip:</strong> Get the best personalized results by searching through 2 or more offers
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-[#595E64]">
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-[#F18913]" />
-                support@claimchecker.com
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-[#F18913]" />
-                1-800-CLAIM-CK
-              </div>
-            </div>
+          </motion.div>
+
+          {/* NO WIN, NO FEE */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2 }}
+            className="bg-gradient-to-br from-green-50 to-green-100/50 rounded-2xl p-6 mb-8"
+          >
+            <h3 className="text-lg font-extrabold text-[#0C2D5B] mb-3 flex items-center gap-2">
+              <CheckCircle className="w-6 h-6 text-green-600" />
+              NO WIN, NO FEE Guarantee:
+            </h3>
+            <p className="text-[#595E64] text-sm leading-relaxed mb-4">
+              The attorney's guarantee every client that they will not charge you a cent if they do not secure a positive outcome in your case. If you do win, the bulk of the fees are usually paid by the opposing counsel's client, who was responsible for the accident. They will discuss and agree upon the fee breakdown upfront and in detail, so there will be complete transparency and no disappointment once your case is won… That is a guarantee to you!
+            </p>
+            <p className="text-2xl font-extrabold text-[#EBB63E] text-center">
+              YOU HAVE NOTHING TO LOSE!
+            </p>
           </motion.div>
 
           {/* CTA Button */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1 }}
+            transition={{ delay: 1.3 }}
             className="text-center"
           >
             <Link
@@ -143,7 +187,7 @@ export default function ThankYou() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.1 }}
+          transition={{ delay: 1.4 }}
           className="text-white/60 text-sm text-center mt-6"
         >
           ✓ 100% Free • ✓ No Obligation • ✓ Your Information is Secure
