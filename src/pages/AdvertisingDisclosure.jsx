@@ -4,8 +4,9 @@ import { FileText, Shield, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
 import { useNavigate } from "react-router-dom";
+import Navbar from "@/components/landing/Navbar";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/76654a39d_CheckMyClaimLogo.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/08c3eb029_CheckMyClaimLogoLight.png";
 
 const stateDisclosures = [
   {
@@ -114,7 +115,9 @@ export default function AdvertisingDisclosure() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0C2D5B] via-[#001634] to-[#1B2737] py-12 px-4">
+    <div className="min-h-screen bg-white">
+      <Navbar />
+      <div className="py-12 px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -122,14 +125,14 @@ export default function AdvertisingDisclosure() {
       >
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-[#EBB63E] to-[#F18913] px-8 py-6 text-center">
+          <div className="bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] px-8 py-6 text-center">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: "spring" }}
               className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full mb-4"
             >
-              <FileText className="w-12 h-12 text-[#F18913]" />
+              <FileText className="w-12 h-12 text-[#0285E9]" />
             </motion.div>
             <motion.h1
               initial={{ opacity: 0 }}
@@ -148,7 +151,7 @@ export default function AdvertisingDisclosure() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="bg-gradient-to-br from-[#EBB63E]/10 to-[#F18913]/10 rounded-2xl p-6 md:p-8 mb-8"
+              className="bg-gradient-to-br from-[#4ba8ee]/10 to-[#0486e9]/10 rounded-2xl p-6 md:p-8 mb-8"
             >
               <p className="text-[#595E64] leading-relaxed mb-4">
                 freecasehelp.com is a non-professional legal services agency that connects service providers with consumers to help them live better lives, and when you call our number, you may be directly connected with one of our partners or a third party to assist you. Independent providers of the services may charge fees and have their own terms of service. freecasehelp.com is not responsible and does not guarantee any outcomes from these providers. Services may not be available in all states, so please call or check our website for details.
@@ -206,7 +209,7 @@ export default function AdvertisingDisclosure() {
                 <p>
                   They will discuss and agree upon the fee breakdown upfront and in detail, so there will be complete transparency and no disappointment once your case is won… That is a guarantee to you!
                 </p>
-                <p className="text-lg font-bold text-[#F18913] text-center">
+                <p className="text-lg font-bold text-[#0285E9] text-center">
                   YOU HAVE NOTHING TO LOSE!
                 </p>
               </div>
@@ -239,6 +242,7 @@ export default function AdvertisingDisclosure() {
           </div>
         </div>
       </motion.div>
+      </div>
     </div>
   );
 }

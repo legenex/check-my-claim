@@ -4,7 +4,7 @@ import { CheckCircle, ArrowRight, Clock, Mail, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/76654a39d_CheckMyClaimLogo.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/08c3eb029_CheckMyClaimLogoLight.png";
 
 export default function ThankYou() {
   return (
@@ -65,7 +65,7 @@ export default function ThankYou() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="bg-gradient-to-r from-[#EBB63E] to-[#F18913] text-white font-bold text-center py-3 px-4 rounded-xl mb-2"
+            className="bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-bold text-center py-3 px-4 rounded-xl mb-2"
           >
             Please Make Sure To Answer your Phone!
           </motion.div>
@@ -84,10 +84,10 @@ export default function ThankYou() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="bg-gradient-to-br from-[#EBB63E]/10 to-[#F18913]/10 rounded-2xl p-6 mb-8"
+            className="bg-gradient-to-br from-[#4ba8ee]/10 to-[#0486e9]/10 rounded-2xl p-6 mb-8"
           >
             <h2 className="text-xl font-bold text-[#0C2D5B] mb-6 text-center flex items-center justify-center gap-2">
-              <Clock className="w-6 h-6 text-[#F18913]" />
+              <Clock className="w-6 h-6 text-[#0285E9]" />
               Here's What To Expect Next:
             </h2>
             <div className="space-y-6">
@@ -95,16 +95,16 @@ export default function ThankYou() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.7 }}
-                className="bg-white rounded-xl p-5 shadow-lg border-2 border-[#F18913]"
+                className="bg-white rounded-xl p-5 shadow-lg border-2 border-[#0285E9]"
               >
                 <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-[#EBB63E] to-[#F18913] flex items-center justify-center">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-[#4ba8ee] to-[#0486e9] flex items-center justify-center">
                     <Phone className="w-6 h-6 text-white animate-pulse" />
                   </div>
                   <div>
                     <h3 className="font-extrabold text-[#0C2D5B] text-lg mb-2">📞 Step 1: We Will Call You (Next Few Minutes!)</h3>
                     <p className="text-[#595E64] font-medium">
-                      One of our trusted advisors will call your phone to verify your details and connect you with the right attorney. <strong className="text-[#F18913]">Please answer the call!</strong>
+                      One of our trusted advisors will call your phone to verify your details and connect you with the right attorney. <strong className="text-[#0285E9]">Please answer the call!</strong>
                     </p>
                   </div>
                 </div>
@@ -116,7 +116,7 @@ export default function ThankYou() {
                 transition={{ delay: 0.8 }}
                 className="flex gap-4 bg-white rounded-xl p-4"
               >
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#EBB63E] to-[#F18913] flex items-center justify-center text-white font-bold">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#4ba8ee] to-[#0486e9] flex items-center justify-center text-white font-bold">
                   2
                 </div>
                 <div>
@@ -131,7 +131,7 @@ export default function ThankYou() {
                 transition={{ delay: 0.9 }}
                 className="flex gap-4 bg-white rounded-xl p-4"
               >
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#EBB63E] to-[#F18913] flex items-center justify-center text-white font-bold">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#4ba8ee] to-[#0486e9] flex items-center justify-center text-white font-bold">
                   3
                 </div>
                 <div>
@@ -146,7 +146,7 @@ export default function ThankYou() {
                 transition={{ delay: 1.0 }}
                 className="flex gap-4 bg-white rounded-xl p-4"
               >
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#EBB63E] to-[#F18913] flex items-center justify-center text-white font-bold">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#4ba8ee] to-[#0486e9] flex items-center justify-center text-white font-bold">
                   4
                 </div>
                 <div>
@@ -171,7 +171,7 @@ export default function ThankYou() {
             <p className="text-[#595E64] text-sm leading-relaxed mb-4">
               The attorney's guarantee every client that they will not charge you a cent if they do not secure a positive outcome in your case. If you do win, the bulk of the fees are usually paid by the opposing counsel's client, who was responsible for the accident. They will discuss and agree upon the fee breakdown upfront and in detail, so there will be complete transparency and no disappointment once your case is won… That is a guarantee to you!
             </p>
-            <p className="text-2xl font-extrabold text-[#EBB63E] text-center">
+            <p className="text-2xl font-extrabold text-[#0285E9] text-center">
               YOU HAVE NOTHING TO LOSE!
             </p>
           </motion.div>
@@ -185,7 +185,7 @@ export default function ThankYou() {
           >
             <Link
               to={createPageUrl("Home")}
-              className="group inline-flex items-center gap-3 bg-gradient-to-r from-[#EBB63E] to-[#F18913] text-white font-bold px-8 py-4 rounded-full hover:shadow-2xl hover:shadow-orange-500/30 transition-all duration-300 hover:scale-105"
+              className="group inline-flex items-center gap-3 bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-bold px-8 py-4 rounded-full hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-105"
             >
               Return to Home
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
