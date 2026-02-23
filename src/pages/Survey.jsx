@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/Footer";
 import CallBanner from "@/components/survey/CallBanner";
 import SurveyProcess from "@/components/survey/SurveyProcess";
@@ -13,11 +12,10 @@ export default function Survey() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#061D32] via-[#0C2D5B] to-[#1B3A4F] overflow-x-hidden">
       <CallBanner />
-      <Navbar />
 
       {/* Quiz Image Section */}
       <section className="py-16 md:py-24 px-4">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-2xl mx-auto">
           <img 
             src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/614888e84_image.png"
             alt="Get The Maximum Cash Payout For Your Accident Injury"
@@ -46,7 +44,7 @@ export default function Survey() {
 
       {/* Survey Embed Section */}
       <section id="survey-embed" className="py-20 md:py-28 px-4">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-2xl mx-auto">
           <img 
             src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/3fa63fe05_image.png"
             alt="Check My Claim Survey"
