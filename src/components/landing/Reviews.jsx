@@ -64,7 +64,7 @@ export default function Reviews() {
             Real Stories, Real Results
           </h2>
           <p className="text-[#595E64] text-lg max-w-2xl mx-auto">
-            Don't just take our word for it—hear from real people who used Claim Checker to get the compensation they deserved.
+            Don't just take our word for it. Hear from real people who used Claim Checker to get the compensation they deserved.
           </p>
         </motion.div>
 
