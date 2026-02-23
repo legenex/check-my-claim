@@ -12,7 +12,7 @@ export default function ThankYou() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-2xl w-full"
+        className="max-w-5xl w-full"
       >
         {/* Logo */}
         <div className="text-center mb-8">
@@ -155,21 +155,6 @@ export default function ThankYou() {
                 </div>
               </motion.div>
             </div>
-          </motion.div>
-
-          {/* More Options */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1 }}
-            className="bg-white border-2 border-[#0C2D5B]/20 rounded-2xl p-6 mb-6"
-          >
-            <h2 className="text-xl font-bold text-[#0C2D5B] mb-2 text-center">
-              Here Are More Options For You!
-            </h2>
-            <p className="text-[#595E64] text-sm text-center italic">
-              <strong>Top Tip:</strong> Get the best personalized results by searching through 2 or more offers
-            </p>
           </motion.div>
 
           {/* NO WIN, NO FEE */}
