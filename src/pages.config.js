@@ -52,6 +52,7 @@ import ThankYou from './pages/ThankYou';
 import ThankYouDisqualified from './pages/ThankYouDisqualified';
 import sb37List from './pages/sb-37-list';
 import AdvertisingDisclosure from './pages/AdvertisingDisclosure';
+import PartnerList from './pages/PartnerList';
 
 
 export const PAGES = {
@@ -60,6 +61,7 @@ export const PAGES = {
     "ThankYouDisqualified": ThankYouDisqualified,
     "sb-37-list": sb37List,
     "AdvertisingDisclosure": AdvertisingDisclosure,
+    "PartnerList": PartnerList,
 }
 
 export const pagesConfig = {
