@@ -32,7 +32,7 @@ export default function Footer() {
         <div className="grid md:grid-cols-3 gap-10">
           {/* Brand */}
           <div>
-            <img src={LOGO_URL} alt="Claim Checker" className="h-14 mb-4" />
+            <img src={LOGO_URL} alt="Check My Claim" className="h-14 mb-4" />
             <p className="text-gray-400 text-sm leading-relaxed">
               Empowering accident victims with free, AI-powered claim checks and connections to top-rated attorneys. No win, no fee.
             </p>
@@ -51,7 +51,7 @@ export default function Footer() {
                 <button
                   key={link.href}
                   onClick={() => scrollTo(link.href)}
-                  className="block text-gray-400 text-sm hover:text-[#EBB63E] transition-colors"
+                  className="block text-gray-400 text-sm hover:text-[#2590E6] transition-colors"
                 >
                   {link.label}
                 </button>
@@ -64,11 +64,11 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Contact</h4>
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-gray-400 text-sm">
-                <Mail className="w-4 h-4 text-[#EBB63E]" />
-                support@claimchecker.com
+                <Mail className="w-4 h-4 text-[#2590E6]" />
+                support@checkmyclaim.com
               </div>
               <div className="flex items-center gap-3 text-gray-400 text-sm">
-                <Phone className="w-4 h-4 text-[#EBB63E]" />
+                <Phone className="w-4 h-4 text-[#2590E6]" />
                 1-800-CLAIM-CK
               </div>
             </div>
@@ -77,10 +77,10 @@ export default function Footer() {
 
         <div className="border-t border-white/10 mt-10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} Claim Checker. All rights reserved.
+            © {new Date().getFullYear()} Check My Claim. All rights reserved.
           </p>
           <p className="text-gray-500 text-xs max-w-lg text-center md:text-right">
-            Claim Checker is not a law firm and does not provide legal advice. Results from the AI tool are for informational purposes only and do not guarantee compensation.
+            Check My Claim is not a law firm and does not provide legal advice. Results from the AI tool are for informational purposes only and do not guarantee compensation.
           </p>
         </div>
       </div>
