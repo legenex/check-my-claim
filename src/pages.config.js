@@ -54,6 +54,7 @@ import sb37List from './pages/sb-37-list';
 import Submitted from './pages/Submitted';
 import Thanks from './pages/Thanks';
 import Survey from './pages/Survey';
+import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
@@ -69,4 +70,5 @@ export const PAGES = {
 export const pagesConfig = {
     mainPage: "Home",
     Pages: PAGES,
+    Layout: __Layout,
 };
