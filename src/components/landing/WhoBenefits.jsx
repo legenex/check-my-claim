@@ -3,10 +3,10 @@ import { motion } from "framer-motion";
 import { CheckCircle, ArrowRight } from "lucide-react";
 
 const bullets = [
-  "Injured in a car, truck, or rideshare accident in the last 12 months.",
-  "Struggling with medical bills, lost wages, or ongoing pain after a crash.",
-  "Unsure if you have a valid claim or if insurance offered enough.",
-  "Looking for a trusted way to connect with an attorney at no upfront cost.",
+  "Injured in a car, truck, or rideshare accident in the last 12 months",
+  "Struggling with medical bills, lost wages, or ongoing pain after a crash",
+  "Unsure if you have a valid claim or if insurance offered enough",
+  "Looking for a trusted way to connect with an attorney at no upfront cost",
 ];
 
 export default function WhoBenefits() {
