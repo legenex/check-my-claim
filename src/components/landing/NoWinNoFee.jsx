@@ -53,7 +53,7 @@ export default function NoWinNoFee() {
               Our Attorneys Don't Get Paid Unless You Do
             </h2>
 
-            <p className="text-xl font-bold text-[#EBB63E] mb-6">
+            <p className="text-xl font-bold text-[#0C2D5B] mb-6">
               THE NO WIN, NO FEE GUARANTEE
             </p>
 
