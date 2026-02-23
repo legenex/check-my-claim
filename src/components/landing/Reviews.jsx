@@ -15,7 +15,7 @@ const reviews = [
     name: "Dana Hopson",
     time: "2 Weeks ago",
     stars: 5,
-    text: "My car was totaled, and I had no idea what to do next. Thanks to Claim Checker, I received compensation fast, and it was more than I expected!",
+    text: "My car was totaled, and I had no idea what to do next. Thanks to Check My Claim, I received compensation fast, and it was more than I expected!",
     avatar: "DH",
     color: "bg-[#F18913]",
   },
@@ -31,7 +31,7 @@ const reviews = [
     name: "Trevon Obral",
     time: "3 Weeks ago",
     stars: 5,
-    text: "Got covered for all the damage and had money to spare. Claim Checker came through fast and they were a pleasure to deal with.",
+    text: "Got covered for all the damage and had money to spare. Check My Claim came through fast and they were a pleasure to deal with.",
     avatar: "TO",
     color: "bg-[#0C2D5B]",
   },
@@ -64,7 +64,7 @@ export default function Reviews() {
             Real Stories, Real Results
           </h2>
           <p className="text-[#595E64] text-lg max-w-2xl mx-auto">
-            Don't just take our word for it. Hear from real people who used Claim Checker to get the compensation they deserved.
+            Don't just take our word for it. Hear from real people who used Check My Claim to get the compensation they deserved.
           </p>
         </motion.div>
 

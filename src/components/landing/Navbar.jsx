@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c27e1ee245bcd8cd77386/e98b03e94_PrimaryLogo_ClaimChecker1.png";
-const LOGO_DARK_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c27e1ee245bcd8cd77386/e98b03e94_PrimaryLogo_ClaimChecker1.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/76654a39d_CheckMyClaimLogo.png";
+const LOGO_DARK_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/76654a39d_CheckMyClaimLogo.png";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -27,7 +27,7 @@ export default function Navbar() {
           <button onClick={() => handleNav("#home")} className="flex-shrink-0">
             <img
               src={LOGO_DARK_URL}
-              alt="Claim Checker"
+              alt="Check My Claim"
               className="h-10 md:h-14 w-auto"
             />
           </button>
@@ -38,14 +38,14 @@ export default function Navbar() {
               <button
                 key={link.href}
                 onClick={() => handleNav(link.href)}
-                className="text-sm font-medium tracking-wide transition-colors duration-300 text-[#0C2D5B] hover:text-[#EBB63E]"
+                className="text-sm font-medium tracking-wide transition-colors duration-300 text-[#111E30] hover:text-[#2590E6]"
               >
                 {link.label}
               </button>
             ))}
             <button
               onClick={() => handleNav("#home")}
-              className="bg-gradient-to-r from-[#EBB63E] to-[#F18913] text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:shadow-lg hover:shadow-orange-500/25 transition-all duration-300 hover:scale-105"
+              className="bg-gradient-to-r from-[#2590E6] to-[#1E7ACC] text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105"
             >
               Start Your Free Claim Check
             </button>
@@ -54,7 +54,7 @@ export default function Navbar() {
           {/* Mobile toggle */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 rounded-lg text-[#0C2D5B]"
+            className="md:hidden p-2 rounded-lg text-[#111E30]"
           >
             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -68,14 +68,14 @@ export default function Navbar() {
             <button
               key={link.href}
               onClick={() => handleNav(link.href)}
-              className="block w-full text-left text-[#0C2D5B] font-medium py-3 px-3 rounded-lg hover:bg-[#F9E6BB]/50 transition-colors"
+              className="block w-full text-left text-[#111E30] font-medium py-3 px-3 rounded-lg hover:bg-[#2590E6]/10 transition-colors"
             >
               {link.label}
             </button>
           ))}
           <button
             onClick={() => handleNav("#home")}
-            className="w-full bg-gradient-to-r from-[#EBB63E] to-[#F18913] text-white font-semibold py-3 rounded-full mt-3"
+            className="w-full bg-gradient-to-r from-[#2590E6] to-[#1E7ACC] text-white font-semibold py-3 rounded-full mt-3"
           >
             Start Your Free Claim Check
           </button>

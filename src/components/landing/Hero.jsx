@@ -14,7 +14,7 @@ export default function Hero() {
           alt="Happy family"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0C2D5B]/95 via-[#001634]/90 to-[#1B2737]/95" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#111E30]/95 via-[#111E30]/90 to-[#0C1A2A]/95" />
       </div>
       <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")" }} />
 
@@ -25,7 +25,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-[#EBB63E] text-sm font-medium px-4 py-2 rounded-full mb-8 border border-[#EBB63E]/20"
+            className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-[#2590E6] text-sm font-medium px-4 py-2 rounded-full mb-8 border border-[#2590E6]/20"
           >
             <Shield className="w-4 h-4" />
             100% Free • No Win, No Fee • Fast Results
@@ -39,7 +39,7 @@ export default function Hero() {
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.08] tracking-tight mb-6"
           >
             Check Your Claim,{" "}
-            <span className="bg-gradient-to-r from-[#EBB63E] to-[#F18913] bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#2590E6] to-[#1E7ACC] bg-clip-text text-transparent">
               Get What You Deserve
             </span>
           </motion.h1>
@@ -63,7 +63,7 @@ export default function Hero() {
           >
             <button
               onClick={() => scrollTo("#home")}
-              className="group relative bg-gradient-to-r from-[#EBB63E] to-[#F18913] text-white font-bold text-lg px-8 py-4 rounded-full hover:shadow-2xl hover:shadow-orange-500/30 transition-all duration-300 hover:scale-105 flex items-center gap-3"
+              className="group relative bg-gradient-to-r from-[#2590E6] to-[#1E7ACC] text-white font-bold text-lg px-8 py-4 rounded-full hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-105 flex items-center gap-3"
             >
               Start Your Free Claim Check
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -84,7 +84,7 @@ export default function Hero() {
               { icon: Clock, label: "Results in Minutes" },
             ].map((item, i) => (
               <div key={i} className="flex items-center justify-center gap-2.5 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl px-4 py-3">
-                <item.icon className="w-4 h-4 text-[#EBB63E]" />
+                <item.icon className="w-4 h-4 text-[#2590E6]" />
                 <span className="text-white/80 text-sm font-medium">{item.label}</span>
               </div>
             ))}
