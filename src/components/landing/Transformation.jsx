@@ -101,7 +101,7 @@ export default function Transformation() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-gradient-to-br from-[#0C2D5B] via-[#001634] to-[#00000] rounded-3xl p-10 md:p-12 shadow-2xl"
+            className="bg-gradient-to-br from-[#0C2D5B] via-[#001634] to-[1B2737] rounded-3xl p-10 md:p-12 shadow-2xl"
           >
             <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-4">
               Ready to Transform Your Situation?
