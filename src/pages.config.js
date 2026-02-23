@@ -49,11 +49,13 @@
  */
 import Home from './pages/Home';
 import ThankYou from './pages/ThankYou';
+import ThankYouDisqualified from './pages/ThankYouDisqualified';
 
 
 export const PAGES = {
     "Home": Home,
     "ThankYou": ThankYou,
+    "ThankYouDisqualified": ThankYouDisqualified,
 }
 
 export const pagesConfig = {
