@@ -6,7 +6,7 @@ export default function NoWinNoFee() {
   const scrollTo = () => document.querySelector("#home")?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <section className="py-20 md:py-28 bg-gradient-to-br from-[#0C2D5B] via-[#001634] to-[#1B2737] relative overflow-hidden">
+<section className="py-20 md:py-28 bg-white relative overflow-hidden">
       <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E\")" }} />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
