@@ -21,23 +21,23 @@ const faqs = [
   },
   {
     q: "Motor vehicle accident attorneys: how do I find the right one?",
-    a: "Look for an attorney who regularly handles motor vehicle accident cases, explains fees upfront, and is responsive. Claim Checker helps you avoid wasted calls by screening your situation first and connecting you with a vetted attorney if your claim appears eligible.",
+    a: "Look for an attorney who regularly handles motor vehicle accident cases, explains fees upfront, and is responsive. Check My Claim helps you avoid wasted calls by screening your situation first and connecting you with a vetted attorney if your claim appears eligible.",
   },
   {
     q: "Car accident personal injury lawyer: what can they help with?",
-    a: "A car accident personal injury lawyer can review liability, medical documentation, damages, and settlement offers. If you are unsure whether your case is worth pursuing, Claim Checker starts with a quick eligibility check and can connect you with a vetted attorney for a review.",
+    a: "A car accident personal injury lawyer can review liability, medical documentation, damages, and settlement offers. If you are unsure whether your case is worth pursuing, Check My Claim starts with a quick eligibility check and can connect you with a vetted attorney for a review.",
   },
   {
     q: "Car accident personal injury attorney: how fast can I speak to one?",
-    a: "Timing depends on availability, but the fastest path is to have your basic details ready and start with a structured claim check. Claim Checker helps you capture the key facts quickly and can connect you with a vetted car accident personal injury attorney if eligible.",
+    a: "Timing depends on availability, but the fastest path is to have your basic details ready and start with a structured claim check. Check My Claim helps you capture the key facts quickly and can connect you with a vetted car accident personal injury attorney if eligible.",
   },
   {
     q: "Auto accident personal injury lawyer: do I qualify if I was partly at fault?",
-    a: "In many states, you may still have options even if you share some fault, but the rules can affect the outcome. Claim Checker helps you check eligibility based on your situation and connect to a vetted auto accident personal injury lawyer for review if it looks like a fit.",
+    a: "In many states, you may still have options even if you share some fault, but the rules can affect the outcome. Check My Claim helps you check eligibility based on your situation and connect to a vetted auto accident personal injury lawyer for review if it looks like a fit.",
   },
   {
     q: "Car accident injury lawyers: what should I ask before hiring?",
-    a: "Ask about experience with your injury type, typical timelines, how fees work, and what they need from you to evaluate the claim. Claim Checker helps you start with an eligibility check so your first attorney conversation is more focused.",
+    a: "Ask about experience with your injury type, typical timelines, how fees work, and what they need from you to evaluate the claim. Check My Claim helps you start with an eligibility check so your first attorney conversation is more focused.",
   },
 ];
 
@@ -48,11 +48,11 @@ function FAQItem({ faq, isOpen, onClick }) {
         onClick={onClick}
         className="w-full flex items-center justify-between py-5 md:py-6 text-left gap-4 group"
       >
-        <span className={`text-base md:text-lg font-semibold transition-colors duration-300 ${isOpen ? "text-[#F18913]" : "text-[#0C2D5B]"}`}>
+        <span className={`text-base md:text-lg font-semibold transition-colors duration-300 ${isOpen ? "text-[#2590E6]" : "text-[#111E30]"}`}>
           {faq.q}
         </span>
         <ChevronDown
-          className={`w-5 h-5 flex-shrink-0 transition-all duration-300 ${isOpen ? "rotate-180 text-[#F18913]" : "text-[#595E64]"}`}
+          className={`w-5 h-5 flex-shrink-0 transition-all duration-300 ${isOpen ? "rotate-180 text-[#2590E6]" : "text-[#595E64]"}`}
         />
       </button>
       <AnimatePresence>
@@ -84,7 +84,7 @@ export default function FAQ() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0C2D5B] mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#111E30] mb-4">
             Frequently Asked Questions
           </h2>
           <p className="text-[#595E64] text-lg">
