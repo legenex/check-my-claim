@@ -52,7 +52,7 @@ export default function SurveyTestimonials() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-2xl md:text-5xl font-extrabold text-white mb-4"
+            className="text-lg md:text-5xl font-extrabold text-white mb-4"
             >
              Loved By Thousands of Clients
             </motion.h2>

@@ -66,7 +66,7 @@ export default function SurveyGuarantee() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-2xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
+            <h2 className="text-lg md:text-5xl font-extrabold text-white mb-4 leading-tight">
               Our Attorneys Don't Get Paid Unless You Do
             </h2>
 

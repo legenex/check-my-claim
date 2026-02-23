@@ -49,7 +49,7 @@ export default function SurveyFightingForYou() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-2xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+            <h2 className="text-lg md:text-5xl font-extrabold text-white mb-6 leading-tight">
               We'll Never Stop Fighting For You
             </h2>
             <p className="text-white/70 text-sm md:text-lg mb-8">

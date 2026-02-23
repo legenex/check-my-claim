@@ -38,7 +38,7 @@ export default function SurveyProcess() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-extrabold text-white mb-4"
+            className="text-lg md:text-5xl font-extrabold text-white mb-4"
           >
             Our Simple 3-Step Process
           </motion.h2>
@@ -47,7 +47,7 @@ export default function SurveyProcess() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-lg text-white/80 max-w-2xl mx-auto"
+            className="text-xs md:text-lg text-white/80 max-w-2xl mx-auto"
           >
             Getting help after an accident shouldn't be hard. Here's how Check My Claim works:
           </motion.p>
