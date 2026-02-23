@@ -22,7 +22,7 @@ export default function RecentWins() {
           className="text-center mb-14"
         >
           {/* white -> navy */}
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0C2D5B] mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#111E30] mb-4">
             We'll Never Stop Fighting For You
           </h2>
 
@@ -40,10 +40,10 @@ export default function RecentWins() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.15 }}
-              className="bg-white border border-gray-200 rounded-2xl p-8 text-center hover:border-[#EBB63E]/40 hover:shadow-xl transition-all duration-500 group"
+              className="bg-white border border-gray-200 rounded-2xl p-8 text-center hover:border-[#2590E6]/40 hover:shadow-xl transition-all duration-500 group"
             >
-              <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-[#EBB63E]/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Trophy className="w-6 h-6 text-[#EBB63E]" />
+              <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-[#2590E6]/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Trophy className="w-6 h-6 text-[#2590E6]" />
               </div>
 
               {/* light grey -> dark grey */}
@@ -51,12 +51,12 @@ export default function RecentWins() {
                 Recent Win
               </p>
 
-              <p className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-[#EBB63E] to-[#F18913] bg-clip-text text-transparent mb-3">
+              <p className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-[#2590E6] to-[#1E7ACC] bg-clip-text text-transparent mb-3">
                 {win.amount}
               </p>
 
               {/* white -> navy */}
-              <p className="text-[#0C2D5B] font-semibold">{win.name}</p>
+              <p className="text-[#111E30] font-semibold">{win.name}</p>
 
               {/* light grey -> dark grey */}
               <p className="text-[#595E64] text-sm">{win.location}</p>
@@ -67,7 +67,7 @@ export default function RecentWins() {
         <div className="text-center">
           <button
             onClick={scrollTo}
-            className="group bg-gradient-to-r from-[#EBB63E] to-[#F18913] text-white font-bold px-8 py-4 rounded-full hover:shadow-2xl hover:shadow-orange-500/30 transition-all duration-300 hover:scale-105 inline-flex items-center gap-3"
+            className="group bg-gradient-to-r from-[#2590E6] to-[#1E7ACC] text-white font-bold px-8 py-4 rounded-full hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-105 inline-flex items-center gap-3"
           >
             Check My Claim Now
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

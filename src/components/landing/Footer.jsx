@@ -1,15 +1,15 @@
 import React from "react";
 import { ArrowRight, Mail, Phone } from "lucide-react";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c27e1ee245bcd8cd77386/afcba8438_DarkMode-PrimaryLogo_ClaimChecker.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/76654a39d_CheckMyClaimLogo.png";
 
 export default function Footer() {
   const scrollTo = (id) => document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <footer id="contact" className="bg-[#0C2D5B] relative overflow-hidden">
+    <footer id="contact" className="bg-[#111E30] relative overflow-hidden">
       {/* Final CTA band */}
-      <div className="bg-gradient-to-r from-[#EBB63E] to-[#F18913] py-12 md:py-16">
+      <div className="bg-gradient-to-r from-[#2590E6] to-[#1E7ACC] py-12 md:py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4">
             Get the Compensation You Deserve
@@ -19,7 +19,7 @@ export default function Footer() {
           </p>
           <button
             onClick={() => scrollTo("#home")}
-            className="group bg-white text-[#0C2D5B] font-bold text-lg px-8 py-4 rounded-full hover:shadow-2xl transition-all duration-300 hover:scale-105 inline-flex items-center gap-3"
+            className="group bg-white text-[#111E30] font-bold text-lg px-8 py-4 rounded-full hover:shadow-2xl transition-all duration-300 hover:scale-105 inline-flex items-center gap-3"
           >
             Start Your Free Claim Check
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
