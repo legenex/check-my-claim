@@ -20,7 +20,7 @@ export default function NoWinNoFee() {
           >
             <div className="relative rounded-3xl overflow-hidden shadow-2xl">
               <img
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c27e1ee245bcd8cd77386/4161c762b_Screenshot2026-02-23at122923.png"
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c27e1ee245bcd8cd77386/c610dc138_Screenshot2026-02-23at123631.png"
                 alt="Professional attorney"
                 className="w-full h-full object-cover"
               />

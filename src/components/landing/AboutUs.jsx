@@ -57,9 +57,9 @@ export default function AboutUs() {
           >
             <div className="bg-gradient-to-br from-[#F9E6BB] to-[#EBB63E]/30 rounded-3xl p-10 md:p-14">
               <img
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/user_68cbdb03a5513a89272f3de0/bf3b7aee7_ClaimCheckerLogoDark.png"
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c27e1ee245bcd8cd77386/e98b03e94_PrimaryLogo_ClaimChecker1.png"
                 alt="Claim Checker"
-                className="w-48 mx-auto mb-8"
+                className="w-56 mx-auto mb-8"
               />
               <div className="space-y-4">
                 {[

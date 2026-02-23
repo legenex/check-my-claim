@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/user_68cbdb03a5513a89272f3de0/f21ae91b7_ClaimCheckerLogo.png";
-const LOGO_DARK_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/user_68cbdb03a5513a89272f3de0/bf3b7aee7_ClaimCheckerLogoDark.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c27e1ee245bcd8cd77386/e98b03e94_PrimaryLogo_ClaimChecker1.png";
+const LOGO_DARK_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c27e1ee245bcd8cd77386/e98b03e94_PrimaryLogo_ClaimChecker1.png";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -30,12 +30,12 @@ export default function Navbar() {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-white shadow-lg" : "bg-transparent"}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex items-center justify-between h-20 md:h-24">
           <button onClick={() => handleNav("#home")} className="flex-shrink-0">
             <img
               src={scrolled ? LOGO_DARK_URL : LOGO_URL}
               alt="Claim Checker"
-              className="h-8 md:h-10 w-auto transition-all duration-300"
+              className="h-10 md:h-14 w-auto transition-all duration-300"
             />
           </button>
 

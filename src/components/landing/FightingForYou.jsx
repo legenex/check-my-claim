@@ -6,9 +6,9 @@ export default function FightingForYou() {
   const scrollTo = () => document.querySelector("#home")?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <section className="py-20 md:py-28 bg-gradient-to-br from-[#F9F9FB] to-white relative overflow-hidden">
-      <div className="absolute top-20 right-10 w-72 h-72 bg-[#EBB63E]/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 left-10 w-72 h-72 bg-[#F18913]/10 rounded-full blur-3xl" />
+    <section className="py-20 md:py-28 bg-gradient-to-br from-[#F9E6BB]/20 via-white to-[#E8E8E8]/30 relative overflow-hidden">
+      <div className="absolute top-20 right-10 w-96 h-96 bg-gradient-to-br from-[#EBB63E]/15 to-[#F18913]/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 left-10 w-96 h-96 bg-gradient-to-tl from-[#0C2D5B]/5 to-transparent rounded-full blur-3xl" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -72,7 +72,7 @@ export default function FightingForYou() {
           >
             <div className="relative rounded-3xl overflow-hidden shadow-2xl">
               <img
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c27e1ee245bcd8cd77386/f41695684_4.png"
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c27e1ee245bcd8cd77386/d2af9541c_Screenshot2026-02-23at123641.png"
                 alt="Professional attorney"
                 className="w-full h-full object-cover"
               />
