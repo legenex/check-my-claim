@@ -44,12 +44,12 @@ export default function Navbar() {
                 {link.label}
               </button>
             ))}
-            <button
-              onClick={() => handleNav("#home")}
+            <a
+              href="https://qualify.checkmyclaim.co/s/mva?utm_source=CMC-Website&utm_campaign=Home-Page&utm_medium=2nd-Button"
               className="bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105"
             >
               Start Your Free Claim Check
-            </button>
+            </a>
           </div>
 
           {/* Mobile toggle */}
@@ -74,12 +74,12 @@ export default function Navbar() {
               {link.label}
             </button>
           ))}
-          <button
-            onClick={() => handleNav("#home")}
-            className="w-full bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-semibold py-3 rounded-full mt-3"
+          <a
+            href="https://qualify.checkmyclaim.co/s/mva?utm_source=CMC-Website&utm_campaign=Home-Page&utm_medium=3rd-Button"
+            className="w-full bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-semibold py-3 rounded-full mt-3 block text-center"
           >
             Start Your Free Claim Check
-          </button>
+          </a>
         </div>
       </div>
     </nav>

@@ -61,13 +61,13 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.45 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14"
           >
-            <button
-              onClick={() => scrollTo("#home")}
+            <a
+              href="https://qualify.checkmyclaim.co/s/mva?utm_source=CMC-Website&utm_campaign=Home-Page&utm_medium=1st-Button"
               className="group relative bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-bold text-lg px-8 py-4 rounded-full hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-105 flex items-center gap-3"
             >
               Start Your Free Claim Check
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </a>
             <p className="text-gray-400 text-sm">Takes less than 2 minutes</p>
           </motion.div>
 
@@ -92,8 +92,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Bottom gradient */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent" />
+
     </section>
   );
 }

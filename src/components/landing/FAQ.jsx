@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, HelpCircle } from "lucide-react";
 
 const faqs = [
   {
@@ -43,16 +43,26 @@ const faqs = [
 
 function FAQItem({ faq, isOpen, onClick }) {
   return (
-    <div className="border-b border-gray-100 last:border-0">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100"
+    >
       <button
         onClick={onClick}
-        className="w-full flex items-center justify-between py-5 md:py-6 text-left gap-4 group"
+        className="w-full flex items-start justify-between p-6 md:p-8 text-left gap-4 group"
       >
-        <span className={`text-base md:text-lg font-semibold transition-colors duration-300 ${isOpen ? "text-[#0285E9]" : "text-[#111E30]"}`}>
-          {faq.q}
-        </span>
+        <div className="flex items-start gap-4 flex-1">
+          <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${isOpen ? "bg-gradient-to-br from-[#4ba8ee] to-[#0486e9]" : "bg-[#0285E9]/10"}`}>
+            <HelpCircle className={`w-5 h-5 transition-colors duration-300 ${isOpen ? "text-white" : "text-[#0285E9]"}`} />
+          </div>
+          <span className={`text-base md:text-lg font-semibold transition-colors duration-300 leading-relaxed ${isOpen ? "text-[#0285E9]" : "text-[#111E30]"}`}>
+            {faq.q}
+          </span>
+        </div>
         <ChevronDown
-          className={`w-5 h-5 flex-shrink-0 transition-all duration-300 ${isOpen ? "rotate-180 text-[#0285E9]" : "text-[#595E64]"}`}
+          className={`w-6 h-6 flex-shrink-0 transition-all duration-300 ${isOpen ? "rotate-180 text-[#0285E9]" : "text-[#595E64]"}`}
         />
       </button>
       <AnimatePresence>
@@ -64,11 +74,15 @@ function FAQItem({ faq, isOpen, onClick }) {
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <p className="text-[#595E64] leading-relaxed pb-6 pr-8">{faq.a}</p>
+            <div className="px-6 md:px-8 pb-6 md:pb-8">
+              <div className="pl-14">
+                <p className="text-[#595E64] leading-relaxed text-base">{faq.a}</p>
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }
 
@@ -76,28 +90,31 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section id="faq" className="py-20 md:py-28 bg-[#F9F9FB]">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="faq" className="py-20 md:py-28 bg-gradient-to-br from-[#F9FAFB] to-white relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-[#0285E9]/5 to-transparent rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-[#0486e9]/5 to-transparent rounded-full blur-3xl" />
+
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
+          <div className="inline-flex items-center gap-2 bg-[#0285E9]/10 text-[#0285E9] font-bold text-sm px-4 py-2 rounded-full mb-4">
+            <HelpCircle className="w-4 h-4" />
+            FAQ
+          </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#111E30] mb-4">
             Frequently Asked Questions
           </h2>
-          <p className="text-[#595E64] text-lg">
+          <p className="text-[#595E64] text-lg md:text-xl max-w-2xl mx-auto">
             Got questions? We've got answers.
           </p>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="bg-white rounded-2xl shadow-sm border border-gray-100 px-6 md:px-8"
-        >
+        <div className="grid gap-4 md:gap-6">
           {faqs.map((faq, i) => (
             <FAQItem
               key={i}
@@ -106,6 +123,25 @@ export default function FAQ() {
               onClick={() => setOpenIndex(openIndex === i ? -1 : i)}
             />
           ))}
+        </div>
+
+        {/* CTA at bottom */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mt-16"
+        >
+          <p className="text-[#595E64] text-lg mb-6">
+            Still have questions? Start your free claim check now.
+          </p>
+          <a
+            href="https://qualify.checkmyclaim.co/s/mva?utm_source=CMC-Website&utm_campaign=Home-Page&utm_medium=13th-Button"
+            className="group inline-flex items-center gap-3 bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-bold px-8 py-4 rounded-full hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-105"
+          >
+            Get Started Now
+            <ChevronDown className="w-5 h-5 -rotate-90 group-hover:translate-x-1 transition-transform" />
+          </a>
         </motion.div>
       </div>
     </section>

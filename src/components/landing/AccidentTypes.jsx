@@ -26,7 +26,7 @@ const types = [
 ];
 
 export default function AccidentTypes() {
-  const scrollTo = () => document.querySelector("#home")?.scrollIntoView({ behavior: "smooth" });
+
 
   return (
     <section id="services" className="py-20 md:py-28 bg-[#F9F9FB]">
@@ -64,7 +64,7 @@ export default function AccidentTypes() {
               <span className="text-[#0285E9] font-semibold text-sm group-hover:underline">
                 Check Your Claim →
               </span>
-            </motion.div>
+            </a>
           ))}
         </div>
       </div>

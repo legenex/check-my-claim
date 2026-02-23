@@ -109,13 +109,13 @@ export default function Transformation() {
             <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
               Join thousands who've found clarity, justice, and compensation through Check My Claim
             </p>
-            <button
-              onClick={scrollTo}
+            <a
+              href="https://qualify.checkmyclaim.co/s/mva?utm_source=CMC-Website&utm_campaign=Home-Page&utm_medium=8th-Button"
               className="group bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-bold px-10 py-5 rounded-full hover:shadow-2xl hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105 inline-flex items-center gap-3 text-lg"
             >
               Start Your Free Claim Check Now
               <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </a>
             <p className="text-gray-400 text-sm mt-4">✓ 100% Free • ✓ No Obligation • ✓ Takes 2 Minutes</p>
           </motion.div>
         </div>

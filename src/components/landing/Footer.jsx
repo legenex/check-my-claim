@@ -17,13 +17,13 @@ export default function Footer() {
           <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
             Don't wait. Every day counts after an accident. Check your eligibility for free in less than 2 minutes.
           </p>
-          <button
-            onClick={() => scrollTo("#home")}
+          <a
+            href="https://qualify.checkmyclaim.co/s/mva?utm_source=CMC-Website&utm_campaign=Home-Page&utm_medium=12th-Button"
             className="group bg-white text-[#111E30] font-bold text-lg px-8 py-4 rounded-full hover:shadow-2xl transition-all duration-300 hover:scale-105 inline-flex items-center gap-3"
           >
             Start Your Free Claim Check
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </button>
+          </a>
         </div>
       </div>
 
