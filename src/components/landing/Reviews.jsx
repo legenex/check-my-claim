@@ -17,7 +17,7 @@ const reviews = [
     stars: 5,
     text: "My car was totaled, and I had no idea what to do next. Thanks to Check My Claim, I received compensation fast, and it was more than I expected!",
     avatar: "DH",
-    color: "bg-[#2590E6]",
+    color: "bg-[#0285E9]",
   },
   {
     name: "Kyle Benavides",
@@ -25,7 +25,7 @@ const reviews = [
     stars: 4,
     text: "I wasn't sure at first but really check a case turned out to be a blessing! We got connected with top specialists and our claim was handled smoothly.",
     avatar: "KB",
-    color: "bg-[#1E7ACC]",
+    color: "bg-[#0486e9]",
   },
   {
     name: "Trevon Obral",
@@ -43,7 +43,7 @@ function StarRating({ count }) {
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}
-          className={`w-4 h-4 ${i < count ? "fill-[#2590E6] text-[#2590E6]" : "fill-gray-200 text-gray-200"}`}
+          className={`w-4 h-4 ${i < count ? "fill-[#0285E9] text-[#0285E9]" : "fill-gray-200 text-gray-200"}`}
         />
       ))}
     </div>

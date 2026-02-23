@@ -5,7 +5,7 @@ const items = ["100% FREE", "NO WIN, NO FEE", "FAST RESULTS", "VETTED ATTORNEYS"
 
 export default function TrustBanner() {
   return (
-    <section className="relative bg-gradient-to-r from-[#2590E6] to-[#1E7ACC] py-5 overflow-hidden">
+    <section className="relative bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] py-5 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2">
           {items.map((item, i) => (

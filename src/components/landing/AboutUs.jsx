@@ -40,7 +40,7 @@ export default function AboutUs() {
                   transition={{ delay: i * 0.1 }}
                   className="bg-[#F9F9FB] rounded-xl p-4 text-center"
                 >
-                  <stat.icon className="w-6 h-6 text-[#2590E6] mx-auto mb-2" />
+                  <stat.icon className="w-6 h-6 text-[#0285E9] mx-auto mb-2" />
                   <p className="text-2xl font-extrabold text-[#111E30]">{stat.value}</p>
                   <p className="text-[#595E64] text-sm">{stat.label}</p>
                 </motion.div>
@@ -55,7 +55,7 @@ export default function AboutUs() {
             viewport={{ once: true }}
             className="relative"
           >
-            <div className="bg-gradient-to-br from-[#E8F4FD] to-[#2590E6]/20 rounded-3xl p-10 md:p-14">
+            <div className="bg-gradient-to-br from-[#E8F4FD] to-[#0285E9]/20 rounded-3xl p-10 md:p-14">
               <img
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/76654a39d_CheckMyClaimLogo.png"
                 alt="Check My Claim"
@@ -69,7 +69,7 @@ export default function AboutUs() {
                   "Fast, compassionate support",
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3 bg-white/80 backdrop-blur-sm rounded-xl px-4 py-3">
-                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#2590E6] to-[#1E7ACC]" />
+                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#4ba8ee] to-[#0486e9]" />
                     <span className="text-[#111E30] font-medium text-sm">{item}</span>
                   </div>
                 ))}

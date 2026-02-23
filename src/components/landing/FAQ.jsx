@@ -48,11 +48,11 @@ function FAQItem({ faq, isOpen, onClick }) {
         onClick={onClick}
         className="w-full flex items-center justify-between py-5 md:py-6 text-left gap-4 group"
       >
-        <span className={`text-base md:text-lg font-semibold transition-colors duration-300 ${isOpen ? "text-[#2590E6]" : "text-[#111E30]"}`}>
+        <span className={`text-base md:text-lg font-semibold transition-colors duration-300 ${isOpen ? "text-[#0285E9]" : "text-[#111E30]"}`}>
           {faq.q}
         </span>
         <ChevronDown
-          className={`w-5 h-5 flex-shrink-0 transition-all duration-300 ${isOpen ? "rotate-180 text-[#2590E6]" : "text-[#595E64]"}`}
+          className={`w-5 h-5 flex-shrink-0 transition-all duration-300 ${isOpen ? "rotate-180 text-[#0285E9]" : "text-[#595E64]"}`}
         />
       </button>
       <AnimatePresence>
