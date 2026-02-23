@@ -53,6 +53,7 @@ import PartnerList from './pages/PartnerList';
 import sb37List from './pages/sb-37-list';
 import Submitted from './pages/Submitted';
 import Thanks from './pages/Thanks';
+import Survey from './pages/Survey';
 
 
 export const PAGES = {
@@ -62,6 +63,7 @@ export const PAGES = {
     "sb-37-list": sb37List,
     "Submitted": Submitted,
     "Thanks": Thanks,
+    "Survey": Survey,
 }
 
 export const pagesConfig = {
