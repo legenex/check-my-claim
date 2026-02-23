@@ -76,7 +76,7 @@ export default function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.65 }}
-            className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto -mt-8"
           >
             {[
               { icon: Shield, label: "Vetted Attorneys Only" },
