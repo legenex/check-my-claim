@@ -10,7 +10,22 @@ import SurveyFAQ from "@/components/survey/SurveyFAQ";
 
 export default function Survey() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#061D32] via-[#0C2D5B] to-[#1B3A4F] overflow-x-hidden">
+    <div 
+      className="min-h-screen overflow-x-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #061D32 0%, #0C2D5B 50%, #1B3A4F 100%)',
+        backgroundAttachment: 'fixed',
+        position: 'relative'
+      }}
+    >
+      <div 
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+        }}
+      />
+      <div className="relative z-10">
       <CallBanner />
 
       {/* Quiz Image Section */}
@@ -65,6 +80,7 @@ export default function Survey() {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   );
 }
