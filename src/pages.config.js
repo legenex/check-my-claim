@@ -50,8 +50,6 @@
 import AdvertisingDisclosure from './pages/AdvertisingDisclosure';
 import Home from './pages/Home';
 import PartnerList from './pages/PartnerList';
-import ThankYou from './pages/ThankYou';
-import ThankYouDisqualified from './pages/ThankYouDisqualified';
 import sb37List from './pages/sb-37-list';
 import Submitted from './pages/Submitted';
 import Thanks from './pages/Thanks';
@@ -61,8 +59,6 @@ export const PAGES = {
     "AdvertisingDisclosure": AdvertisingDisclosure,
     "Home": Home,
     "PartnerList": PartnerList,
-    "ThankYou": ThankYou,
-    "ThankYouDisqualified": ThankYouDisqualified,
     "sb-37-list": sb37List,
     "Submitted": Submitted,
     "Thanks": Thanks,
