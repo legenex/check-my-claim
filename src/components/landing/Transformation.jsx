@@ -27,7 +27,7 @@ export default function Transformation() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#EBB63E] to-[#000000] text-white font-bold text-sm px-5 py-2.5 rounded-full mb-4 shadow-lg">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#EBB63E] to-[#F18913] text-white font-bold text-sm px-5 py-2.5 rounded-full mb-4 shadow-lg">
             YOUR JOURNEY TO JUSTICE
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0C2D5B] mb-4">
