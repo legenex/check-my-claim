@@ -24,7 +24,7 @@ export default function AboutUs() {
               About Claim Checker
             </h2>
             <p className="text-[#595E64] text-lg mb-6 leading-relaxed">
-              We're here to help accident victims get the clarity and support they need—fast and risk-free.
+              We're here to help accident victims get the clarity and support they need. Fast and risk-free.
             </p>
             <p className="text-[#595E64] leading-relaxed mb-8">
               At Claim Checker, our mission is simple: to empower those injured in accidents by providing a free, AI-powered claim check. We connect you with top attorneys who work on a "no win, no fee" basis, so you have nothing to lose. With thousands helped nationwide, we're committed to fighting for the compensation you might deserve.
