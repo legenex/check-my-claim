@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Car, PersonStanding, HardHat, Stethoscope } from "lucide-react";
+import { Car, Truck, Users, HardHat } from "lucide-react";
 
 const types = [
   {
@@ -9,19 +9,19 @@ const types = [
     desc: "Getting paid for your injury shouldn't be an accident.",
   },
   {
-    icon: PersonStanding,
-    title: "Slip & Fall",
-    desc: "Don't get tripped up by a subpar legal team.",
+    icon: Truck,
+    title: "Commercial Accidents",
+    desc: "Get the compensation you deserve from commercial vehicle incidents.",
+  },
+  {
+    icon: Users,
+    title: "Ride Share Accidents",
+    desc: "Don't let ride share companies deny your rightful claim.",
   },
   {
     icon: HardHat,
-    title: "Work Accidents",
+    title: "Work Place Accidents",
     desc: "Filing an injury claim shouldn't feel like working another job.",
-  },
-  {
-    icon: Stethoscope,
-    title: "Medical Malpractice",
-    desc: "It's never been easier to start your injury case.",
   },
 ];
 
