@@ -49,10 +49,10 @@ export default function SurveyFightingForYou() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+            <h2 className="text-2xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
               We'll Never Stop Fighting For You
             </h2>
-            <p className="text-white/70 text-lg mb-8">
+            <p className="text-white/70 text-sm md:text-lg mb-8">
               We work with only the best attorneys to get you the compensation you deserve.
             </p>
 
@@ -72,7 +72,7 @@ export default function SurveyFightingForYou() {
                       <benefit.icon className="h-6 w-6 text-[#0285E9]" />
                     </div>
                   </div>
-                  <p className="text-white font-medium">{benefit.title}</p>
+                  <p className="text-white font-medium text-sm md:text-base">{benefit.title}</p>
                 </motion.div>
               ))}
             </div>
@@ -106,13 +106,13 @@ export default function SurveyFightingForYou() {
                 transition={{ duration: 3, repeat: Infinity }}
                 className="absolute -top-8 -right-8 bg-gradient-to-r from-[#0285E9] to-[#0486e9] text-white px-6 py-4 rounded-2xl shadow-xl"
               >
-                <p className="text-3xl font-extrabold">$50M+</p>
-                <p className="text-sm font-semibold">Recovered</p>
+                <p className="text-2xl md:text-3xl font-extrabold">$50M+</p>
+                <p className="text-xs md:text-sm font-semibold">Recovered</p>
               </motion.div>
 
               <div className="pt-8">
-                <p className="text-white/60 text-sm mb-2">TOTAL CLIENT WINS</p>
-                <p className="text-5xl font-extrabold text-white mb-4">
+                <p className="text-white/60 text-xs md:text-sm mb-2">TOTAL CLIENT WINS</p>
+                <p className="text-3xl md:text-5xl font-extrabold text-white mb-4">
                   50,000+
                 </p>
                 <p className="text-white/70">

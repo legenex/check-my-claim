@@ -53,7 +53,7 @@ export default function SurveyGuarantee() {
 
                 <div className="text-center">
                   <p className="text-white/60 text-sm mb-2">RISK-FREE GUARANTEE</p>
-                  <p className="text-4xl font-extrabold text-white mb-2">100% FREE</p>
+                  <p className="text-3xl md:text-4xl font-extrabold text-white mb-2">100% FREE</p>
                   <p className="text-white/70">Zero Risk Guarantee</p>
                 </div>
               </div>
@@ -66,15 +66,15 @@ export default function SurveyGuarantee() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
+            <h2 className="text-2xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
               Our Attorneys Don't Get Paid Unless You Do
             </h2>
 
-            <p className="text-white/70 text-lg mb-8 font-semibold">
+            <p className="text-white/70 text-sm md:text-lg mb-8 font-semibold">
               THE NO WIN, NO FEE GUARANTEE
             </p>
 
-            <p className="text-white/70 text-base mb-8 leading-relaxed">
+            <p className="text-white/70 text-sm md:text-base mb-8 leading-relaxed">
               Check My Claim connects you with vetted attorneys in our network who work on a "no win, no fee" basis. This means the attorneys we match you with will not charge you a cent if they do not secure a positive outcome in your case. Our role is simple: we provide a free eligibility check and connect you with the right legal professional.
             </p>
 
@@ -90,7 +90,7 @@ export default function SurveyGuarantee() {
                   className="flex items-start gap-3"
                 >
                   <CheckCircle className="w-6 h-6 text-[#0285E9] flex-shrink-0 mt-0.5" />
-                  <p className="text-white text-base leading-relaxed">{guarantee}</p>
+                  <p className="text-white text-sm md:text-base leading-relaxed">{guarantee}</p>
                 </motion.div>
               ))}
             </div>

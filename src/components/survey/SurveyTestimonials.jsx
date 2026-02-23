@@ -52,16 +52,16 @@ export default function SurveyTestimonials() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-extrabold text-white mb-4"
-          >
-            Loved By Thousands of Clients
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-lg text-white/80"
+            className="text-2xl md:text-5xl font-extrabold text-white mb-4"
+            >
+             Loved By Thousands of Clients
+            </motion.h2>
+            <motion.p
+             initial={{ opacity: 0 }}
+             whileInView={{ opacity: 1 }}
+             viewport={{ once: true }}
+             transition={{ delay: 0.1 }}
+             className="text-sm md:text-lg text-white/80"
           >
             See what our satisfied clients have to say
           </motion.p>
