@@ -32,7 +32,7 @@ export default function NoWinNoFee() {
                 <Shield className="w-8 h-8 text-[#F18913]" />
                 <div>
                   <p className="text-[#0C2D5B] font-extrabold text-xl">100% FREE</p>
-                  <p className="text-[#595E64] text-xs">Zero Risk Guarantee</p>
+                  <p className="text-[#0C2D5B] text-xs">Zero Risk Guarantee</p>
                 </div>
               </div>
             </div>
