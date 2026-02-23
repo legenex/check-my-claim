@@ -48,7 +48,7 @@ export default function NoWinNoFee() {
               OUR GUARANTEE
             </div>
 
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-6 leading-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0C2D5B] mb-6 leading-tight">
               Our Attorneys Don't Get Paid Unless You Do
             </h2>
 
@@ -76,9 +76,9 @@ export default function NoWinNoFee() {
                   className="flex items-center gap-4"
                 >
                   <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-br from-[#EBB63E] to-[#F18913] flex items-center justify-center">
-                    <CheckCircle className="w-4 h-4 text-white" />
+                    <CheckCircle className="w-4 h-4 text-[#0C2D5B]" />
                   </div>
-                  <p className="text-white font-medium">{item}</p>
+                  <p className="text-[#0C2D5B] font-medium">{item}</p>
                 </motion.div>
               ))}
             </div>
@@ -91,7 +91,7 @@ export default function NoWinNoFee() {
 
             <button
               onClick={scrollTo}
-              className="group bg-gradient-to-r from-[#EBB63E] to-[#F18913] text-white font-bold px-8 py-4 rounded-full hover:shadow-2xl hover:shadow-orange-500/30 transition-all duration-300 hover:scale-105 inline-flex items-center gap-3"
+              className="group bg-gradient-to-r from-[#EBB63E] to-[#F18913] text-[#0C2D5B] font-bold px-8 py-4 rounded-full hover:shadow-2xl hover:shadow-orange-500/30 transition-all duration-300 hover:scale-105 inline-flex items-center gap-3"
             >
               Start Your Free Claim Check
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
