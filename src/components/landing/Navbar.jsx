@@ -21,14 +21,14 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-white shadow-lg" : "bg-transparent"}`}>
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20 md:h-24">
           <button onClick={() => handleNav("#home")} className="flex-shrink-0">
             <img
-              src={scrolled ? LOGO_DARK_URL : LOGO_URL}
+              src={LOGO_DARK_URL}
               alt="Claim Checker"
-              className="h-10 md:h-14 w-auto transition-all duration-300"
+              className="h-10 md:h-14 w-auto"
             />
           </button>
 
@@ -38,7 +38,7 @@ export default function Navbar() {
               <button
                 key={link.href}
                 onClick={() => handleNav(link.href)}
-                className={`text-sm font-medium tracking-wide transition-colors duration-300 hover:text-[#EBB63E] ${scrolled ? "text-[#0C2D5B]" : "text-white"}`}
+                className="text-sm font-medium tracking-wide transition-colors duration-300 text-[#0C2D5B] hover:text-[#EBB63E]"
               >
                 {link.label}
               </button>
@@ -54,7 +54,7 @@ export default function Navbar() {
           {/* Mobile toggle */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className={`md:hidden p-2 rounded-lg ${scrolled ? "text-[#0C2D5B]" : "text-white"}`}
+            className="md:hidden p-2 rounded-lg text-[#0C2D5B]"
           >
             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
