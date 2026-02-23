@@ -48,7 +48,7 @@ export default function NoWinNoFee() {
               OUR GUARANTEE
             </div>
 
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#F18913] mb-6 leading-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0C2D5B] mb-6 leading-tight">
               Our Attorneys Don't Get Paid Unless You Do
             </h2>
 
