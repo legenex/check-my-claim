@@ -25,14 +25,14 @@ export default function Sb37List() {
       >
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-[#EBB63E] to-[#F18913] px-8 py-6 text-center">
+          <div className="bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] px-8 py-6 text-center">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: "spring" }}
               className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full mb-4"
             >
-              <Users className="w-12 h-12 text-[#F18913]" />
+              <Users className="w-12 h-12 text-[#0285E9]" />
             </motion.div>
             <motion.h1
               initial={{ opacity: 0 }}
@@ -51,13 +51,13 @@ export default function Sb37List() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="bg-gradient-to-br from-[#EBB63E]/10 to-[#F18913]/10 rounded-2xl p-8 mb-8"
+              className="bg-gradient-to-br from-[#4ba8ee]/10 to-[#0486e9]/10 rounded-2xl p-8 mb-8"
             >
               <div className="space-y-4">
-                <div className="bg-white rounded-xl p-6 shadow-md border-l-4 border-[#F18913]">
+                <div className="bg-white rounded-xl p-6 shadow-md border-l-4 border-[#0285E9]">
                   <h3 className="text-xl font-bold text-[#0C2D5B]">Kevin Danesh</h3>
                 </div>
-                <div className="bg-white rounded-xl p-6 shadow-md border-l-4 border-[#F18913]">
+                <div className="bg-white rounded-xl p-6 shadow-md border-l-4 border-[#0285E9]">
                   <h3 className="text-xl font-bold text-[#0C2D5B]">The Law Offices of Larry H. Parker</h3>
                 </div>
               </div>
@@ -85,7 +85,7 @@ export default function Sb37List() {
                 <p>
                   They will discuss and agree upon the fee breakdown upfront and in detail, so there will be complete transparency and no disappointment once your case is won… That is a guarantee to you!
                 </p>
-                <p className="text-lg font-bold text-[#F18913] text-center">
+                <p className="text-lg font-bold text-[#0285E9] text-center">
                   YOU HAVE NOTHING TO LOSE!
                 </p>
               </div>
