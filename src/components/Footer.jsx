@@ -17,7 +17,7 @@ export default function Footer() {
             Privacy Policy
           </Link>
           <Link
-            to={createPageUrl("TermsAndConditions")}
+            to={createPageUrl("TermsOfService")}
             className="text-[#0285E9] hover:underline text-sm font-medium"
           >
             Terms & Conditions
