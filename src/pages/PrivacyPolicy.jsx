@@ -5,7 +5,7 @@ import { createPageUrl } from "@/utils";
 
 export default function PrivacyPolicy() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0a1f3d] via-[#0d2847] to-[#0a1f3d] flex items-center justify-center p-4 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-[#0a1f3d] via-[#0d2847] to-[#0a1f3d] flex items-center justify-center p-4 overflow-hidden" style={{ paddingTop: '100px' }}>
       <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl flex flex-col" style={{ maxHeight: '85vh', height: '85vh' }}>
         {/* Sticky Header */}
         <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-6 md:px-8 py-6 rounded-t-2xl flex items-center gap-4">
