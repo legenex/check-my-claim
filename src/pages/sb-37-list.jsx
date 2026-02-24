@@ -12,12 +12,7 @@ export default function Sb37List() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0C2D5B] via-[#001634] to-[#1B2737]">
-      {/* Logo */}
-      <div className="pt-8 pb-6 text-center">
-        <img src={LOGO_URL} alt="Check My Claim" className="h-12 mx-auto" />
-      </div>
-
-      <div className="flex items-center justify-center px-4 pb-12">
+      <div className="flex items-center justify-center px-4 pb-12" style={{ paddingTop: '120px' }}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

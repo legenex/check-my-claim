@@ -1,13 +1,7 @@
 import React from "react";
-import { motion } from "framer-motion";
-import { FileText, Shield, ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { FileText, ArrowLeft, Shield } from "lucide-react";
+import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { useNavigate } from "react-router-dom";
-import LandingFooter from "@/components/landing/Footer";
-import PageFooter from "@/components/Footer";
-
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/01b1e384b_CheckMyClaimLogo.png";
 
 const stateDisclosures = [
   {
@@ -113,143 +107,82 @@ const stateDisclosures = [
 ];
 
 export default function AdvertisingDisclosure() {
-  const navigate = useNavigate();
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0C2D5B] via-[#001634] to-[#1B2737]">
-      {/* Logo */}
-      <div className="pt-8 pb-6 text-center">
-        <img src={LOGO_URL} alt="Check My Claim" className="h-12 mx-auto" />
-      </div>
-
-      <div className="pb-12 px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="max-w-6xl mx-auto"
-      >
-        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
-          {/* Header */}
-          <div className="bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] px-8 py-6 text-center">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: "spring" }}
-              className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full mb-4"
-            >
-              <FileText className="w-12 h-12 text-[#0285E9]" />
-            </motion.div>
-            <motion.h1
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              className="text-3xl md:text-4xl font-extrabold text-white"
-            >
-              Advertising Disclosure
-            </motion.h1>
+    <div className="min-h-screen bg-gradient-to-br from-[#0a1f3d] via-[#0d2847] to-[#0a1f3d] flex items-center justify-center p-4 overflow-hidden" style={{ paddingTop: '100px' }}>
+      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl flex flex-col" style={{ maxHeight: '85vh', height: '85vh' }}>
+        {/* Sticky Header */}
+        <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-6 md:px-8 py-6 rounded-t-2xl flex items-center gap-4">
+          <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#0285E9]/10">
+            <FileText className="w-6 h-6 text-[#0285E9]" />
           </div>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-[#111E30]">
+            Advertising Disclosure
+          </h1>
+        </div>
 
-          {/* Content */}
-          <div className="px-6 md:px-10 py-10">
-            {/* General Disclosure */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="bg-gradient-to-br from-[#4ba8ee]/10 to-[#0486e9]/10 rounded-2xl p-6 md:p-8 mb-8"
-            >
-              <p className="text-[#595E64] leading-relaxed mb-4">
-                checkmyclaim.co is a non-professional legal services agency that connects service providers with consumers to help them live better lives, and when you call our number, you may be directly connected with one of our partners or a third party to assist you. Independent providers of the services may charge fees and have their own terms of service. checkmyclaim.co is not responsible and does not guarantee any outcomes from these providers. Services may not be available in all states, so please call or check our website for details.
-              </p>
-              <p className="text-[#595E64] leading-relaxed">
-                This Agreement contains a binding arbitration agreement, which provides that you and we agree to resolve certain disputes through binding individual arbitration and give up any right to have those disputes decided by a judge or a jury. You have the right to opt out of our agreement to arbitrate. See the Legal Disputes section of this Agreement.
-              </p>
-            </motion.div>
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto px-6 md:px-8 py-6 pb-4">
+          <div className="prose prose-slate max-w-none">
+          <p className="text-[#595E64] mb-6 leading-relaxed">
+            checkmyclaim.co is a non-professional legal services agency that connects service providers with consumers to help them live better lives, and when you call our number, you may be directly connected with one of our partners or a third party to assist you. Independent providers of the services may charge fees and have their own terms of service. checkmyclaim.co is not responsible and does not guarantee any outcomes from these providers. Services may not be available in all states, so please call or check our website for details.
+          </p>
+          
+          <p className="text-[#595E64] mb-8 leading-relaxed">
+            This Agreement contains a binding arbitration agreement, which provides that you and we agree to resolve certain disputes through binding individual arbitration and give up any right to have those disputes decided by a judge or a jury. You have the right to opt out of our agreement to arbitrate. See the Legal Disputes section of this Agreement.
+          </p>
 
-            {/* State Specific Disclosures */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="mb-8"
-            >
-              <h2 className="text-2xl md:text-3xl font-extrabold text-[#0C2D5B] mb-6 text-center">
-                STATE SPECIFIC LEGAL ADVERTISING DISCLOSURES
-              </h2>
-              <div className="space-y-4">
-                {stateDisclosures.map((disclosure, index) => (
-                  <motion.div
-                    key={disclosure.state}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.7 + index * 0.02 }}
-                    className="bg-white border border-gray-200 rounded-xl p-4 md:p-6 hover:shadow-md transition-shadow"
-                  >
-                    <h3 className="text-lg font-bold text-[#0C2D5B] mb-2">{disclosure.state}</h3>
-                    <p className="text-[#595E64] text-sm leading-relaxed">{disclosure.text}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* NO WIN, NO FEE Guarantee */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="bg-gradient-to-br from-green-50 to-green-100/50 rounded-2xl p-6 md:p-8 mb-8 border-2 border-green-500"
-            >
-              <div className="flex items-center justify-center mb-6">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
-                  <Shield className="w-9 h-9 text-white" />
+          <section className="mb-8">
+            <h2 className="text-2xl font-bold text-[#111E30] mb-6">State Specific Legal Advertising Disclosures</h2>
+            <div className="space-y-4">
+              {stateDisclosures.map((disclosure) => (
+                <div
+                  key={disclosure.state}
+                  className="border-l-4 border-[#0285E9] bg-gray-50 rounded-lg p-4"
+                >
+                  <h3 className="text-lg font-bold text-[#111E30] mb-2">{disclosure.state}</h3>
+                  <p className="text-[#595E64] text-sm leading-relaxed">{disclosure.text}</p>
                 </div>
-              </div>
-              <h2 className="text-2xl md:text-3xl font-extrabold text-[#0C2D5B] mb-6 text-center">
-                NO WIN, NO FEE Guarantee:
-              </h2>
-              <div className="space-y-4 text-[#595E64] leading-relaxed">
-                <p>
-                  The attorney's guarantee every client that they will not charge you a cent if they do not secure a positive outcome in your case. If you do win, the bulk of the fees are usually paid by the opposing counsel's client, who was responsible for the accident.
-                </p>
-                <p>
-                  They will discuss and agree upon the fee breakdown upfront and in detail, so there will be complete transparency and no disappointment once your case is won… That is a guarantee to you!
-                </p>
-                <p className="text-lg font-bold text-[#0285E9] text-center">
-                  YOU HAVE NOTHING TO LOSE!
-                </p>
-              </div>
-            </motion.div>
+              ))}
+            </div>
+          </section>
 
-            {/* Back to Home */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.9 }}
-              className="text-center"
-            >
-              <Button
-                variant="outline"
-                onClick={() => navigate(createPageUrl("Home"))}
-                className="inline-flex items-center gap-2"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Back to Home
-              </Button>
-            </motion.div>
+          {/* NO WIN NO FEE Guarantee Card */}
+          <div className="bg-gradient-to-br from-[#0285E9] to-[#0486e9] rounded-xl p-6 shadow-lg mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20">
+                <Shield className="w-6 h-6 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-white">NO WIN, NO FEE Guarantee</h2>
+            </div>
+            <p className="text-white/90 leading-relaxed">
+              The attorney's guarantee every client that they will not charge you a cent if they do not secure a positive outcome in your case. If you do win, the bulk of the fees are usually paid by the opposing counsel's client, who was responsible for the accident. They will discuss and agree upon the fee breakdown upfront and in detail, so there will be complete transparency and no disappointment once your case is won… That is a guarantee to you! YOU HAVE NOTHING TO LOSE!
+            </p>
           </div>
+          </div>
+        </div>
 
-          {/* Footer */}
-          <div className="bg-gray-50 px-8 py-6 text-center border-t border-gray-200">
-            <img src={LOGO_URL} alt="Claim Checker" className="h-8 mx-auto mb-3" />
-            <p className="text-[#595E64] text-xs">
+        {/* Sticky Bottom Section */}
+        <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 md:px-8 py-4 rounded-b-2xl">
+          <Link 
+            to={createPageUrl("Home")}
+            className="inline-flex items-center gap-2 bg-[#0285E9] hover:bg-[#0486e9] text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200 mb-4"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            Back to Home
+          </Link>
+
+          <div className="flex flex-col items-center gap-3">
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/01b1e384b_CheckMyClaimLogo.png" 
+              alt="Check My Claim Logo" 
+              className="h-10"
+            />
+            <p className="text-[#595E64] text-sm text-center">
               Your privacy is important to us. We will never share your information without your consent.
             </p>
           </div>
         </div>
-      </motion.div>
       </div>
-      <LandingFooter />
-      <PageFooter />
     </div>
   );
 }
