@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
 import { useNavigate } from "react-router-dom";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/checkmyclaim-logo.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/01b1e384b_CheckMyClaimLogo.png";
 
 export default function Sb37List() {
   const navigate = useNavigate();

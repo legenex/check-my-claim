@@ -50,13 +50,13 @@
 import AdvertisingDisclosure from './pages/AdvertisingDisclosure';
 import Home from './pages/Home';
 import PartnerList from './pages/PartnerList';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import Sorry from './pages/Sorry';
 import Submitted from './pages/Submitted';
 import Survey from './pages/Survey';
+import TermsOfService from './pages/TermsOfService';
 import Thanks from './pages/Thanks';
 import sb37List from './pages/sb-37-list';
-import Sorry from './pages/Sorry';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import TermsOfService from './pages/TermsOfService';
 import __Layout from './Layout.jsx';
 
 
@@ -64,13 +64,13 @@ export const PAGES = {
     "AdvertisingDisclosure": AdvertisingDisclosure,
     "Home": Home,
     "PartnerList": PartnerList,
+    "PrivacyPolicy": PrivacyPolicy,
+    "Sorry": Sorry,
     "Submitted": Submitted,
     "Survey": Survey,
+    "TermsOfService": TermsOfService,
     "Thanks": Thanks,
     "sb-37-list": sb37List,
-    "Sorry": Sorry,
-    "PrivacyPolicy": PrivacyPolicy,
-    "TermsOfService": TermsOfService,
 }
 
 export const pagesConfig = {

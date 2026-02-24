@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import LandingFooter from "@/components/landing/Footer";
 import PageFooter from "@/components/Footer";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/checkmyclaim-logo.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/01b1e384b_CheckMyClaimLogo.png";
 
 const affiliatedPartners = [
   "Car Accident Helpline",
