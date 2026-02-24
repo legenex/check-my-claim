@@ -2,8 +2,6 @@ import React from "react";
 import { Shield, ArrowLeft, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import LandingFooter from "@/components/landing/Footer";
-import PageFooter from "@/components/Footer";
 
 export default function PrivacyPolicy() {
   return (
@@ -187,9 +185,6 @@ export default function PrivacyPolicy() {
           </div>
         </div>
       </div>
-      
-      <LandingFooter />
-      <PageFooter />
     </div>
   );
 }
