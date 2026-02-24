@@ -4,7 +4,8 @@ import { FileText, Shield, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
 import { useNavigate } from "react-router-dom";
-import Footer from "@/components/Footer";
+import LandingFooter from "@/components/landing/Footer";
+import PageFooter from "@/components/Footer";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/checkmyclaim-logo.png";
 
@@ -247,7 +248,8 @@ export default function AdvertisingDisclosure() {
         </div>
       </motion.div>
       </div>
-      <Footer />
+      <LandingFooter />
+      <PageFooter />
     </div>
   );
 }
