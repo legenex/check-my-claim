@@ -20,15 +20,15 @@ const stateDisclosures = [
   },
   {
     state: "Arizona",
-    text: "freecasehelp.com is a website name and not a law firm. The law firms who advertise through this website do not operate as freecasehelp.com."
+    text: "checkmyclaim.co is a website name and not a law firm. The law firms who advertise through this website do not operate as checkmyclaim.co"
   },
   {
     state: "California",
-    text: "Please note that freecasehelp.com is an attorney marketing network and is not affiliated with any government agency. freecasehelp.com does not receive any funding from any government or not-for-profit foundation."
+    text: "Please note that checkmyclaim.co is an attorney marketing network and is not affiliated with any government agency. checkmyclaim.co does not receive any funding from any government or not-for-profit foundation."
   },
   {
     state: "Colorado",
-    text: "freecasehelp.com is a website name and not a law firm. The law firms who advertise through this website do not operate as freecasehelp.com."
+    text: "checkmyclaim.co is a website name and not a law firm. The law firms who advertise through this website do not operate as checkmyclaim.co."
   },
   {
     state: "Florida",
@@ -36,7 +36,7 @@ const stateDisclosures = [
   },
   {
     state: "Georgia",
-    text: "freecasehelp.com is a website name and not a law firm. The law firms who advertise through this website do not operate as freecasehelp.com."
+    text: "checkmyclaim.co is a website name and not a law firm. The law firms who advertise through this website do not operate as checkmyclaim.co."
   },
   {
     state: "Hawaii",
@@ -48,19 +48,19 @@ const stateDisclosures = [
   },
   {
     state: "Indiana",
-    text: "freecasehelp.com is a website name and not a law firm. The law firms who advertise through this website do not operate as freecasehelp.com."
+    text: "checkmyclaim.co is a website name and not a law firm. The law firms who advertise through this website do not operate as checkmyclaim.co."
   },
   {
     state: "Iowa",
-    text: "freecasehelp.com is a website name and not a law firm. The law firms who advertise through this website do not operate as freecasehelp.com. The Supreme Court of Iowa requires the following disclosure: The choice of a lawyer and the determination of the need for legal assistance are extremely important decisions and should not be based on advertisements or self-proclaimed expertise. Memberships and offices in legal fraternities and legal societies, technical and professional licenses, and memberships in scientific, technical, and professional associations and societies of law or field of practice do not mean that a lawyer is a \"specialist\" or \"expert\" in a particular field of law. Such memberships, licenses, or offices also do not necessarily mean that a lawyer is any more expert or competent than any other lawyer. A description of limitation of practice does not mean that any agency or board has certified the lawyer as a specialist or expert in any indicated field of law, nor does it mean that such a lawyer is necessarily any more expert or competent than any other lawyer. The Supreme Court of Iowa requires the following disclosure: All potential clients should make their own independent evaluation and investigation of any lawyer being considered for particular legal representation."
+    text: "checkmyclaim.co is a website name and not a law firm. The law firms who advertise through this website do not operate as checkmyclaim.co. The Supreme Court of Iowa requires the following disclosure: The choice of a lawyer and the determination of the need for legal assistance are extremely important decisions and should not be based on advertisements or self-proclaimed expertise. Memberships and offices in legal fraternities and legal societies, technical and professional licenses, and memberships in scientific, technical, and professional associations and societies of law or field of practice do not mean that a lawyer is a \"specialist\" or \"expert\" in a particular field of law. Such memberships, licenses, or offices also do not necessarily mean that a lawyer is any more expert or competent than any other lawyer. A description of limitation of practice does not mean that any agency or board has certified the lawyer as a specialist or expert in any indicated field of law, nor does it mean that such a lawyer is necessarily any more expert or competent than any other lawyer. The Supreme Court of Iowa requires the following disclosure: All potential clients should make their own independent evaluation and investigation of any lawyer being considered for particular legal representation."
   },
   {
     state: "Kentucky",
-    text: "freecasehelp.com is a website name and not a law firm. The law firms who advertise through this website do not operate as freecasehelp.com."
+    text: "checkmyclaim.co is a website name and not a law firm. The law firms who advertise through this website do not operate as checkmyclaim.co."
   },
   {
     state: "Maine",
-    text: "freecasehelp.com is a website name and not a law firm. The law firms who advertise through this website do not operate as freecasehelp.com."
+    text: "checkmyclaim.co is a website name and not a law firm. The law firms who advertise through this website do not operate as checkmyclaim.co."
   },
   {
     state: "Massachusetts",
@@ -68,7 +68,7 @@ const stateDisclosures = [
   },
   {
     state: "Mississippi",
-    text: "freecasehelp.com is a website name and not a law firm. The law firms who advertise through this website do not operate as freecasehelp.com. Background information on any Mississippi attorney is available free upon request to that attorney. Mississippi has no procedure for approving, certifying, or designating organizations and authorities."
+    text: "checkmyclaim.co is a website name and not a law firm. The law firms who advertise through this website do not operate as checkmyclaim.co. Background information on any Mississippi attorney is available free upon request to that attorney. Mississippi has no procedure for approving, certifying, or designating organizations and authorities."
   },
   {
     state: "Missouri",
@@ -76,11 +76,11 @@ const stateDisclosures = [
   },
   {
     state: "Nevada",
-    text: "freecasehelp.com is a website name and not a law firm. The law firms who advertise through this website do not operate as freecasehelp.com. Neither the State Bar of Nevada nor any agency of the State Bar has certified any lawyer identified in this advertisement as a specialist or expert, except as indicated. Anyone considering hiring an attorney should independently investigate the lawyer's qualifications, credentials, and ability."
+    text: "checkmyclaim.co is a website name and not a law firm. The law firms who advertise through this website do not operate as checkmyclaim.co. Neither the State Bar of Nevada nor any agency of the State Bar has certified any lawyer identified in this advertisement as a specialist or expert, except as indicated. Anyone considering hiring an attorney should independently investigate the lawyer's qualifications, credentials, and ability."
   },
   {
     state: "New Jersey",
-    text: "freecasehelp.com is a website name and not a law firm. The law firms who advertise through this website do not operate as freecasehelp.com. The Supreme Court of New Jersey recognizes certifications in some areas of legal practice. If a lawyer claims certification as a specialist or expert in a field of law or practice and does not specifically indicate that such certification has been granted by the Supreme Court of New Jersey or by an organization approved by the American Bar Association, then the user should understand that the claimed certification body has either not been approved or been denied certification by the Supreme Court of New Jersey and the American Bar Association."
+    text: "checkmyclaim.co is a website name and not a law firm. The law firms who advertise through this website do not operate as checkmyclaim.co. The Supreme Court of New Jersey recognizes certifications in some areas of legal practice. If a lawyer claims certification as a specialist or expert in a field of law or practice and does not specifically indicate that such certification has been granted by the Supreme Court of New Jersey or by an organization approved by the American Bar Association, then the user should understand that the claimed certification body has either not been approved or been denied certification by the Supreme Court of New Jersey and the American Bar Association."
   },
   {
     state: "New Mexico",
@@ -88,7 +88,7 @@ const stateDisclosures = [
   },
   {
     state: "New York",
-    text: "freecasehelp.com is a website name and not a law firm. The law firms who advertise through this website do not operate as freecasehelp.com."
+    text: "checkmyclaim.co is a website name and not a law firm. The law firms who advertise through this website do not operate as checkmyclaim.co."
   },
   {
     state: "Rhode Island",
@@ -100,7 +100,7 @@ const stateDisclosures = [
   },
   {
     state: "Texas",
-    text: "freecasehelp.com is a website name and not a law firm. The law firms who advertise through this website do not operate as freecasehelp.com. Lawyers named on this site are not certified by the Texas Board of Legal Specialization unless otherwise specifically indicated."
+    text: "checkmyclaim.co is a website name and not a law firm. The law firms who advertise through this website do not operate as checkmyclaim.co. Lawyers named on this site are not certified by the Texas Board of Legal Specialization unless otherwise specifically indicated."
   },
   {
     state: "Washington",
@@ -155,7 +155,7 @@ export default function AdvertisingDisclosure() {
               className="bg-gradient-to-br from-[#4ba8ee]/10 to-[#0486e9]/10 rounded-2xl p-6 md:p-8 mb-8"
             >
               <p className="text-[#595E64] leading-relaxed mb-4">
-                freecasehelp.com is a non-professional legal services agency that connects service providers with consumers to help them live better lives, and when you call our number, you may be directly connected with one of our partners or a third party to assist you. Independent providers of the services may charge fees and have their own terms of service. freecasehelp.com is not responsible and does not guarantee any outcomes from these providers. Services may not be available in all states, so please call or check our website for details.
+                checkmyclaim.co is a non-professional legal services agency that connects service providers with consumers to help them live better lives, and when you call our number, you may be directly connected with one of our partners or a third party to assist you. Independent providers of the services may charge fees and have their own terms of service. checkmyclaim.co is not responsible and does not guarantee any outcomes from these providers. Services may not be available in all states, so please call or check our website for details.
               </p>
               <p className="text-[#595E64] leading-relaxed">
                 This Agreement contains a binding arbitration agreement, which provides that you and we agree to resolve certain disputes through binding individual arbitration and give up any right to have those disputes decided by a judge or a jury. You have the right to opt out of our agreement to arbitrate. See the Legal Disputes section of this Agreement.
