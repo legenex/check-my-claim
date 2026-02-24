@@ -63,9 +63,22 @@ export default function Footer() {
           <p className="text-gray-500 text-sm">
             © {new Date().getFullYear()} Check My Claim. All rights reserved.
           </p>
-          <p className="text-gray-500 text-xs max-w-lg text-center md:text-right">
-            Check My Claim is not a law firm and does not provide legal advice. Results from the AI tool are for informational purposes only and do not guarantee compensation.
-          </p>
+          <div className="flex flex-col md:flex-row items-center gap-4">
+            <p className="text-gray-500 text-xs max-w-lg text-center md:text-right">
+              Check My Claim is not a law firm and does not provide legal advice. Results from the AI tool are for informational purposes only and do not guarantee compensation.
+            </p>
+            <div className="flex gap-6 flex-wrap justify-center">
+              <a href="/privacy-policy" className="text-[#0285E9] hover:underline text-sm font-medium whitespace-nowrap">
+                Privacy Policy
+              </a>
+              <a href="/terms-of-service" className="text-[#0285E9] hover:underline text-sm font-medium whitespace-nowrap">
+                Terms & Conditions
+              </a>
+              <a href="/advertising-disclosure" className="text-[#0285E9] hover:underline text-sm font-medium whitespace-nowrap">
+                Advertising Disclosure
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

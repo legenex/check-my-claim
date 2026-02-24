@@ -14,7 +14,6 @@ import RecentWins from "@/components/landing/RecentWins";
 import AboutUs from "@/components/landing/AboutUs";
 import FAQ from "@/components/landing/FAQ";
 import LandingFooter from "@/components/landing/Footer";
-import PageFooter from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -34,7 +33,6 @@ export default function Home() {
       <AboutUs />
       <FAQ />
       <LandingFooter />
-      <PageFooter />
     </div>
   );
 }
