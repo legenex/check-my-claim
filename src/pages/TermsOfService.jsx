@@ -147,16 +147,13 @@ export default function TermsOfService() {
 
           <section className="mb-8">
             <h2 className="text-2xl font-bold text-[#111E30] mb-4">10. Contact Us</h2>
-            <p className="text-[#595E64] leading-relaxed">
-              If you have any questions or concerns regarding these Terms, please contact us at Check my Claim.
-            </p>
-          </section>
-
-          <div className="bg-[#0285E9]/10 border-l-4 border-[#0285E9] p-6 rounded-lg mb-8">
             <p className="text-[#595E64] leading-relaxed mb-4">
-              By accessing or using the Website, you acknowledge that you have read, understood, and agreed to these Terms.
+              If you have any questions or concerns regarding these Terms, please contact us at:
             </p>
-          </div>
+            <a href="mailto:help@checkmyclaim.co" className="text-[#0285E9] hover:underline font-semibold">
+              help@checkmyclaim.co
+            </a>
+          </section>
 
           {/* NO WIN NO FEE Guarantee Card */}
           <div className="bg-gradient-to-br from-[#0285E9] to-[#0486e9] rounded-xl p-6 shadow-lg mb-8">
