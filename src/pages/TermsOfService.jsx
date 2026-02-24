@@ -18,7 +18,7 @@ export default function TermsOfService() {
         </div>
 
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto px-6 md:px-8 py-6">
+        <div className="flex-1 overflow-y-auto px-6 md:px-8 py-6 pb-4">
           <div className="prose prose-slate max-w-none">
           <p className="text-[#595E64] mb-6 leading-relaxed">
             These Terms and Conditions ("Terms") govern your use of the Check my Claim website (the "Website"), owned and operated by NJA-Online LLC ("we," "us," or "our"). By accessing or using the Website, you agree to be bound by these Terms. If you do not agree with any of the provisions of these Terms, you must not access or use the Website.
@@ -170,28 +170,28 @@ export default function TermsOfService() {
               The attorney's guarantee every client that they will not charge you a cent if they do not secure a positive outcome in your case. If you do win, the bulk of the fees are usually paid by the opposing counsel's client, who was responsible for the accident. They will discuss and agree upon the fee breakdown upfront and in detail, so there will be complete transparency and no disappointment once your case is won… That is a guarantee to you! YOU HAVE NOTHING TO LOSE!
             </p>
           </div>
-
-          {/* Bottom Section */}
-          <div className="border-t border-gray-200 pt-6 pb-4">
-            <Link 
-              to={createPageUrl("Home")}
-              className="inline-flex items-center gap-2 bg-[#0285E9] hover:bg-[#0486e9] text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200 mb-6"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              Back to Home
-            </Link>
-
-            <div className="flex flex-col items-center gap-3 mt-6">
-              <img 
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/checkmyclaim-logo.png" 
-                alt="Check My Claim Logo" 
-                className="h-10"
-              />
-              <p className="text-[#595E64] text-sm text-center">
-                Your privacy is important to us. We will never share your information without your consent.
-              </p>
-            </div>
           </div>
+        </div>
+
+        {/* Sticky Bottom Section */}
+        <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 md:px-8 py-4 rounded-b-2xl">
+          <Link 
+            to={createPageUrl("Home")}
+            className="inline-flex items-center gap-2 bg-[#0285E9] hover:bg-[#0486e9] text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200 mb-4"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            Back to Home
+          </Link>
+
+          <div className="flex flex-col items-center gap-3">
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/checkmyclaim-logo.png" 
+              alt="Check My Claim Logo" 
+              className="h-10"
+            />
+            <p className="text-[#595E64] text-sm text-center">
+              Your privacy is important to us. We will never share your information without your consent.
+            </p>
           </div>
         </div>
       </div>
