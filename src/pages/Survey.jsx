@@ -72,42 +72,42 @@ export default function Survey() {
       </section>
 
       {/* Process Section */}
-      <div className="px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <div className="px-4 sm:px-6 lg:px-8 py-4 md:py-6">
         <div className="max-w-7xl mx-auto">
           <SurveyProcess />
         </div>
       </div>
 
       {/* Fighting For You Section */}
-      <div className="px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <div className="px-4 sm:px-6 lg:px-8 py-4 md:py-6">
         <div className="max-w-7xl mx-auto">
           <SurveyFightingForYou />
         </div>
       </div>
 
       {/* Recent Wins Section */}
-      <div className="px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <div className="px-4 sm:px-6 lg:px-8 py-4 md:py-6">
         <div className="max-w-7xl mx-auto">
           <SurveyRecentWins />
         </div>
       </div>
 
       {/* Guarantee Section */}
-      <div className="px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <div className="px-4 sm:px-6 lg:px-8 py-4 md:py-6">
         <div className="max-w-7xl mx-auto">
           <SurveyGuarantee />
         </div>
       </div>
 
       {/* Testimonials Section */}
-      <div className="px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <div className="px-4 sm:px-6 lg:px-8 py-4 md:py-6">
         <div className="max-w-7xl mx-auto">
           <SurveyTestimonials />
         </div>
       </div>
 
       {/* FAQ Section */}
-      <div className="px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <div className="px-4 sm:px-6 lg:px-8 py-4 md:py-6">
         <div className="max-w-7xl mx-auto">
           <SurveyFAQ />
         </div>
