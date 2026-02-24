@@ -13,7 +13,7 @@ import NoWinNoFee from "@/components/landing/NoWinNoFee";
 import RecentWins from "@/components/landing/RecentWins";
 import AboutUs from "@/components/landing/AboutUs";
 import FAQ from "@/components/landing/FAQ";
-import Footer from "@/components/landing/Footer";
+import LandingFooter from "@/components/landing/Footer";
 import PageFooter from "@/components/Footer";
 
 export default function Home() {
@@ -33,7 +33,7 @@ export default function Home() {
       <RecentWins />
       <AboutUs />
       <FAQ />
-      <Footer />
+      <LandingFooter />
       <PageFooter />
     </div>
   );
