@@ -118,6 +118,7 @@ export default function Sb37List() {
           </div>
         </div>
       </motion.div>
+      </div>
     </div>
   );
 }

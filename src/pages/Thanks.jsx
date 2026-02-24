@@ -131,6 +131,7 @@ export default function Thanks() {
           </div>
         </div>
       </motion.div>
+      </div>
       
       <Footer />
     </div>

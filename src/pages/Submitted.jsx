@@ -206,6 +206,7 @@ export default function Submitted() {
           ✓ 100% Free • ✓ No Obligation • ✓ Your Information is Secure
         </motion.p>
       </motion.div>
+      </div>
       
       <Footer />
     </div>
