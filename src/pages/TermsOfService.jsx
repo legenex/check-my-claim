@@ -1,5 +1,7 @@
 import React from "react";
-import { FileText } from "lucide-react";
+import { FileText, ArrowLeft, Shield } from "lucide-react";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 
 export default function TermsOfService() {
   return (
@@ -156,12 +158,40 @@ export default function TermsOfService() {
             </p>
           </div>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-bold text-[#111E30] mb-4">NO WIN, NO FEE Guarantee</h2>
-            <p className="text-[#595E64] leading-relaxed">
+          {/* NO WIN NO FEE Guarantee Card */}
+          <div className="bg-gradient-to-br from-[#0285E9] to-[#0486e9] rounded-xl p-6 shadow-lg mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20">
+                <Shield className="w-6 h-6 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-white">NO WIN, NO FEE Guarantee</h2>
+            </div>
+            <p className="text-white/90 leading-relaxed">
               The attorney's guarantee every client that they will not charge you a cent if they do not secure a positive outcome in your case. If you do win, the bulk of the fees are usually paid by the opposing counsel's client, who was responsible for the accident. They will discuss and agree upon the fee breakdown upfront and in detail, so there will be complete transparency and no disappointment once your case is won… That is a guarantee to you! YOU HAVE NOTHING TO LOSE!
             </p>
-          </section>
+          </div>
+
+          {/* Bottom Section */}
+          <div className="border-t border-gray-200 pt-6 pb-4">
+            <Link 
+              to={createPageUrl("Home")}
+              className="inline-flex items-center gap-2 bg-[#0285E9] hover:bg-[#0486e9] text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-200 mb-6"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              Back to Home
+            </Link>
+
+            <div className="flex flex-col items-center gap-3 mt-6">
+              <img 
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/checkmyclaim-logo.png" 
+                alt="Check My Claim Logo" 
+                className="h-10"
+              />
+              <p className="text-[#595E64] text-sm text-center">
+                Your privacy is important to us. We will never share your information without your consent.
+              </p>
+            </div>
+          </div>
           </div>
         </div>
       </div>
