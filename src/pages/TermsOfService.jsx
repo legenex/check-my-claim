@@ -1,15 +1,23 @@
 import React from "react";
-import Footer from "@/components/Footer";
+import { FileText } from "lucide-react";
 
 export default function TermsOfService() {
   return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-4xl mx-auto px-4 py-12 md:py-16">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-[#111E30] mb-8">
-          Terms of Service
-        </h1>
+    <div className="min-h-screen bg-gradient-to-br from-[#0a1f3d] via-[#0d2847] to-[#0a1f3d] flex items-center justify-center p-4 overflow-hidden">
+      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl flex flex-col" style={{ maxHeight: '70vh', height: '70vh' }}>
+        {/* Sticky Header */}
+        <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-6 md:px-8 py-6 rounded-t-2xl flex items-center gap-4">
+          <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#0285E9]/10">
+            <FileText className="w-6 h-6 text-[#0285E9]" />
+          </div>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-[#111E30]">
+            Terms of Service
+          </h1>
+        </div>
 
-        <div className="prose prose-slate max-w-none">
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto px-6 md:px-8 py-6">
+          <div className="prose prose-slate max-w-none">
           <p className="text-[#595E64] mb-6 leading-relaxed">
             These Terms and Conditions ("Terms") govern your use of the Check my Claim website (the "Website"), owned and operated by NJA-Online LLC ("we," "us," or "our"). By accessing or using the Website, you agree to be bound by these Terms. If you do not agree with any of the provisions of these Terms, you must not access or use the Website.
           </p>
@@ -154,10 +162,9 @@ export default function TermsOfService() {
               The attorney's guarantee every client that they will not charge you a cent if they do not secure a positive outcome in your case. If you do win, the bulk of the fees are usually paid by the opposing counsel's client, who was responsible for the accident. They will discuss and agree upon the fee breakdown upfront and in detail, so there will be complete transparency and no disappointment once your case is won… That is a guarantee to you! YOU HAVE NOTHING TO LOSE!
             </p>
           </section>
+          </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 }
