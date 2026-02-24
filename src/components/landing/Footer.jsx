@@ -9,23 +9,7 @@ export default function Footer() {
   return (
     <footer id="contact" className="bg-[#111E30] relative overflow-hidden">
       {/* Final CTA band */}
-      <div className="bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] py-12 md:py-16">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4">
-            Get the Compensation You Deserve
-          </h2>
-          <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
-            Don't wait. Every day counts after an accident. Check your eligibility for free in less than 2 minutes.
-          </p>
-          <a
-            href="https://qualify.checkmyclaim.co/s/mva?utm_source=CMC-Website&utm_campaign=Home-Page&utm_medium=12th-Button"
-            className="group bg-white text-[#111E30] font-bold text-lg px-8 py-4 rounded-full hover:shadow-2xl transition-all duration-300 hover:scale-105 inline-flex items-center gap-3"
-          >
-            Start Your Free Claim Check
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </a>
-        </div>
-      </div>
+
 
       {/* Footer content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
