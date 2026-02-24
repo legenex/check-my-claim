@@ -1,5 +1,7 @@
 import React from "react";
 import { ArrowRight, Mail, Phone } from "lucide-react";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 
 const LOGO_LIGHT_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/530d12638_CheckMyClaimLogoLight.png";
 
@@ -68,15 +70,15 @@ export default function Footer() {
               Check My Claim is not a law firm and does not provide legal advice. Results from the AI tool are for informational purposes only and do not guarantee compensation.
             </p>
             <div className="flex gap-6 flex-wrap justify-center">
-              <a href="/privacy-policy" className="text-[#0285E9] hover:underline text-sm font-medium whitespace-nowrap">
+              <Link to={createPageUrl("PrivacyPolicy")} className="text-[#0285E9] hover:underline text-sm font-medium whitespace-nowrap">
                 Privacy Policy
-              </a>
-              <a href="/terms-of-service" className="text-[#0285E9] hover:underline text-sm font-medium whitespace-nowrap">
+              </Link>
+              <Link to={createPageUrl("TermsOfService")} className="text-[#0285E9] hover:underline text-sm font-medium whitespace-nowrap">
                 Terms & Conditions
-              </a>
-              <a href="/advertising-disclosure" className="text-[#0285E9] hover:underline text-sm font-medium whitespace-nowrap">
+              </Link>
+              <Link to={createPageUrl("AdvertisingDisclosure")} className="text-[#0285E9] hover:underline text-sm font-medium whitespace-nowrap">
                 Advertising Disclosure
-              </a>
+              </Link>
             </div>
           </div>
         </div>
