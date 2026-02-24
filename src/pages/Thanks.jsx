@@ -6,7 +6,7 @@ import { createPageUrl } from "@/utils";
 import { useNavigate } from "react-router-dom";
 import Footer from "@/components/Footer";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/08c3eb029_CheckMyClaimLogoLight.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/checkmyclaim-logo.png";
 
 export default function Thanks() {
   const navigate = useNavigate();
@@ -16,11 +16,17 @@ export default function Thanks() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0C2D5B] via-[#001634] to-[#1B2737] flex flex-col items-center justify-center px-4 pt-24 pb-12">
+    <div className="min-h-screen bg-gradient-to-br from-[#0C2D5B] via-[#001634] to-[#1B2737]">
+      {/* Logo */}
+      <div className="pt-8 pb-6 text-center">
+        <img src={LOGO_URL} alt="Check My Claim" className="h-12 mx-auto" />
+      </div>
+
+      <div className="flex flex-col items-center px-4 pb-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-4xl w-full flex-1 flex items-center justify-center"
+        className="max-w-4xl w-full"
       >
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden w-full">
           {/* Header */}

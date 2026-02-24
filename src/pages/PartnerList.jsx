@@ -4,10 +4,9 @@ import { Users, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
 import { useNavigate } from "react-router-dom";
-import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/Footer";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/08c3eb029_CheckMyClaimLogoLight.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/checkmyclaim-logo.png";
 
 const affiliatedPartners = [
   "Car Accident Helpline",
@@ -203,9 +202,13 @@ export default function PartnerList() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar />
-      <div className="pt-24 pb-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#0C2D5B] via-[#001634] to-[#1B2737]">
+      {/* Logo */}
+      <div className="pt-8 pb-6 text-center">
+        <img src={LOGO_URL} alt="Check My Claim" className="h-12 mx-auto" />
+      </div>
+
+      <div className="pb-12 px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
