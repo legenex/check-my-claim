@@ -29,8 +29,8 @@ export default function Survey() {
       <CallBanner />
 
       {/* Quiz Image Section */}
-      <section className="py-6 md:py-8 px-4">
-        <div className="max-w-2xl mx-auto">
+      <section className="py-6 md:py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
           <img 
             src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/614888e84_image.png"
             alt="Get The Maximum Cash Payout For Your Accident Injury"
@@ -40,49 +40,49 @@ export default function Survey() {
       </section>
 
       {/* Process Section */}
-      <div className="px-4">
-        <div className="max-w-2xl mx-auto">
+      <div className="px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <div className="max-w-7xl mx-auto">
           <SurveyProcess />
         </div>
       </div>
 
       {/* Fighting For You Section */}
-      <div className="px-4">
-        <div className="max-w-2xl mx-auto">
+      <div className="px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <div className="max-w-7xl mx-auto">
           <SurveyFightingForYou />
         </div>
       </div>
 
       {/* Recent Wins Section */}
-      <div className="px-4">
-        <div className="max-w-2xl mx-auto">
+      <div className="px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <div className="max-w-7xl mx-auto">
           <SurveyRecentWins />
         </div>
       </div>
 
       {/* Guarantee Section */}
-      <div className="px-4">
-        <div className="max-w-2xl mx-auto">
+      <div className="px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <div className="max-w-7xl mx-auto">
           <SurveyGuarantee />
         </div>
       </div>
 
       {/* Testimonials Section */}
-      <div className="px-4">
-        <div className="max-w-2xl mx-auto">
+      <div className="px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <div className="max-w-7xl mx-auto">
           <SurveyTestimonials />
         </div>
       </div>
 
       {/* FAQ Section */}
-      <div className="px-4">
-        <div className="max-w-2xl mx-auto">
+      <div className="px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <div className="max-w-7xl mx-auto">
           <SurveyFAQ />
         </div>
       </div>
 
-      <footer className="bg-[#0C2D5B] border-t border-white/10 py-8 px-4">
-        <div className="max-w-2xl mx-auto">
+      <footer className="bg-[#0C2D5B] border-t border-white/10 py-8 px-4 sm:px-6 lg:px-8 mt-12">
+        <div className="max-w-7xl mx-auto">
           {/* Links */}
           <div className="flex flex-wrap justify-center gap-6 text-white/70 text-xs sm:text-sm mb-6 pb-6 border-b border-white/10">
             <a href="/" className="hover:text-white transition-colors">Home</a>
