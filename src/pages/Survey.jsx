@@ -28,14 +28,46 @@ export default function Survey() {
       <div className="relative z-10">
       <CallBanner />
 
-      {/* Quiz Image Section */}
+      {/* Quiz Section */}
       <section className="py-6 md:py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <img 
-            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/614888e84_image.png"
-            alt="Get The Maximum Cash Payout For Your Accident Injury"
-            className="w-full rounded-2xl shadow-lg"
-          />
+        <div className="max-w-5xl mx-auto">
+          <div className="bg-white rounded-3xl p-6 md:p-12 shadow-2xl">
+            {/* Header Text */}
+            <p className="text-center text-gray-600 text-sm md:text-base mb-4">
+              Take the 30 Second Quiz to Start the Process of Seeing How Much Your Claim Could Be Worth
+            </p>
+            
+            {/* Main Heading */}
+            <h1 className="text-center text-[#0285E9] text-3xl md:text-5xl lg:text-6xl font-bold mb-8 md:mb-12">
+              Get The Maximum Cash Payout For Your Accident Injury!!
+            </h1>
+            
+            {/* Question Section */}
+            <div className="space-y-4 md:space-y-6">
+              <h2 className="text-center text-gray-900 text-2xl md:text-3xl font-bold">
+                How Were You Injured?
+              </h2>
+              <p className="text-center text-gray-600 text-base md:text-lg mb-6 md:mb-8">
+                Select The Type Of Accident You Were Involved In:
+              </p>
+              
+              {/* Answer Buttons Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                <button className="bg-[#0A1F3D] hover:bg-[#0C2847] text-white text-lg md:text-xl font-semibold py-6 md:py-8 px-6 rounded-xl border-4 border-[#0285E9] transition-all duration-200 hover:scale-105 shadow-lg">
+                  Auto / Motorcycle Accident
+                </button>
+                <button className="bg-[#0A1F3D] hover:bg-[#0C2847] text-white text-lg md:text-xl font-semibold py-6 md:py-8 px-6 rounded-xl border-4 border-[#0285E9] transition-all duration-200 hover:scale-105 shadow-lg">
+                  Commercial / Semi Accident
+                </button>
+                <button className="bg-[#0A1F3D] hover:bg-[#0C2847] text-white text-lg md:text-xl font-semibold py-6 md:py-8 px-6 rounded-xl border-4 border-[#0285E9] transition-all duration-200 hover:scale-105 shadow-lg">
+                  Passenger / Rideshare / Pedestrian Accident
+                </button>
+                <button className="bg-[#0A1F3D] hover:bg-[#0C2847] text-white text-lg md:text-xl font-semibold py-6 md:py-8 px-6 rounded-xl border-4 border-[#0285E9] transition-all duration-200 hover:scale-105 shadow-lg">
+                  At Work / Other / I Wasn't Injured
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
