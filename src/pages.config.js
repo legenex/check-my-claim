@@ -55,6 +55,7 @@ import Survey from './pages/Survey';
 import Thanks from './pages/Thanks';
 import sb37List from './pages/sb-37-list';
 import TermsOfService from './pages/TermsOfService';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import __Layout from './Layout.jsx';
 
 
@@ -67,6 +68,7 @@ export const PAGES = {
     "Thanks": Thanks,
     "sb-37-list": sb37List,
     "TermsOfService": TermsOfService,
+    "PrivacyPolicy": PrivacyPolicy,
 }
 
 export const pagesConfig = {
