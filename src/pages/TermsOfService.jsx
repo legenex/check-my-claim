@@ -2,6 +2,8 @@ import React from "react";
 import { FileText, ArrowLeft, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import LandingFooter from "@/components/landing/Footer";
+import PageFooter from "@/components/Footer";
 
 export default function TermsOfService() {
   return (
@@ -195,6 +197,9 @@ export default function TermsOfService() {
           </div>
         </div>
       </div>
+      
+      <LandingFooter />
+      <PageFooter />
     </div>
   );
 }
