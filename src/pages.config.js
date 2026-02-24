@@ -50,10 +50,11 @@
 import AdvertisingDisclosure from './pages/AdvertisingDisclosure';
 import Home from './pages/Home';
 import PartnerList from './pages/PartnerList';
-import sb37List from './pages/sb-37-list';
 import Submitted from './pages/Submitted';
-import Thanks from './pages/Thanks';
 import Survey from './pages/Survey';
+import Thanks from './pages/Thanks';
+import sb37List from './pages/sb-37-list';
+import TermsOfService from './pages/TermsOfService';
 import __Layout from './Layout.jsx';
 
 
@@ -61,10 +62,11 @@ export const PAGES = {
     "AdvertisingDisclosure": AdvertisingDisclosure,
     "Home": Home,
     "PartnerList": PartnerList,
-    "sb-37-list": sb37List,
     "Submitted": Submitted,
-    "Thanks": Thanks,
     "Survey": Survey,
+    "Thanks": Thanks,
+    "sb-37-list": sb37List,
+    "TermsOfService": TermsOfService,
 }
 
 export const pagesConfig = {
