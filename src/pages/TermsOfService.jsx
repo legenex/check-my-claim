@@ -6,6 +6,7 @@ import LandingFooter from "@/components/landing/Footer";
 
 export default function TermsOfService() {
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-br from-[#0a1f3d] via-[#0d2847] to-[#0a1f3d] flex items-center justify-center p-4 overflow-hidden" style={{ paddingTop: '100px' }}>
       <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl flex flex-col" style={{ maxHeight: '85vh', height: '85vh' }}>
         {/* Sticky Header */}
