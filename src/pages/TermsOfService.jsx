@@ -157,15 +157,16 @@ export default function TermsOfService() {
           </section>
 
           {/* NO WIN NO FEE Guarantee Card */}
-          <div className="bg-gradient-to-br from-[#0285E9] to-[#0486e9] rounded-xl p-6 shadow-lg mb-8">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20">
-                <Shield className="w-6 h-6 text-white" />
-              </div>
-              <h2 className="text-2xl font-bold text-white">NO WIN, NO FEE Guarantee</h2>
-            </div>
-            <p className="text-white/90 leading-relaxed">
-              The attorney's guarantee every client that they will not charge you a cent if they do not secure a positive outcome in your case. If you do win, the bulk of the fees are usually paid by the opposing counsel's client, who was responsible for the accident. They will discuss and agree upon the fee breakdown upfront and in detail, so there will be complete transparency and no disappointment once your case is won… That is a guarantee to you! YOU HAVE NOTHING TO LOSE!
+          <div className="bg-gradient-to-br from-green-50 to-green-100/50 rounded-2xl p-6 mb-8">
+            <h3 className="text-lg font-extrabold text-[#0C2D5B] mb-3 flex items-center gap-2">
+              <CheckCircle className="w-6 h-6 text-green-600" />
+              NO WIN, NO FEE Guarantee:
+            </h3>
+            <p className="text-[#595E64] text-sm leading-relaxed mb-4">
+              The attorney's guarantee every client that they will not charge you a cent if they do not secure a positive outcome in your case. If you do win, the bulk of the fees are usually paid by the opposing counsel's client, who was responsible for the accident. They will discuss and agree upon the fee breakdown upfront and in detail, so there will be complete transparency and no disappointment once your case is won… That is a guarantee to you!
+            </p>
+            <p className="text-2xl font-extrabold text-[#0285E9] text-center">
+              YOU HAVE NOTHING TO LOSE!
             </p>
           </div>
           </div>
