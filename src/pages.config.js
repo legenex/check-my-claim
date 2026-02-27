@@ -55,7 +55,6 @@ import Sorry from './pages/Sorry';
 import Submitted from './pages/Submitted';
 import Survey from './pages/Survey';
 import TermsOfService from './pages/TermsOfService';
-import Thanks from './pages/Thanks';
 import sb37List from './pages/sb-37-list';
 import __Layout from './Layout.jsx';
 
@@ -69,7 +68,6 @@ export const PAGES = {
     "Submitted": Submitted,
     "Survey": Survey,
     "TermsOfService": TermsOfService,
-    "Thanks": Thanks,
     "sb-37-list": sb37List,
 }
 
