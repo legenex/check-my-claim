@@ -161,6 +161,7 @@ export default function AdvertisingDisclosure() {
               YOU HAVE NOTHING TO LOSE!
             </p>
           </div>
+          </div>
         </div>
 
         {/* Sticky Bottom Section */}
