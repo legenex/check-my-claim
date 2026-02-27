@@ -106,14 +106,14 @@ export default function Thanks() {
               <h3 className="text-xl font-bold text-[#0C2D5B] mb-4">
                 Don't Wanna Wait? Click the button below to call now, and fast track your claim..
               </h3>
-              <Button
-                onClick={handleCallNow}
+              <a
+                href="tel:+18448406905"
                 className="bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] hover:shadow-2xl hover:shadow-blue-500/40 text-white font-bold text-lg px-10 py-6 rounded-full transition-all duration-300 hover:scale-105 inline-flex items-center gap-3"
               >
                 <Phone className="w-6 h-6" />
                 Call Us Now
-              </Button>
-              <p className="text-[#595E64] text-sm mt-3">1-800-CLAIM-CK</p>
+              </a>
+              <p className="text-[#595E64] text-sm mt-3"><span className="__tc_dni_phone">(844) 840 6905</span></p>
             </motion.div>
 
             {/* Back to Home */}
