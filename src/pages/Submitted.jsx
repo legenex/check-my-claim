@@ -173,6 +173,25 @@ export default function Submitted() {
             </div>
           </motion.div>
 
+          {/* Don't Wanna Wait CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.1 }}
+            className="bg-gradient-to-br from-[#4ba8ee]/10 to-[#0486e9]/10 rounded-2xl p-6 mb-8 text-center"
+          >
+            <h3 className="text-xl font-bold text-[#0C2D5B] mb-4">
+              Don't Wanna Wait? Click the button below to call now, and fast track your claim..
+            </h3>
+            <a
+              href="tel:+18447381035"
+              className="bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] hover:shadow-2xl hover:shadow-blue-500/40 text-white font-bold text-lg px-10 py-4 rounded-full transition-all duration-300 hover:scale-105 inline-flex items-center gap-3"
+            >
+              <Phone className="w-6 h-6" />
+              <span className="__tc_dni_phone">(844) 738 1035</span>
+            </a>
+          </motion.div>
+
           {/* NO WIN, NO FEE */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}

@@ -108,10 +108,26 @@ export default function Thanks() {
                 className="bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] hover:shadow-2xl hover:shadow-blue-500/40 text-white font-bold text-lg px-10 py-4 rounded-full transition-all duration-300 hover:scale-105 inline-flex items-center gap-3"
               >
                 <Phone className="w-6 h-6" />
-                Call Us Now
-              </a>
-              <p className="text-[#595E64] text-sm mt-3">
                 <span className="__tc_dni_phone">(844) 738 1035</span>
+              </a>
+            </motion.div>
+
+            {/* NO WIN, NO FEE */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+              className="bg-gradient-to-br from-green-50 to-green-100/50 rounded-2xl p-6 mb-8"
+            >
+              <h3 className="text-lg font-extrabold text-[#0C2D5B] mb-3 flex items-center gap-2">
+                <CheckCircle2 className="w-6 h-6 text-green-600" />
+                NO WIN, NO FEE Guarantee:
+              </h3>
+              <p className="text-[#595E64] text-sm leading-relaxed mb-4">
+                The attorney's guarantee every client that they will not charge you a cent if they do not secure a positive outcome in your case. If you do win, the bulk of the fees are usually paid by the opposing counsel's client, who was responsible for the accident. They will discuss and agree upon the fee breakdown upfront and in detail, so there will be complete transparency and no disappointment once your case is won… That is a guarantee to you!
+              </p>
+              <p className="text-2xl font-extrabold text-[#0285E9] text-center">
+                YOU HAVE NOTHING TO LOSE!
               </p>
             </motion.div>
 
