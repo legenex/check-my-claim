@@ -1,46 +1,62 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Shield, ArrowLeft, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Shield, ArrowLeft, Users, Phone, CheckCircle2 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { useNavigate } from "react-router-dom";
+import LandingFooter from "@/components/landing/Footer";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/01b1e384b_CheckMyClaimLogo.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/440596289_PrimaryLogo_CheckMyClaim.png";
 
 export default function Sb37List() {
-  const navigate = useNavigate();
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0C2D5B] via-[#001634] to-[#1B2737]">
-      <div className="flex items-center justify-center px-4 pb-12" style={{ paddingTop: '120px' }}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="max-w-5xl w-full"
-      >
-        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
-          {/* Header */}
-          <div className="bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] px-8 py-6 text-center">
+      {/* Custom Header */}
+      <header className="bg-white shadow-md px-4 py-4">
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+          <img src={LOGO_URL} alt="Check My Claim" className="h-10 md:h-14 w-auto" />
+          <div className="flex flex-col items-center gap-1.5">
+            <span className="text-[#111E30] text-sm font-medium">Prefer to speak to someone right now?</span>
+            <a
+              href="tel:+18447381035"
+              className="flex items-center gap-2 bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-bold px-5 py-2.5 rounded-full hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 text-sm"
+            >
+              <Phone className="w-4 h-4" />
+              <span className="__tc_dni_phone">(844) 738 1035</span>
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <div className="flex flex-col items-center px-4 pb-12 pt-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-5xl w-full"
+        >
+          {/* Main Card */}
+          <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
+            {/* Icon */}
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: "spring" }}
-              className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full mb-4"
+              className="flex justify-center mb-6"
             >
-              <Users className="w-12 h-12 text-[#0285E9]" />
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#4ba8ee] to-[#0486e9] flex items-center justify-center">
+                <Users className="w-12 h-12 text-white" />
+              </div>
             </motion.div>
+
+            {/* Heading */}
             <motion.h1
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-3xl md:text-4xl font-extrabold text-white"
+              className="text-3xl md:text-4xl font-extrabold text-[#0C2D5B] text-center mb-8"
             >
               Affiliated Participants
             </motion.h1>
-          </div>
 
-          {/* Content */}
-          <div className="px-8 py-10">
             {/* Participants List */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -58,32 +74,26 @@ export default function Sb37List() {
               </div>
             </motion.div>
 
-            {/* NO WIN, NO FEE Guarantee */}
+            {/* NO WIN, NO FEE */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
-              className="bg-gradient-to-br from-green-50 to-green-100/50 rounded-2xl p-8 mb-8 border-2 border-green-500"
+              className="bg-gradient-to-br from-green-50 to-green-100/50 rounded-2xl p-6 mb-8"
             >
-              <div className="flex items-center justify-center mb-6">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
-                  <Shield className="w-9 h-9 text-white" />
-                </div>
-              </div>
-              <h2 className="text-2xl md:text-3xl font-extrabold text-[#0C2D5B] mb-6 text-center">
+              <h3 className="text-lg font-extrabold text-[#0C2D5B] mb-3 flex items-center gap-2">
+                <CheckCircle2 className="w-6 h-6 text-green-600" />
                 NO WIN, NO FEE Guarantee:
-              </h2>
-              <div className="space-y-4 text-[#595E64] leading-relaxed">
-                <p>
-                  The attorney's guarantee every client that they will not charge you a cent if they do not secure a positive outcome in your case. If you do win, the bulk of the fees are usually paid by the opposing counsel's client, who was responsible for the accident.
-                </p>
-                <p>
-                  They will discuss and agree upon the fee breakdown upfront and in detail, so there will be complete transparency and no disappointment once your case is won… That is a guarantee to you!
-                </p>
-                <p className="text-lg font-bold text-[#0285E9] text-center">
-                  YOU HAVE NOTHING TO LOSE!
-                </p>
-              </div>
+              </h3>
+              <p className="text-[#595E64] text-sm leading-relaxed mb-2">
+                The attorney's guarantee every client that they will not charge you a cent if they do not secure a positive outcome in your case. If you do win, the bulk of the fees are usually paid by the opposing counsel's client, who was responsible for the accident.
+              </p>
+              <p className="text-[#595E64] text-sm leading-relaxed mb-4">
+                They will discuss and agree upon the fee breakdown upfront and in detail, so there will be complete transparency and no disappointment once your case is won… That is a guarantee to you!
+              </p>
+              <p className="text-2xl font-extrabold text-[#0285E9] text-center">
+                YOU HAVE NOTHING TO LOSE!
+              </p>
             </motion.div>
 
             {/* Back to Home */}
@@ -93,27 +103,29 @@ export default function Sb37List() {
               transition={{ delay: 0.9 }}
               className="text-center"
             >
-              <Button
-                variant="outline"
-                onClick={() => navigate(createPageUrl("Home"))}
-                className="inline-flex items-center gap-2"
+              <Link
+                to={createPageUrl("Home")}
+                className="group inline-flex items-center gap-2 border border-gray-300 text-[#0C2D5B] font-semibold px-6 py-3 rounded-full hover:bg-gray-50 transition-all duration-300"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Back to Home
-              </Button>
+              </Link>
             </motion.div>
           </div>
 
-          {/* Footer */}
-          <div className="bg-gray-50 px-8 py-6 text-center border-t border-gray-200">
-            <img src={LOGO_URL} alt="Claim Checker" className="h-8 mx-auto mb-3" />
-            <p className="text-[#595E64] text-xs">
-              Your privacy is important to us. We will never share your information without your consent.
-            </p>
-          </div>
-        </div>
-      </motion.div>
+          {/* Footer Note */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.0 }}
+            className="text-white/60 text-sm text-center mt-6"
+          >
+            ✓ 100% Free • ✓ No Obligation • ✓ Your Information is Secure
+          </motion.p>
+        </motion.div>
       </div>
+
+      <LandingFooter />
     </div>
   );
 }
