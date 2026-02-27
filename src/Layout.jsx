@@ -28,6 +28,31 @@ export default function Layout({ children, currentPageName }) {
     `;
     document.head.appendChild(metaPixelScript);
 
+    const tiktokScript = document.createElement("script");
+    tiktokScript.innerHTML = `
+      !function (w) {
+        if (!w.tiktok) {
+          w.tiktok = {};
+        }
+        w.tiktok.lib = {
+          identify: function() {},
+          track: function(event) {}
+        };
+      }(window);
+    `;
+    document.head.appendChild(tiktokScript);
+
+    const tiktokPixel = document.createElement("script");
+    tiktokPixel.src = "https://analytics.tiktok.com/i18n/pixel/events.js";
+    tiktokPixel.async = true;
+    document.head.appendChild(tiktokPixel);
+
+    setTimeout(() => {
+      if (window.ttq) {
+        window.ttq.track('PageView');
+      }
+    }, 500);
+
     const noscript = document.createElement("noscript");
     noscript.innerHTML = '<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=764662699668489&ev=PageView&noscript=1"/>';
     document.head.appendChild(noscript);

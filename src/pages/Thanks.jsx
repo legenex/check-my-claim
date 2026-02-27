@@ -14,7 +14,10 @@ export default function Thanks() {
     const fireEvent = () => {
       if (window.fbq) {
         window.fbq('track', 'DQLead', {}, { eventID: eventId });
-      } else {
+      }
+      if (window.ttq) {
+        window.ttq.track('DQLead');
+      } else if (!window.fbq) {
         setTimeout(fireEvent, 300);
       }
     };

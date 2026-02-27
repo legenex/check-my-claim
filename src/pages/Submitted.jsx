@@ -14,8 +14,11 @@ export default function Submitted() {
     const eventId = params.get('event_id');
     const fireEvent = () => {
       if (window.fbq) {
-        window.fbq('track', 'Lead', {}, { eventID: eventId });
-      } else {
+        window.fbq('track', 'Submit form event', {}, { eventID: eventId });
+      }
+      if (window.ttq) {
+        window.ttq.track('Submit form event');
+      } else if (!window.fbq) {
         setTimeout(fireEvent, 300);
       }
     };
