@@ -146,7 +146,6 @@ export default function Thanks() {
       </div>
       
       <LandingFooter />
-      <PageFooter />
     </div>
   );
 }
