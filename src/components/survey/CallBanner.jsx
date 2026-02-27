@@ -16,10 +16,10 @@ export default function CallBanner() {
 
         {/* Call Button - Right */}
         <a 
-          href="tel:(888)270-1785"
-          className="bg-[#0285E9] hover:bg-[#0486e9] text-white font-bold px-6 py-2 rounded-full transition-all duration-300 hover:shadow-lg text-sm whitespace-nowrap"
+          href="tel:+18447381035"
+          className="flex items-center gap-2 bg-[#0285E9] hover:bg-[#0486e9] text-white font-bold px-6 py-2 rounded-full transition-all duration-300 hover:shadow-lg text-sm whitespace-nowrap"
         >
-          Click Here To Call
+          <span className="__tc_dni_phone">(844) 738 1035</span>
         </a>
       </div>
     </header>

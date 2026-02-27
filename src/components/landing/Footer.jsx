@@ -53,10 +53,10 @@ export default function Footer() {
                 <Mail className="w-4 h-4 text-[#0285E9]" />
                 support@checkmyclaim.com
               </div>
-              <div className="flex items-center gap-3 text-gray-400 text-sm">
+              <a href="tel:+18447381035" className="flex items-center gap-3 text-gray-400 text-sm hover:text-[#0285E9] transition-colors">
                 <Phone className="w-4 h-4 text-[#0285E9]" />
-                1-800-CLAIM-CK
-              </div>
+                <span className="__tc_dni_phone">(844) 738 1035</span>
+              </a>
             </div>
           </div>
         </div>
