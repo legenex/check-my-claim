@@ -11,9 +11,14 @@ export default function Thanks() {
   React.useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const eventId = params.get('event_id');
-    if (window.fbq) {
-      window.fbq('track', 'DQLead', {}, { eventID: eventId });
-    }
+    const fireEvent = () => {
+      if (window.fbq) {
+        window.fbq('track', 'DQLead', {}, { eventID: eventId });
+      } else {
+        setTimeout(fireEvent, 300);
+      }
+    };
+    fireEvent();
   }, []);
 
   return (
