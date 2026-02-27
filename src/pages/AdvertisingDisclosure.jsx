@@ -176,7 +176,7 @@ export default function AdvertisingDisclosure() {
 
           <div className="flex flex-col items-center gap-3">
             <img 
-              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/01b1e384b_CheckMyClaimLogo.png" 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/440596289_PrimaryLogo_CheckMyClaim.png" 
               alt="Check My Claim Logo" 
               className="h-10"
             />
