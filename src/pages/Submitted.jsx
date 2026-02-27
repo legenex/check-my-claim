@@ -10,20 +10,11 @@ const PHONE_NUMBER = "1-800-CLAIM-CK";
 
 export default function Submitted() {
   React.useEffect(() => {
-    const script = document.createElement("script");
-    script.innerHTML = `
-      function getEventIdFromUrl() {
-        const params = new URLSearchParams(window.location.search);
-        return params.get('event_id');
-      }
-      const eventId = getEventIdFromUrl();
-      fbq('init', '764662699668489');
-      fbq('track', 'Lead', {}, {eventID: eventId});
-      fbq('track', 'PageView', {}, {eventID: eventId});
-      fbq('track', 'PageView', {}, {eventID: eventId});
-    `;
-    document.head.appendChild(script);
-    return () => { if (script.parentNode) script.parentNode.removeChild(script); };
+    const params = new URLSearchParams(window.location.search);
+    const eventId = params.get('event_id');
+    if (window.fbq) {
+      window.fbq('track', 'Lead', {}, { eventID: eventId });
+    }
   }, []);
 
   return (
