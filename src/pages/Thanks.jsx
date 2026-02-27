@@ -9,18 +9,11 @@ const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/pub
 
 export default function Thanks() {
   React.useEffect(() => {
-    const script = document.createElement("script");
-    script.innerHTML = `
-      function getEventIdFromUrl() {
-        const params = new URLSearchParams(window.location.search);
-        return params.get('event_id');
-      }
-      const eventId = getEventIdFromUrl();
-      fbq('init', '764662699668489');
-      fbq('track', 'DQLead', {}, {eventID: eventId});
-    `;
-    document.head.appendChild(script);
-    return () => { if (script.parentNode) script.parentNode.removeChild(script); };
+    const params = new URLSearchParams(window.location.search);
+    const eventId = params.get('event_id');
+    if (window.fbq) {
+      window.fbq('track', 'DQLead', {}, { eventID: eventId });
+    }
   }, []);
 
   return (
