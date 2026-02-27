@@ -90,7 +90,7 @@ export default function Sorry() {
 
             {/* Footer */}
             <div className="bg-gray-50 px-8 py-6 text-center border-t border-gray-200">
-              <img src={LOGO_URL} alt="Check My Claim" className="h-8 mx-auto mb-3" />
+              <img src={LOGO_DARK_URL} alt="Check My Claim" className="h-8 mx-auto mb-3" />
               <p className="text-[#595E64] text-xs">
                 Your privacy is important to us. We will never share your information without your consent.
               </p>
