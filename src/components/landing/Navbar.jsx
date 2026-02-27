@@ -9,8 +9,8 @@ const LOGO_LIGHT_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/obje
 
 const navLinks = [
   { label: "Home", href: "#home" },
-  { label: "About Us", href: "#about" },
   { label: "Services", href: "#services" },
+  { label: "About Us", href: "#about" },
   { label: "FAQ", href: "#faq" },
   { label: "Contact Us", href: "#contact" },
 ];
