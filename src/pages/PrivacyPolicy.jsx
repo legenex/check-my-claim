@@ -1,7 +1,8 @@
 import React from "react";
-import { Shield, ArrowLeft, FileText } from "lucide-react";
+import { Shield, ArrowLeft, FileText, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import LandingFooter from "@/components/landing/Footer";
 
 export default function PrivacyPolicy() {
   return (

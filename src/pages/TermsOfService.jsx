@@ -1,7 +1,8 @@
 import React from "react";
-import { FileText, ArrowLeft, Shield } from "lucide-react";
+import { FileText, ArrowLeft, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import LandingFooter from "@/components/landing/Footer";
 
 export default function TermsOfService() {
   return (
