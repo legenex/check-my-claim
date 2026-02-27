@@ -6,21 +6,33 @@ import { createPageUrl } from "@/utils";
 import { useNavigate } from "react-router-dom";
 import LandingFooter from "@/components/landing/Footer";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/01b1e384b_CheckMyClaimLogo.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/ed9e4ff65_PrimaryLogo_CheckMyClaim.png";
 
 export default function Thanks() {
   const navigate = useNavigate();
 
   const handleCallNow = () => {
-    window.location.href = "tel:1-800-CLAIM-CK";
+    window.location.href = "tel:+18448406905";
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0C2D5B] via-[#001634] to-[#1B2737]">
-      {/* Logo */}
-      <div className="pt-8 pb-6 text-center">
-        <img src={LOGO_URL} alt="Check My Claim" className="h-12 mx-auto" />
-      </div>
+      {/* Custom Header */}
+      <header className="bg-white shadow-md px-4 py-4">
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+          <img src={LOGO_URL} alt="Check My Claim" className="h-10 md:h-14 w-auto" />
+          <div className="flex flex-col items-center gap-1.5">
+            <span className="text-[#111E30] text-sm font-medium">Prefer to speak to someone right now?</span>
+            <a
+              href="tel:+18448406905"
+              className="flex items-center gap-2 bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-bold px-5 py-2.5 rounded-full hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 text-sm"
+            >
+              <Phone className="w-4 h-4" />
+              <span className="__tc_dni_phone">(844) 840 6905</span>
+            </a>
+          </div>
+        </div>
+      </header>
 
       <div className="flex flex-col items-center px-4 pb-12">
       <motion.div
