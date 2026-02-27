@@ -55,8 +55,8 @@ import Sorry from './pages/Sorry';
 import Submitted from './pages/Submitted';
 import Survey from './pages/Survey';
 import TermsOfService from './pages/TermsOfService';
-import sb37List from './pages/sb-37-list';
 import Thanks from './pages/Thanks';
+import sb37List from './pages/sb-37-list';
 import __Layout from './Layout.jsx';
 
 
@@ -69,8 +69,8 @@ export const PAGES = {
     "Submitted": Submitted,
     "Survey": Survey,
     "TermsOfService": TermsOfService,
-    "sb-37-list": sb37List,
     "Thanks": Thanks,
+    "sb-37-list": sb37List,
 }
 
 export const pagesConfig = {
