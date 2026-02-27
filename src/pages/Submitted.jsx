@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import LandingFooter from "@/components/landing/Footer";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/checkmyclaim-logo.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/ed9e4ff65_PrimaryLogo_CheckMyClaim.png";
 const PHONE_NUMBER = "1-800-CLAIM-CK";
 
 export default function Submitted() {
@@ -15,8 +15,8 @@ export default function Submitted() {
       <header className="bg-white shadow-md px-4 py-4">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <img src={LOGO_URL} alt="Check My Claim" className="h-10 md:h-14 w-auto" />
-          <div className="flex items-center gap-3">
-            <span className="text-[#111E30] text-sm font-medium hidden sm:inline">Prefer to speak to someone right now?</span>
+          <div className="flex flex-col items-center gap-1.5">
+            <span className="text-[#111E30] text-sm font-medium">Prefer to speak to someone right now?</span>
             <a
               href={`tel:${PHONE_NUMBER}`}
               className="flex items-center gap-2 bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-bold px-5 py-2.5 rounded-full hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 text-sm"
