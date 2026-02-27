@@ -33,8 +33,8 @@ export default function Layout({ children, currentPageName }) {
     document.head.appendChild(noscript);
 
     const scripts = [
-      { src: "https://static.truecall.com/c/x3co6aj15sabuvd33z06oli1cb4qzlyn979j.js" },
-      { src: "https://static.truecall.com/s/truecall.js", id: "__tc_script", "data-campaign_uuid": "x3co6aj15sabuvd33z06oli1kb4qzlyn979j" },
+      { src: "https://static.truecall.com/c/xg60dqbonituu0aebhl2qq83cmoh46t1c2nb.js" },
+      { src: "https://static.truecall.com/s/truecall.js" },
       { src: "//b-js.ringba.com/CA21e00314872e49f486db9db5c54eef94", async: true },
     ];
 
