@@ -13,7 +13,7 @@ export default function Submitted() {
     <div className="min-h-screen bg-gradient-to-br from-[#0C2D5B] via-[#001634] to-[#1B2737]">
       {/* Custom Header */}
       <header className="bg-white shadow-md px-4 py-4">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <img src={LOGO_URL} alt="Check My Claim" className="h-10 md:h-14 w-auto" />
           <div className="flex flex-col items-center gap-1.5">
             <span className="text-[#111E30] text-sm font-medium">Prefer to speak to someone right now?</span>
