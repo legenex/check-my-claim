@@ -1,12 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { CheckCircle, ArrowRight, Clock, Mail, Phone } from "lucide-react";
+import { CheckCircle, ArrowRight, Clock, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import LandingFooter from "@/components/landing/Footer";
-import PageFooter from "@/components/Footer";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/checkmyclaim-logo.png";
+const PHONE_NUMBER = "1-800-CLAIM-CK";
 
 export default function Submitted() {
   return (
