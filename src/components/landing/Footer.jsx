@@ -3,7 +3,7 @@ import { ArrowRight, Mail, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 
-const LOGO_LIGHT_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/530d12638_CheckMyClaimLogoLight.png";
+const LOGO_LIGHT_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/a32c079ff_DarkMode-PrimaryLogo_CheckMyClaim.png";
 
 export default function Footer() {
   const scrollTo = (id) => document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
