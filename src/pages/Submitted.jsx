@@ -9,6 +9,22 @@ const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/pub
 const PHONE_NUMBER = "1-800-CLAIM-CK";
 
 export default function Submitted() {
+  React.useEffect(() => {
+    const script = document.createElement("script");
+    script.innerHTML = `
+      function getEventIdFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('event_id');
+      }
+      const eventId = getEventIdFromUrl();
+      fbq('init', '764662699668489');
+      fbq('track', 'Lead', {}, {eventID: eventId});
+      fbq('track', 'PageView', {}, {eventID: eventId});
+    `;
+    document.head.appendChild(script);
+    return () => { if (script.parentNode) script.parentNode.removeChild(script); };
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0C2D5B] via-[#001634] to-[#1B2737]">
       {/* Custom Header */}
