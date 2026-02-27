@@ -18,7 +18,6 @@ export default function Thanks() {
       const eventId = getEventIdFromUrl();
       fbq('init', '764662699668489');
       fbq('track', 'DQLead', {}, {eventID: eventId});
-      fbq('track', 'PageView', {}, {eventID: eventId});
     `;
     document.head.appendChild(script);
     return () => { if (script.parentNode) script.parentNode.removeChild(script); };

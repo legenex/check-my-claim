@@ -20,6 +20,7 @@ export default function Submitted() {
       fbq('init', '764662699668489');
       fbq('track', 'Lead', {}, {eventID: eventId});
       fbq('track', 'PageView', {}, {eventID: eventId});
+      fbq('track', 'PageView', {}, {eventID: eventId});
     `;
     document.head.appendChild(script);
     return () => { if (script.parentNode) script.parentNode.removeChild(script); };
