@@ -187,5 +187,7 @@ export default function AdvertisingDisclosure() {
         </div>
       </div>
     </div>
+    <LandingFooter />
+    </>
   );
 }
