@@ -22,7 +22,7 @@ export default function Submitted() {
               className="flex items-center gap-2 bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-bold px-5 py-2.5 rounded-full hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 text-sm"
             >
               <Phone className="w-4 h-4" />
-              <span className="__tc_dni_phone">(844) 840 6905</span>
+              <span className="__tc_dni_phone">(844) 738 1035</span>
             </a>
           </div>
         </div>

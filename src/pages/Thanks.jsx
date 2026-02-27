@@ -28,7 +28,7 @@ export default function Thanks() {
               className="flex items-center gap-2 bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-bold px-5 py-2.5 rounded-full hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 text-sm"
             >
               <Phone className="w-4 h-4" />
-              <span className="__tc_dni_phone">(844) 840 6905</span>
+              <span className="__tc_dni_phone">(844) 738 1035</span>
             </a>
           </div>
         </div>
@@ -107,7 +107,7 @@ export default function Thanks() {
                 Don't Wanna Wait? Click the button below to call now, and fast track your claim..
               </h3>
               <a
-                href="tel:+18448406905"
+                href="tel:+18447381035"
                 className="bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] hover:shadow-2xl hover:shadow-blue-500/40 text-white font-bold text-lg px-10 py-6 rounded-full transition-all duration-300 hover:scale-105 inline-flex items-center gap-3"
               >
                 <Phone className="w-6 h-6" />
