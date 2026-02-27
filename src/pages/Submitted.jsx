@@ -222,7 +222,6 @@ export default function Submitted() {
       </div>
       
       <LandingFooter />
-      <PageFooter />
     </div>
   );
 }
