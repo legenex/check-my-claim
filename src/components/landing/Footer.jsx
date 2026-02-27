@@ -70,13 +70,13 @@ export default function Footer() {
               Check My Claim is not a law firm and does not provide legal advice. Results from the AI tool are for informational purposes only and do not guarantee compensation.
             </p>
             <div className="flex gap-6 flex-wrap justify-center">
-              <Link to={createPageUrl("PrivacyPolicy")} className="text-[#0285E9] hover:underline text-sm font-medium whitespace-nowrap">
+              <Link to={createPageUrl("PrivacyPolicy")} onClick={() => window.scrollTo(0, 0)} className="text-[#0285E9] hover:underline text-sm font-medium whitespace-nowrap">
                 Privacy Policy
               </Link>
-              <Link to={createPageUrl("TermsOfService")} className="text-[#0285E9] hover:underline text-sm font-medium whitespace-nowrap">
+              <Link to={createPageUrl("TermsOfService")} onClick={() => window.scrollTo(0, 0)} className="text-[#0285E9] hover:underline text-sm font-medium whitespace-nowrap">
                 Terms & Conditions
               </Link>
-              <Link to={createPageUrl("AdvertisingDisclosure")} className="text-[#0285E9] hover:underline text-sm font-medium whitespace-nowrap">
+              <Link to={createPageUrl("AdvertisingDisclosure")} onClick={() => window.scrollTo(0, 0)} className="text-[#0285E9] hover:underline text-sm font-medium whitespace-nowrap">
                 Advertising Disclosure
               </Link>
             </div>
