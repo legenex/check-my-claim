@@ -189,5 +189,6 @@ export default function PrivacyPolicy() {
       </div>
     </div>
     <LandingFooter />
+    </>
   );
 }
