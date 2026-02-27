@@ -18,7 +18,7 @@ export default function Submitted() {
           <div className="flex flex-col items-center gap-1.5">
             <span className="text-[#111E30] text-sm font-medium">Prefer to speak to someone right now?</span>
             <a
-              href={`tel:${PHONE_NUMBER}`}
+              href="tel:+18448406905"
               className="flex items-center gap-2 bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-bold px-5 py-2.5 rounded-full hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 text-sm"
             >
               <Phone className="w-4 h-4" />
