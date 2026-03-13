@@ -54,6 +54,24 @@ export default function Layout({ children, currentPageName }) {
     gaConfig.innerHTML = `
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+
+      // Default for everyone: denied
+      gtag('consent', 'default', {
+        analytics_storage: 'denied',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied'
+      });
+
+      // Override for US: granted
+      gtag('consent', 'default', {
+        analytics_storage: 'granted',
+        ad_storage: 'granted',
+        ad_user_data: 'granted',
+        ad_personalization: 'granted',
+        region: ['US']
+      });
+
       gtag('js', new Date());
       gtag('config', 'G-ZSBE52R6SL');
     `;
