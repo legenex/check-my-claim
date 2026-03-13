@@ -55,21 +55,24 @@ export default function Layout({ children, currentPageName }) {
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
 
-      // Default for everyone: denied
+      // Deny for EEA + UK
       gtag('consent', 'default', {
         analytics_storage: 'denied',
         ad_storage: 'denied',
         ad_user_data: 'denied',
-        ad_personalization: 'denied'
+        ad_personalization: 'denied',
+        region: [
+          'AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU',
+          'MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB'
+        ]
       });
 
-      // Override for US: granted
+      // Grant for everyone else (includes most US traffic)
       gtag('consent', 'default', {
         analytics_storage: 'granted',
         ad_storage: 'granted',
         ad_user_data: 'granted',
-        ad_personalization: 'granted',
-        region: ['US']
+        ad_personalization: 'granted'
       });
 
       gtag('js', new Date());
