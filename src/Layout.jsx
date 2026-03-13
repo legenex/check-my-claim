@@ -23,7 +23,7 @@ export default function Layout({ children, currentPageName }) {
       t.src=v;s=b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '764662699668489');
+      fbq('init', '892894053744200');
       fbq('track', 'PageView', {}, {eventID: eventId});
     `;
     document.head.appendChild(metaPixelScript);
@@ -41,7 +41,7 @@ export default function Layout({ children, currentPageName }) {
     document.head.appendChild(tiktokScript);
 
     const noscript = document.createElement("noscript");
-    noscript.innerHTML = '<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=764662699668489&ev=PageView&noscript=1"/>';
+    noscript.innerHTML = '<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=892894053744200&ev=PageView&noscript=1"/>';
     document.head.appendChild(noscript);
 
     const scripts = [
