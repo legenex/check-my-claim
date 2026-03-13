@@ -44,6 +44,21 @@ export default function Layout({ children, currentPageName }) {
     noscript.innerHTML = '<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=892894053744200&ev=PageView&noscript=1"/>';
     document.head.appendChild(noscript);
 
+    // Google Analytics
+    const gaScript = document.createElement("script");
+    gaScript.async = true;
+    gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-ZSBE52R6SL";
+    document.head.appendChild(gaScript);
+
+    const gaConfig = document.createElement("script");
+    gaConfig.innerHTML = `
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ZSBE52R6SL');
+    `;
+    document.head.appendChild(gaConfig);
+
     const scripts = [
       { src: "https://static.truecall.com/c/xg60dqbonituu0aebhl2qq83cmoh46t1c2nb.js" },
       { src: "https://static.truecall.com/s/truecall.js" },
