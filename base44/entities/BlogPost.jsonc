@@ -1,0 +1,108 @@
+{
+  "name": "BlogPost",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "excerpt": {
+      "type": "string"
+    },
+    "body": {
+      "type": "string"
+    },
+    "featuredImage": {
+      "type": "string",
+      "format": "uri"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Car Accidents",
+        "Personal Injury",
+        "Legal Process",
+        "Settlement Tips",
+        "Slip & Fall",
+        "Legal Advice",
+        "Medical Malpractice"
+      ]
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "authorName": {
+      "type": "string"
+    },
+    "authorAvatar": {
+      "type": "string",
+      "format": "uri"
+    },
+    "authorBio": {
+      "type": "string"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "readTimeMinutes": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "Published",
+        "Scheduled",
+        "Hidden"
+      ],
+      "default": "Draft"
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "metaDescription": {
+      "type": "string"
+    },
+    "ogImage": {
+      "type": "string",
+      "format": "uri"
+    },
+    "faqItems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string"
+          },
+          "answer": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "isAIGenerated": {
+      "type": "boolean",
+      "default": false
+    },
+    "isFeatured": {
+      "type": "boolean",
+      "default": false
+    },
+    "viewCount": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "title",
+    "slug",
+    "status"
+  ]
+}

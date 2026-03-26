@@ -7,6 +7,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import AdminDashboard from './pages/admin/Dashboard';
+import BlogPage from './pages/Blog';
+import BlogPostPage from './pages/BlogPost';
 import AdminPages from './pages/admin/Pages';
 import AdminBlog from './pages/admin/Blog';
 import AdminSEO from './pages/admin/SEO';
@@ -66,6 +68,8 @@ const AuthenticatedApp = () => {
           }
         />
       ))}
+      <Route path="/Blog" element={<BlogPage />} />
+      <Route path="/blog/:slug" element={<BlogPostPage />} />
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/admin/pages" element={<AdminPages />} />
       <Route path="/admin/blog" element={<AdminBlog />} />
