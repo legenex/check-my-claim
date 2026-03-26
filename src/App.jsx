@@ -6,6 +6,14 @@ import { pagesConfig } from './pages.config'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
+import AdminDashboard from './pages/admin/Dashboard';
+import AdminPages from './pages/admin/Pages';
+import AdminBlog from './pages/admin/Blog';
+import AdminSEO from './pages/admin/SEO';
+import AdminAnalytics from './pages/admin/Analytics';
+import AdminIntegrations from './pages/admin/Integrations';
+import AdminUserManagement from './pages/admin/UserManagement';
+import AdminSettings from './pages/admin/AdminSettings';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -58,6 +66,14 @@ const AuthenticatedApp = () => {
           }
         />
       ))}
+      <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/admin/pages" element={<AdminPages />} />
+      <Route path="/admin/blog" element={<AdminBlog />} />
+      <Route path="/admin/seo" element={<AdminSEO />} />
+      <Route path="/admin/analytics" element={<AdminAnalytics />} />
+      <Route path="/admin/integrations" element={<AdminIntegrations />} />
+      <Route path="/admin/users" element={<AdminUserManagement />} />
+      <Route path="/admin/settings" element={<AdminSettings />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
