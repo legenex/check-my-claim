@@ -53,27 +53,19 @@ export default function Submitted() {
 
         {/* Main Card */}
         <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
-          {/* Success Icon */}
+          {/* Important Call Incoming Image */}
           <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2, type: "spring" }}
             className="flex justify-center mb-6"
           >
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
-              <CheckCircle className="w-12 h-12 text-white" />
-            </div>
+            <img
+              src="https://media.base44.com/images/public/699c8efa75d8857518d34273/09cab419e_ImportantCall-DesignCMC.png"
+              alt="Important Call Incoming!"
+              className="w-full max-w-md"
+            />
           </motion.div>
-
-          {/* Heading */}
-          <motion.h1
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="text-3xl md:text-4xl font-extrabold text-[#0C2D5B] text-center mb-4"
-          >
-            Congrats!
-          </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 10 }}
