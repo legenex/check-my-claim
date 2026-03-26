@@ -84,7 +84,7 @@ export default function Submitted() {
             transition={{ delay: 0.45 }}
             className="text-[#595E64] text-lg text-center mb-2"
           >
-            One of our trusted advisors will call you in the next few minutes!
+            Based on your answers, it seems you may have a <strong className="text-green-500 font-extrabold">HIGH VALUE CLAIM!</strong> One of our trusted advisors will call you in the next few minutes to discuss your claim further
           </motion.p>
 
           <motion.div
