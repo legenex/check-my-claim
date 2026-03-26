@@ -71,7 +71,7 @@ export default function Submitted() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="text-[#0C2D5B] text-xl font-bold text-center mb-2"
+            className="text-[#0C2D5B] text-4xl font-bold text-center mb-2"
           >
             Congrats! We will be <span className="text-green-500">CALLING YOU</span>
           </motion.p>
