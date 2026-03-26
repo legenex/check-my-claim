@@ -76,14 +76,7 @@ export default function Submitted() {
             Congrats! We will be <span className="text-green-500">CALLING YOU</span>
           </motion.p>
 
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.42 }}
-            className="text-[#595E64] text-base text-center mb-4"
-          >
-            Please make sure to answer your phone to find out more about your claim
-          </motion.p>
+
 
           <motion.p
             initial={{ opacity: 0, y: 10 }}
