@@ -1,0 +1,36 @@
+{
+  "name": "KnowledgeBaseDoc",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "docType": {
+      "type": "string",
+      "enum": [
+        "Brand Voice",
+        "Legal Guidelines",
+        "Audience Persona",
+        "Competitor Research",
+        "Style Guide",
+        "Product/Service Info",
+        "Internal Policy",
+        "Other"
+      ]
+    },
+    "content": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "title",
+    "docType"
+  ]
+}

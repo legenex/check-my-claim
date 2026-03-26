@@ -1,0 +1,75 @@
+{
+  "name": "CTATemplate",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "headline": {
+      "type": "string"
+    },
+    "subtext": {
+      "type": "string"
+    },
+    "buttonText": {
+      "type": "string"
+    },
+    "ctaUrl": {
+      "type": "string"
+    },
+    "utmSource": {
+      "type": "string",
+      "default": "CMC-Website"
+    },
+    "utmCampaign": {
+      "type": "string",
+      "default": "Blog-Page"
+    },
+    "utmMedium": {
+      "type": "string",
+      "default": "{slug}"
+    },
+    "utmTerm": {
+      "type": "string",
+      "default": "{primary_keyword}"
+    },
+    "buttonColor": {
+      "type": "string",
+      "default": "#1e90ff"
+    },
+    "backgroundStyle": {
+      "type": "string",
+      "enum": [
+        "Dark Card",
+        "Blue Banner",
+        "Gradient",
+        "White Card",
+        "Solid Colour"
+      ],
+      "default": "Blue Banner"
+    },
+    "position": {
+      "type": "string",
+      "enum": [
+        "Top",
+        "Mid-article",
+        "End",
+        "All three"
+      ],
+      "default": "End"
+    },
+    "icon": {
+      "type": "string"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "name",
+    "headline",
+    "buttonText",
+    "ctaUrl"
+  ]
+}
