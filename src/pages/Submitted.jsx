@@ -71,9 +71,18 @@ export default function Submitted() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="text-[#0C2D5B] text-xl font-bold text-center mb-4"
+            className="text-[#0C2D5B] text-xl font-bold text-center mb-2"
           >
-            Based On Your Answers, It Appears You May Have A High Value Claim!
+            Congrats! We will be <span className="text-green-500">CALLING YOU</span>
+          </motion.p>
+
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.42 }}
+            className="text-[#595E64] text-base text-center mb-4"
+          >
+            Please make sure to answer your phone to find out more about your claim
           </motion.p>
 
           <motion.p
