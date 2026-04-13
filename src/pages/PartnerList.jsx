@@ -157,7 +157,7 @@ export default function PartnerList() {
                 #participants-container > * {
                   padding: 10px 14px;
                   border-left: 3px solid #0285E9;
-                  margin-bottom: 10px;
+                  margin-bottom: 20px;
                   background: #f8fafc;
                   border-radius: 0 8px 8px 0;
                 }
