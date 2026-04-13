@@ -149,14 +149,27 @@ export default function PartnerList() {
             >
               <h2 className="text-2xl font-extrabold text-[#0C2D5B] mb-4">Sponsors</h2>
               <style>{`
-                #participants-container > * {
-                  margin-bottom: 12px;
+                #participants-container {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 0;
                 }
-                #participants-container p,
-                #participants-container div,
-                #participants-container li,
-                #participants-container span {
-                  line-height: 1.6;
+                #participants-container > * {
+                  padding: 10px 14px;
+                  border-left: 3px solid #0285E9;
+                  margin-bottom: 10px;
+                  background: #f8fafc;
+                  border-radius: 0 8px 8px 0;
+                }
+                #participants-container a {
+                  font-weight: 700;
+                  font-size: 15px;
+                  color: #0C2D5B !important;
+                  text-decoration: none;
+                  display: block;
+                }
+                #participants-container a:hover {
+                  color: #0285E9 !important;
                 }
               `}</style>
               <div id="participants-container"></div>
