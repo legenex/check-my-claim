@@ -148,6 +148,17 @@ export default function PartnerList() {
               className="mb-8"
             >
               <h2 className="text-2xl font-extrabold text-[#0C2D5B] mb-4">Sponsors</h2>
+              <style>{`
+                #participants-container > * {
+                  margin-bottom: 12px;
+                }
+                #participants-container p,
+                #participants-container div,
+                #participants-container li,
+                #participants-container span {
+                  line-height: 1.6;
+                }
+              `}</style>
               <div id="participants-container"></div>
             </motion.div>
 
