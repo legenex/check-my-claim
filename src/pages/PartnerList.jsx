@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Users, ArrowLeft, Phone, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -8,6 +8,7 @@ import LandingFooter from "@/components/landing/Footer";
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/440596289_PrimaryLogo_CheckMyClaim.png";
 
 const affiliatedPartners = [
+
   "Car Accident Helpline",
   "Los Defensores",
   "4LegalLeads",
@@ -59,6 +60,14 @@ const sponsors = [
 ];
 
 export default function PartnerList() {
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://pmdb.walkeradvertising.com/sponsors/embed.js";
+    script.setAttribute("data-container", "participants-container");
+    document.body.appendChild(script);
+    return () => { document.body.removeChild(script); };
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0C2D5B] via-[#001634] to-[#1B2737]">
       {/* Custom Header */}
@@ -131,7 +140,7 @@ export default function PartnerList() {
               </div>
             </motion.div>
 
-            {/* Sponsors */}
+            {/* Sponsors Widget */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -139,19 +148,7 @@ export default function PartnerList() {
               className="mb-8"
             >
               <h2 className="text-2xl font-extrabold text-[#0C2D5B] mb-4">Sponsors</h2>
-              <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                {sponsors.map((sponsor, index) => (
-                  <motion.div
-                    key={sponsor}
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.7 + index * 0.01 }}
-                    className="bg-gray-50 border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow"
-                  >
-                    <p className="text-[#595E64] text-sm">{sponsor}</p>
-                  </motion.div>
-                ))}
-              </div>
+              <div id="participants-container"></div>
             </motion.div>
 
             {/* NO WIN, NO FEE */}

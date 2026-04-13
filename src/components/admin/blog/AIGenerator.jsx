@@ -132,7 +132,7 @@ Return JSON with array of ideas, each with: title, primaryKeyword, searchIntent 
     setIdeasLoading(false);
   };
 
-  const useIdea = (idea) => {
+  const applyIdea = (idea) => {
     setBrief(b => ({ ...b, title: idea.title, primaryKeyword: idea.primaryKeyword }));
     setStep(1);
   };
@@ -240,7 +240,7 @@ ${allNotes || "Write authoritative, empathetic content that builds trust with ac
                   <div key={i} className="bg-[#0a1628] border border-white/10 rounded-xl p-4 hover:border-[#1e90ff]/40 transition-all">
                     <div className="flex items-start justify-between gap-2 mb-2">
                       <h5 className="text-sm font-bold text-white leading-snug">{idea.title}</h5>
-                      <button onClick={() => useIdea(idea)} className="flex-shrink-0 flex items-center gap-1 text-xs bg-[#1e90ff]/20 text-[#1e90ff] border border-[#1e90ff]/30 px-2 py-1 rounded-lg hover:bg-[#1e90ff]/30 transition-all font-semibold whitespace-nowrap">
+                      <button onClick={() => applyIdea(idea)} className="flex-shrink-0 flex items-center gap-1 text-xs bg-[#1e90ff]/20 text-[#1e90ff] border border-[#1e90ff]/30 px-2 py-1 rounded-lg hover:bg-[#1e90ff]/30 transition-all font-semibold whitespace-nowrap">
                         Use <ArrowRight className="w-3 h-3" />
                       </button>
                     </div>
