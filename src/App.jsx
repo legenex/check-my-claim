@@ -16,7 +16,7 @@ import AdminAnalytics from './pages/admin/Analytics';
 import AdminIntegrations from './pages/admin/Integrations';
 import AdminUserManagement from './pages/admin/UserManagement';
 import AdminSettings from './pages/admin/AdminSettings';
-import Signals from './pages/admin/Signals';
+import Signals from './pages/admin/Signals.jsx';
 import SignalDetail from './pages/admin/SignalDetail';
 import SignalSources from './pages/admin/SignalSources';
 import SignalSettings from './pages/admin/SignalSettings';
