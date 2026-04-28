@@ -11,9 +11,35 @@ export default function Signals() {
   const [refreshing, setRefreshing] = useState(false);
   const [filters, setFilters] = useState({
     status: 'all',
-    startDate: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],
-    endDate: new Date().toISOString().split('T')[0],
+    dateRange: 'last7', // last3, last7, last30, last90, last365
   });
+
+  const getDateRange = (range) => {
+    const end = new Date();
+    const start = new Date();
+    
+    switch (range) {
+      case 'last3':
+        start.setDate(start.getDate() - 3);
+        break;
+      case 'last7':
+        start.setDate(start.getDate() - 7);
+        break;
+      case 'last30':
+        start.setDate(start.getDate() - 30);
+        break;
+      case 'last90':
+        start.setDate(start.getDate() - 90);
+        break;
+      case 'last365':
+        start.setDate(start.getDate() - 365);
+        break;
+      default:
+        start.setDate(start.getDate() - 7);
+    }
+    
+    return { start: start.toISOString(), end: end.toISOString() };
+  };
 
   useEffect(() => {
     fetchSignals();
@@ -22,17 +48,15 @@ export default function Signals() {
   const fetchSignals = async () => {
     setLoading(true);
     try {
+      const { start, end } = getDateRange(filters.dateRange);
       const query = {};
+      
       if (filters.status !== 'all') query.status = filters.status;
-      if (filters.startDate) {
-        query.created_date = { $gte: new Date(filters.startDate).toISOString() };
-      }
-      if (filters.endDate) {
-        const endOfDay = new Date(filters.endDate);
-        endOfDay.setHours(23, 59, 59, 999);
-        if (!query.created_date) query.created_date = {};
-        query.created_date.$lte = endOfDay.toISOString();
-      }
+      
+      query.created_date = {
+        $gte: start,
+        $lte: end
+      };
       
       const results = await base44.entities.ScoredSignal.filter(query, '-composite_score', 500);
       setSignals(results);
@@ -187,23 +211,32 @@ export default function Signals() {
             onChange={e => setFilters({ ...filters, status: e.target.value })}
             className="bg-[#0a1628] border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#1e90ff]"
           >
+            <option value="all">All Statuses</option>
             <option value="new">New Signals</option>
             <option value="reviewed">Reviewed</option>
-            <option value="all">All Statuses</option>
           </select>
-          <input
-            type="date"
-            value={filters.startDate}
-            onChange={e => setFilters({ ...filters, startDate: e.target.value })}
-            className="bg-[#0a1628] border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#1e90ff]"
-          />
-          <span className="text-slate-400 text-sm">to</span>
-          <input
-            type="date"
-            value={filters.endDate}
-            onChange={e => setFilters({ ...filters, endDate: e.target.value })}
-            className="bg-[#0a1628] border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#1e90ff]"
-          />
+
+          <div className="flex items-center gap-2">
+            {[
+              { label: 'Last 3 Days', value: 'last3' },
+              { label: 'Last 7 Days', value: 'last7' },
+              { label: 'Last 3 Months', value: 'last90' },
+              { label: 'Last 6 Months', value: 'last365' },
+            ].map(range => (
+              <button
+                key={range.value}
+                onClick={() => setFilters({ ...filters, dateRange: range.value })}
+                className={`px-3 py-2 rounded-lg text-sm font-semibold transition-all ${
+                  filters.dateRange === range.value
+                    ? 'bg-[#1e90ff] text-white'
+                    : 'bg-[#0a1628] text-slate-400 hover:text-white'
+                }`}
+              >
+                {range.label}
+              </button>
+            ))}
+          </div>
+
           <button
             onClick={refreshFromSources}
             disabled={refreshing}
