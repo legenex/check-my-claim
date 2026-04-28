@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import ComplianceBanner from "@/components/signals/ComplianceBanner";
-import { Radar, AlertCircle, TrendingUp, CheckCircle, Zap, Download } from "lucide-react";
+import { Radar, AlertCircle, TrendingUp, CheckCircle, Zap, Download, RefreshCw } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 export default function Signals() {
   const [signals, setSignals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [seeding, setSeeding] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [filters, setFilters] = useState({
     status: 'all',
     startDate: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],
@@ -129,6 +130,18 @@ export default function Signals() {
     }
   };
 
+  const refreshFromSources = async () => {
+    setRefreshing(true);
+    try {
+      const result = await base44.functions.invoke('refreshSignals', {});
+      await fetchSignals();
+    } catch (err) {
+      console.error('Refresh error:', err);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   const exportAsCSV = () => {
     const headers = ['Event Summary', 'Score', 'Status', 'Campaigns', 'Geo Targeting', 'Budget Range', 'Created Date'];
     const rows = signals.map(s => [
@@ -191,6 +204,14 @@ export default function Signals() {
             onChange={e => setFilters({ ...filters, endDate: e.target.value })}
             className="bg-[#0a1628] border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#1e90ff]"
           />
+          <button
+            onClick={refreshFromSources}
+            disabled={refreshing}
+            className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all"
+          >
+            <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+            {refreshing ? 'Refreshing...' : '↻ Refresh Sources'}
+          </button>
           <button
             onClick={exportAsCSV}
             disabled={signals.length === 0}
