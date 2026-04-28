@@ -1,0 +1,38 @@
+{
+  "name": "SignalRunLog",
+  "type": "object",
+  "properties": {
+    "source_id": {
+      "type": "string",
+      "description": "Reference to SignalSource"
+    },
+    "run_started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "run_finished_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "signals_ingested": {
+      "type": "number"
+    },
+    "signals_skipped_duplicate": {
+      "type": "number"
+    },
+    "signals_failed": {
+      "type": "number"
+    },
+    "signals_pii_stripped": {
+      "type": "number",
+      "description": "Count of records that had PII removed before storage"
+    },
+    "error_summary": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "source_id",
+    "run_started_at"
+  ]
+}

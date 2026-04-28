@@ -1,0 +1,115 @@
+{
+  "name": "CampaignBrief",
+  "type": "object",
+  "properties": {
+    "scored_signal_id": {
+      "type": "string",
+      "description": "Reference to ScoredSignal"
+    },
+    "brief_title": {
+      "type": "string"
+    },
+    "brief_summary": {
+      "type": "string"
+    },
+    "recommended_campaign_slug": {
+      "type": "string"
+    },
+    "recommended_geo_targeting": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "recommended_demographic_targeting": {
+      "type": "object"
+    },
+    "recommended_creative_angles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "recommended_buyer_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "recommended_budget_low": {
+      "type": "number"
+    },
+    "recommended_budget_high": {
+      "type": "number"
+    },
+    "suggested_ad_copy_headlines": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "suggested_ad_copy_descriptions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "suggested_targeting_export": {
+      "type": "object",
+      "description": "Pre-formatted for Meta CSV and Google Ads upload"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "approved",
+        "launched",
+        "archived"
+      ],
+      "default": "draft"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "approved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "approved_by": {
+      "type": "string"
+    },
+    "ai_generated_image_urls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "ai_generated_video_urls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "meta_campaign_id": {
+      "type": "string"
+    },
+    "google_campaign_id": {
+      "type": "string"
+    },
+    "tiktok_campaign_id": {
+      "type": "string"
+    },
+    "launched_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "launched_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "scored_signal_id",
+    "brief_title"
+  ]
+}

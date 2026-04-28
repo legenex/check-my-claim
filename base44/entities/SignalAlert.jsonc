@@ -1,0 +1,43 @@
+{
+  "name": "SignalAlert",
+  "type": "object",
+  "properties": {
+    "scored_signal_id": {
+      "type": "string",
+      "description": "Reference to ScoredSignal"
+    },
+    "alert_type": {
+      "type": "string",
+      "enum": [
+        "email",
+        "slack",
+        "sms",
+        "webhook"
+      ]
+    },
+    "recipient": {
+      "type": "string"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "delivery_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "sent",
+        "failed",
+        "bounced"
+      ]
+    },
+    "payload_summary": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "scored_signal_id",
+    "alert_type",
+    "recipient"
+  ]
+}

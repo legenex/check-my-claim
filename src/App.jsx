@@ -16,6 +16,10 @@ import AdminAnalytics from './pages/admin/Analytics';
 import AdminIntegrations from './pages/admin/Integrations';
 import AdminUserManagement from './pages/admin/UserManagement';
 import AdminSettings from './pages/admin/AdminSettings';
+import Signals from './pages/admin/Signals';
+import SignalDetail from './pages/admin/SignalDetail';
+import SignalSources from './pages/admin/SignalSources';
+import SignalSettings from './pages/admin/SignalSettings';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -78,6 +82,10 @@ const AuthenticatedApp = () => {
       <Route path="/admin/integrations" element={<AdminIntegrations />} />
       <Route path="/admin/users" element={<AdminUserManagement />} />
       <Route path="/admin/settings" element={<AdminSettings />} />
+      <Route path="/admin/signals" element={<Signals />} />
+      <Route path="/admin/signals/:id" element={<SignalDetail />} />
+      <Route path="/admin/signals/sources" element={<SignalSources />} />
+      <Route path="/admin/signals/settings" element={<SignalSettings />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

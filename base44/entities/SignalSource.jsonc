@@ -1,0 +1,70 @@
+{
+  "name": "SignalSource",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "nhtsa_fars",
+        "state_dot_crash",
+        "nhtsa_recall",
+        "fmcsa_crash",
+        "ntsb",
+        "osha_fatality",
+        "fda_recall",
+        "fda_maude",
+        "cdc_outbreak",
+        "court_filings",
+        "google_news",
+        "local_news_rss",
+        "custom"
+      ]
+    },
+    "api_endpoint": {
+      "type": "string"
+    },
+    "api_key_masked": {
+      "type": "string",
+      "description": "Masked display of API key, actual key stored server-side only"
+    },
+    "poll_interval_minutes": {
+      "type": "number"
+    },
+    "is_enabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "last_polled_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_success_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_error_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_error_message": {
+      "type": "string"
+    },
+    "consecutive_failures": {
+      "type": "number",
+      "default": 0
+    },
+    "circuit_breaker_open": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "name",
+    "source_type",
+    "api_endpoint",
+    "poll_interval_minutes"
+  ]
+}

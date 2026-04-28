@@ -1,0 +1,40 @@
+{
+  "name": "ZipCodeData",
+  "type": "object",
+  "properties": {
+    "zip_code": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "county_fips": {
+      "type": "string"
+    },
+    "population": {
+      "type": "number"
+    },
+    "median_household_income": {
+      "type": "number"
+    },
+    "median_home_value": {
+      "type": "number"
+    },
+    "median_age": {
+      "type": "number"
+    },
+    "vehicle_ownership_rate": {
+      "type": "number",
+      "description": "Percentage 0-100"
+    },
+    "commute_to_work_drove_alone_rate": {
+      "type": "number",
+      "description": "Percentage 0-100"
+    }
+  },
+  "required": [
+    "zip_code",
+    "state",
+    "county_fips"
+  ]
+}

@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, FileText, BookOpen, Search, BarChart2,
   Puzzle, Users, Settings, ChevronDown, ChevronRight,
-  Menu, X, Bell, LogOut, Globe
+  Menu, X, Bell, LogOut, Globe, Radar
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
@@ -15,6 +15,7 @@ const navItems = [
   { label: "Blog Manager", icon: BookOpen, path: "/admin/blog" },
   { label: "SEO Manager", icon: Search, path: "/admin/seo" },
   { label: "Analytics", icon: BarChart2, path: "/admin/analytics" },
+  { label: "Signal Engine", icon: Radar, path: "/admin/signals" },
   { label: "Integrations", icon: Puzzle, path: "/admin/integrations" },
   { label: "User Management", icon: Users, path: "/admin/users" },
   { label: "Settings", icon: Settings, path: "/admin/settings" },

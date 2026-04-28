@@ -1,0 +1,96 @@
+{
+  "name": "ScoredSignal",
+  "type": "object",
+  "properties": {
+    "raw_signal_id": {
+      "type": "string",
+      "description": "Reference to RawSignal"
+    },
+    "severity_score": {
+      "type": "number"
+    },
+    "volume_score": {
+      "type": "number"
+    },
+    "wealth_score": {
+      "type": "number"
+    },
+    "urgency_score": {
+      "type": "number"
+    },
+    "competition_score": {
+      "type": "number"
+    },
+    "composite_score": {
+      "type": "number"
+    },
+    "recommended_campaigns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of campaign slugs"
+    },
+    "recommended_geo_targeting": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "ZIPs and county FIPS codes"
+    },
+    "recommended_demographic_targeting": {
+      "type": "object",
+      "description": "Age range, vehicle ownership, income brackets, etc - targeting only"
+    },
+    "recommended_creative_angles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "recommended_buyer_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "recommended_daily_budget_low": {
+      "type": "number"
+    },
+    "recommended_daily_budget_high": {
+      "type": "number"
+    },
+    "brief_summary": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "reviewed",
+        "dismissed",
+        "brief_generated",
+        "campaign_launched",
+        "expired"
+      ],
+      "default": "new"
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reviewed_by": {
+      "type": "string"
+    },
+    "dismiss_reason": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "raw_signal_id",
+    "composite_score"
+  ]
+}

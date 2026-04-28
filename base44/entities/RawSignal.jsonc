@@ -1,0 +1,93 @@
+{
+  "name": "RawSignal",
+  "type": "object",
+  "properties": {
+    "source_id": {
+      "type": "string",
+      "description": "Reference to SignalSource"
+    },
+    "source_event_id": {
+      "type": "string",
+      "description": "Unique ID from source for deduplication"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "fatal_crash",
+        "injury_crash",
+        "vehicle_recall",
+        "commercial_crash",
+        "aviation_incident",
+        "rail_incident",
+        "workplace_fatality",
+        "drug_recall",
+        "device_recall",
+        "food_outbreak",
+        "mdl_filing",
+        "other"
+      ]
+    },
+    "event_subtype": {
+      "type": "string"
+    },
+    "severity_raw": {
+      "type": "string"
+    },
+    "location_geojson": {
+      "type": "object",
+      "description": "GeoJSON point or polygon of incident location - geographic only, no addresses"
+    },
+    "affected_states": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "affected_counties": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "County FIPS codes"
+    },
+    "affected_zip_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "event_started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "event_ended_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "title": {
+      "type": "string",
+      "description": "Aggregate title, NO individual victim names"
+    },
+    "description": {
+      "type": "string",
+      "description": "Factual aggregate description, NO individual victim names or PII"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "raw_payload_stripped": {
+      "type": "object",
+      "description": "JSON payload with PII removed before storage"
+    },
+    "ingested_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "source_id",
+    "source_event_id",
+    "event_type",
+    "title"
+  ]
+}
