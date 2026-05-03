@@ -17,6 +17,9 @@ import AdminIntegrations from './pages/admin/Integrations';
 import AdminUserManagement from './pages/admin/UserManagement';
 import AdminSettings from './pages/admin/AdminSettings';
 import Signals from './pages/admin/Signals.jsx';
+import Advertorials from './pages/admin/Advertorials';
+import AdvertorialEditor from './pages/admin/AdvertorialEditor';
+import AdvertorialPage from './pages/AdvertorialPage';
 import SignalDetail from './pages/admin/SignalDetail';
 import SignalSources from './pages/admin/SignalSources';
 import SignalSettings from './pages/admin/SignalSettings';
@@ -86,6 +89,10 @@ const AuthenticatedApp = () => {
       <Route path="/admin/signals/:id" element={<SignalDetail />} />
       <Route path="/admin/signals/sources" element={<SignalSources />} />
       <Route path="/admin/signals/settings" element={<SignalSettings />} />
+      <Route path="/admin/advertorials" element={<Advertorials />} />
+      <Route path="/admin/advertorials/new" element={<AdvertorialEditor />} />
+      <Route path="/admin/advertorials/:id/edit" element={<AdvertorialEditor />} />
+      <Route path="/advertorial/:slug" element={<AdvertorialPage />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

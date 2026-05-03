@@ -1,0 +1,131 @@
+{
+  "name": "Advertorial",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "headline": {
+      "type": "string"
+    },
+    "subheadline": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Rideshare",
+        "Pedestrian/Cyclist",
+        "Listicle",
+        "Personal Narrative",
+        "Urgency",
+        "Anti-Lawyer",
+        "Pride and Pain",
+        "Other"
+      ]
+    },
+    "author_name": {
+      "type": "string",
+      "default": "Check My Claim Editorial Team"
+    },
+    "author_role": {
+      "type": "string",
+      "default": "Consumer Advocacy Desk"
+    },
+    "published_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "featured_image_url": {
+      "type": "string"
+    },
+    "featured_image_alt": {
+      "type": "string"
+    },
+    "body_content": {
+      "type": "string",
+      "description": "Full article body HTML"
+    },
+    "inline_images": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "alt": {
+            "type": "string"
+          },
+          "caption": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "soft_cta_text_1": {
+      "type": "string"
+    },
+    "soft_cta_text_2": {
+      "type": "string"
+    },
+    "soft_cta_text_3": {
+      "type": "string"
+    },
+    "primary_cta_text": {
+      "type": "string",
+      "default": "Start Your Free 30-Second Claim Check"
+    },
+    "primary_cta_url": {
+      "type": "string",
+      "default": "https://qualify.checkmyclaim.co/s/mva"
+    },
+    "estimated_reading_time": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "published",
+        "archived"
+      ],
+      "default": "draft"
+    },
+    "meta_description": {
+      "type": "string"
+    },
+    "meta_title": {
+      "type": "string"
+    },
+    "tracking_pixel_meta": {
+      "type": "string"
+    },
+    "tracking_pixel_taboola": {
+      "type": "string"
+    },
+    "payout": {
+      "type": "number"
+    },
+    "traffic_source_label": {
+      "type": "string"
+    },
+    "view_count": {
+      "type": "number",
+      "default": 0
+    },
+    "conversion_count": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "title",
+    "headline",
+    "slug",
+    "status"
+  ]
+}
