@@ -25,7 +25,7 @@ export function captureIncomingParams() {
  * @param {string} [opts.utmCampaign]- override campaign. Defaults to "Advertorial".
  * @param {string} [opts.baseUrl]    - override base URL (advertorial.primary_cta_url)
  */
-export function buildSurveyUrl({ linkId = "link_cta", utmMedium, utmCampaign, baseUrl } = {}) {
+export function buildSurveyUrl({ linkId = "link_cta", utmMedium, utmCampaign, baseUrl, extraParams } = {}) {
   const base = baseUrl || SURVEY_BASE;
 
   // Prefer sessionStorage values captured from incoming traffic
@@ -34,6 +34,7 @@ export function buildSurveyUrl({ linkId = "link_cta", utmMedium, utmCampaign, ba
   const sid = stored("sid") || "LGNX";
   const source = stored("utm_source") || "CMC-Site";
   const medium = stored("utm_medium") || utmMedium || "advertorial";
+  // Default campaign: "Experiment" if utmCampaign says so, else "Advertorial"
   const campaign = stored("utm_campaign") || utmCampaign || "Advertorial";
   const fbclid = stored("fbclid");
   const gclid = stored("gclid");
@@ -48,6 +49,7 @@ export function buildSurveyUrl({ linkId = "link_cta", utmMedium, utmCampaign, ba
   if (fbclid) p.set("fbclid", fbclid);
   if (gclid) p.set("gclid", gclid);
   if (ttclid) p.set("ttclid", ttclid);
+  if (extraParams) Object.entries(extraParams).forEach(([k, v]) => { if (v) p.set(k, v); });
 
   return `${base}?${p.toString()}`;
 }
@@ -62,6 +64,33 @@ export async function incrementAdvClicks(advertorial, base44) {
     await base44.entities.Advertorial.update(advertorial.id, {
       clicks: (advertorial.clicks || 0) + 1,
     });
+  } catch (_) {}
+}
+
+/**
+ * Increment clicks on an Experiment record.
+ */
+export async function incrementExpClicks(experiment, base44) {
+  if (!experiment?.id) return;
+  try {
+    await base44.entities.Experiment.update(experiment.id, {
+      clicks: (experiment.clicks || 0) + 1,
+    });
+  } catch (_) {}
+}
+
+/**
+ * Debounced view count for an Experiment record (once per session per slug).
+ */
+export function incrementExpViews(experiment, base44) {
+  if (!experiment?.id) return;
+  const key = `cmc_exp_viewed_${experiment.slug}`;
+  if (sessionStorage.getItem(key)) return;
+  sessionStorage.setItem(key, "1");
+  try {
+    base44.entities.Experiment.update(experiment.id, {
+      view_count: (experiment.view_count || 0) + 1,
+    }).catch(() => {});
   } catch (_) {}
 }
 

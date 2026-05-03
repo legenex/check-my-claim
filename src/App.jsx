@@ -24,6 +24,9 @@ import SignalDetail from './pages/admin/SignalDetail';
 import SignalSources from './pages/admin/SignalSources';
 import SignalSettings from './pages/admin/SignalSettings';
 import ClaimBotAdminPage from './pages/admin/ClaimBot';
+import ExperimentsPage from './pages/admin/Experiments';
+import ExperimentEditor from './pages/admin/ExperimentEditor';
+import ExperimentPage from './pages/ExperimentPage';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -94,7 +97,12 @@ const AuthenticatedApp = () => {
       <Route path="/admin/advertorials/new" element={<AdvertorialEditor />} />
       <Route path="/admin/advertorials/:id/edit" element={<AdvertorialEditor />} />
       <Route path="/admin/claimbot" element={<ClaimBotAdminPage />} />
+      <Route path="/admin/experiments" element={<ExperimentsPage />} />
+      <Route path="/admin/experiments/new" element={<ExperimentEditor />} />
+      <Route path="/admin/experiments/:id/edit" element={<ExperimentEditor />} />
       <Route path="/advertorial/:slug" element={<AdvertorialPage />} />
+      <Route path="/tools/*" element={<ExperimentPage />} />
+      <Route path="/community/*" element={<ExperimentPage />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
