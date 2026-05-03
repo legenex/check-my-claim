@@ -1,20 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
+import { buildSurveyUrl, captureIncomingParams, incrementAdvClicks, incrementAdvViews } from "@/lib/surveyUrl";
+import AdvertorialCTASection from "./AdvertorialCTASection";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/a32c079ff_DarkMode-PrimaryLogo_CheckMyClaim.png";
 
-function SoftCTA({ text, ctaUrl, slug }) {
+// ---------------------------------------------------------------------------
+// Soft inline CTA (link_1, link_2, link_3)
+// ---------------------------------------------------------------------------
+function SoftCTA({ text, advertorial, linkId }) {
   if (!text) return null;
+  const handleClick = async (e) => {
+    e.preventDefault();
+    await incrementAdvClicks(advertorial, base44);
+    const url = buildSurveyUrl({
+      linkId,
+      utmMedium: advertorial?.utm_medium_label || "advertorial",
+      baseUrl: advertorial?.primary_cta_url,
+    });
+    window.open(url, "_blank");
+  };
   return (
     <div className="my-8 px-6 py-5 bg-blue-50 border-l-4 border-[#2BB6F6] rounded-r-lg">
       <p className="text-base italic text-slate-700 leading-relaxed">
         {text}{" "}
-        <a
-          href={`${ctaUrl}?utm_source=advertorial&utm_medium=advertorial&utm_campaign=${slug}`}
-          className="text-[#1a6fc4] font-semibold not-italic underline hover:text-blue-800"
-          target="_blank" rel="noopener noreferrer"
-        >
+        <a href="#" onClick={handleClick} className="text-[#1a6fc4] font-semibold not-italic underline hover:text-blue-800">
           Run the free 30-second check here →
         </a>
       </p>
@@ -22,51 +33,101 @@ function SoftCTA({ text, ctaUrl, slug }) {
   );
 }
 
-function PrimaryCTA({ advertorial }) {
-  const url = `${advertorial.primary_cta_url}?utm_source=advertorial&utm_medium=advertorial&utm_campaign=${advertorial.slug}`;
-  const handleClick = async () => {
-    try {
-      await base44.entities.Advertorial.update(advertorial.id, {
-        conversion_count: (advertorial.conversion_count || 0) + 1
-      });
-    } catch {}
-    window.open(url, "_blank");
-  };
-
+// ---------------------------------------------------------------------------
+// Mid-article secondary image (half-width right float)
+// ---------------------------------------------------------------------------
+function SecondaryImage({ advertorial }) {
+  if (!advertorial?.secondary_image_url) return null;
   return (
-    <div className="bg-[#0a1628] text-white py-12 px-6 text-center mt-12">
-      <div className="max-w-2xl mx-auto">
-        <div className="flex justify-center gap-6 mb-6 flex-wrap">
-          {["50,000+ Wins", "$50M+ Recovered", "100% Free"].map(badge => (
-            <div key={badge} className="bg-[#1e3a5f] px-4 py-2 rounded-full text-sm font-bold text-[#2BB6F6]">
-              ✓ {badge}
-            </div>
-          ))}
-        </div>
-        <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-tight">
-          Ready to Find Out What Your Case Is Worth?
-        </h2>
-        <p className="text-slate-300 mb-6 text-base">
-          It takes 30 seconds. No obligation. No law firm pressure. Just answers.
-        </p>
-        <button
-          onClick={handleClick}
-          className="inline-block bg-[#2BB6F6] hover:bg-[#1a9fd8] text-white font-bold text-lg px-10 py-4 rounded-xl transition-all shadow-lg shadow-blue-500/20"
-        >
-          {advertorial.primary_cta_text || "Start Your Free 30-Second Claim Check"} →
-        </button>
-        <p className="text-xs text-slate-500 mt-4">No win, no fee. No upfront costs. Free consultation.</p>
-      </div>
+    <div className="my-8 block md:float-right md:ml-8 md:mb-4 md:w-64 lg:w-80 w-full">
+      <img
+        src={advertorial.secondary_image_url}
+        alt={advertorial.secondary_image_alt || ""}
+        className="w-full rounded-xl shadow-md object-cover"
+        style={{ maxHeight: "280px" }}
+      />
+      {advertorial.secondary_image_caption && (
+        <p className="text-xs text-slate-400 mt-2 italic text-center">{advertorial.secondary_image_caption}</p>
+      )}
     </div>
   );
 }
 
+// ---------------------------------------------------------------------------
+// Body renderer — inserts soft CTAs at 1/3, 2/3, 7/8 marks + secondary image at midpoint
+// ---------------------------------------------------------------------------
+function BodyWithCTAs({ advertorial }) {
+  const body = advertorial.body_content || "";
+  const paragraphs = body.split(/\n\n+/);
+  const total = paragraphs.length;
+  const cta1At = Math.floor(total * 0.33);
+  const cta2At = Math.floor(total * 0.66);
+  const cta3At = Math.floor(total * 0.88);
+  const imgAt = Math.floor(total * 0.45);
+
+  return (
+    <div className="prose prose-lg prose-slate max-w-none prose-headings:font-extrabold prose-headings:text-slate-900 prose-p:text-slate-800 prose-p:leading-[1.85] prose-p:text-[1.05rem] prose-a:text-[#1a6fc4] overflow-hidden">
+      {paragraphs.map((para, i) => (
+        <React.Fragment key={i}>
+          {i === imgAt && <SecondaryImage advertorial={advertorial} />}
+          <div dangerouslySetInnerHTML={{ __html: para }} />
+          {i === cta1At && <SoftCTA text={advertorial.soft_cta_text_1} advertorial={advertorial} linkId="link_1" />}
+          {i === cta2At && <SoftCTA text={advertorial.soft_cta_text_2} advertorial={advertorial} linkId="link_2" />}
+          {i === cta3At && <SoftCTA text={advertorial.soft_cta_text_3} advertorial={advertorial} linkId="link_3" />}
+        </React.Fragment>
+      ))}
+      <div style={{ clear: "both" }} />
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Sticky bar (mobile + desktop)
+// ---------------------------------------------------------------------------
+function StickyBar({ advertorial }) {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 400);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  if (!visible) return null;
+
+  const handleClick = async () => {
+    await incrementAdvClicks(advertorial, base44);
+    const url = buildSurveyUrl({
+      linkId: "link_footer",
+      utmMedium: advertorial?.utm_medium_label || "advertorial",
+      baseUrl: advertorial?.primary_cta_url,
+    });
+    window.open(url, "_blank");
+  };
+
+  return (
+    <>
+      <button onClick={handleClick}
+        className="hidden md:block fixed bottom-6 right-6 bg-[#2BB6F6] hover:bg-[#1a9fd8] text-white font-bold px-6 py-3 rounded-full shadow-xl transition-all z-40 text-sm">
+        Free Claim Check ›
+      </button>
+      <button onClick={handleClick}
+        className="md:hidden fixed bottom-0 left-0 right-0 bg-[#2BB6F6] hover:bg-[#1a9fd8] text-white font-bold py-4 text-center z-40 text-base shadow-2xl">
+        Start Your Free Claim Check →
+      </button>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Main component
+// ---------------------------------------------------------------------------
 export default function AdvertorialPublicPage({ slug }) {
   const [advertorial, setAdvertorial] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
+    captureIncomingParams();
     const urlSlug = slug || window.location.pathname.split("/advertorial/")[1]?.split("?")[0];
     if (!urlSlug) { setNotFound(true); setLoading(false); return; }
 
@@ -76,14 +137,13 @@ export default function AdvertorialPublicPage({ slug }) {
         const adv = results[0];
         setAdvertorial(adv);
         setLoading(false);
-        // Increment view count
-        base44.entities.Advertorial.update(adv.id, { view_count: (adv.view_count || 0) + 1 }).catch(() => {});
+        // Debounced view count (once per session per slug)
+        incrementAdvViews(adv, base44);
         // Inject pixels
         if (adv.tracking_pixel_meta) injectMetaPixel(adv.tracking_pixel_meta);
         if (adv.tracking_pixel_taboola) injectTaboolaPixel(adv.tracking_pixel_taboola);
         // SEO
-        if (adv.meta_title) document.title = adv.meta_title;
-        else document.title = `${adv.headline} | Check My Claim`;
+        document.title = adv.meta_title || `${adv.headline} | Check My Claim`;
       })
       .catch(() => { setNotFound(true); setLoading(false); });
   }, [slug]);
@@ -96,13 +156,19 @@ export default function AdvertorialPublicPage({ slug }) {
 
   if (notFound) return (
     <div className="min-h-screen bg-white flex items-center justify-center">
-      <div className="text-center"><h1 className="text-2xl font-bold text-slate-800 mb-2">Article Not Found</h1>
+      <div className="text-center">
+        <h1 className="text-2xl font-bold text-slate-800 mb-2">Article Not Found</h1>
         <Link to="/" className="text-[#2BB6F6] hover:underline">← Back to Check My Claim</Link>
       </div>
     </div>
   );
 
-  const ctaUrl = advertorial.primary_cta_url || "https://qualify.checkmyclaim.co/s/mva";
+  const phone = advertorial.phone_number || "(844) 840-6905";
+  const telNum = phone.replace(/\D/g, "");
+
+  const handlePhoneClick = async () => {
+    await incrementAdvClicks(advertorial, base44);
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -111,21 +177,17 @@ export default function AdvertorialPublicPage({ slug }) {
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <Link to="/"><img src={LOGO_URL} alt="Check My Claim" className="h-8 w-auto" /></Link>
           <a
-            href={`${ctaUrl}?utm_source=advertorial&utm_medium=advertorial&utm_campaign=${advertorial.slug}`}
-            className="bg-[#2BB6F6] hover:bg-[#1a9fd8] text-white text-sm font-bold px-4 py-2 rounded-lg transition-all"
-            target="_blank" rel="noopener noreferrer"
+            href={`tel:${telNum}`}
+            onClick={handlePhoneClick}
+            className="bg-[#2BB6F6] hover:bg-[#1a9fd8] text-white text-sm font-bold px-4 py-2 rounded-lg transition-all flex items-center gap-2"
           >
-            Free Claim Check →
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.76a16 16 0 0 0 6.29 6.29l1.94-1.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+            </svg>
+            Prefer to call? {phone}
           </a>
         </div>
       </header>
-
-      {/* Disclaimer Banner */}
-      <div className="bg-slate-100 border-b border-slate-200 px-4 py-2">
-        <p className="max-w-4xl mx-auto text-xs text-slate-500 text-center">
-          <strong>ADVERTORIAL</strong> — This is a paid advertisement. checkmyclaim.co is not a law firm or an attorney referral service. Past results do not guarantee future outcomes.
-        </p>
-      </div>
 
       {/* Article */}
       <article className="max-w-3xl mx-auto px-4 py-10">
@@ -174,16 +236,21 @@ export default function AdvertorialPublicPage({ slug }) {
           </div>
         )}
 
-        {/* Body with soft CTAs interspersed */}
-        <BodyWithCTAs advertorial={advertorial} ctaUrl={ctaUrl} />
+        {/* Body with soft CTAs + secondary image */}
+        <BodyWithCTAs advertorial={advertorial} />
       </article>
 
-      {/* Primary CTA Section */}
-      <PrimaryCTA advertorial={advertorial} />
+      {/* Light-blue CTA section */}
+      <AdvertorialCTASection advertorial={advertorial} />
 
-      {/* Footer Disclaimer */}
+      {/* Footer */}
       <footer className="bg-[#0a1628] text-slate-400 px-6 py-10 text-xs leading-relaxed">
         <div className="max-w-4xl mx-auto space-y-4">
+          {/* Moved advertorial disclosure */}
+          <p className="text-slate-600 text-xs">
+            <strong className="text-slate-500">ADVERTORIAL</strong> — This is a paid advertisement. checkmyclaim.co is not a law firm or an attorney referral service. Past results do not guarantee future outcomes.
+          </p>
+
           <p>
             <strong className="text-slate-300">DISCLAIMER:</strong> checkmyclaim.co is not a law firm or an attorney referral service. This advertisement is not legal advice and is not a guarantee or prediction of the outcome of your legal matter. Every case is different, and the outcome depends on the laws, facts, and circumstances unique to each case. Hiring an attorney is an important decision that should not be based solely on advertising. Request free information about your attorney's background and experience. <strong>CA RESIDENTS:</strong> Paid attorney advertising on behalf of jointly advertising independent attorneys, including: The Law Offices of Larry H. Parker, San Antonio, CA. A full listing of attorney sponsors can be found <a href="https://checkmyclaim.co/PartnerList" className="text-[#2BB6F6] underline">here</a>. Check My Claim is not a law firm and does not provide legal services. You can request an attorney by name. This advertising does not imply a higher quality of legal services than that provided by other attorneys, nor does it imply that the attorneys are certified specialists or experts in any area of law. Please note that past results showcased in advertisements do not dictate future results. If you live in AL, FL, MO, NY, or WY, <a href="https://checkmyclaim.co/disclosures/" className="text-[#2BB6F6] underline">Click here</a> to see additional information about attorney advertising in your state.
           </p>
@@ -195,61 +262,8 @@ export default function AdvertorialPublicPage({ slug }) {
       </footer>
 
       {/* Sticky CTA */}
-      <StickyBar advertorial={advertorial} ctaUrl={ctaUrl} />
+      <StickyBar advertorial={advertorial} />
     </div>
-  );
-}
-
-function BodyWithCTAs({ advertorial, ctaUrl }) {
-  const body = advertorial.body_content || "";
-  const paragraphs = body.split(/\n\n+/);
-  const total = paragraphs.length;
-  const cta1At = Math.floor(total * 0.33);
-  const cta2At = Math.floor(total * 0.66);
-  const cta3At = Math.floor(total * 0.88);
-
-  return (
-    <div className="prose prose-lg prose-slate max-w-none prose-headings:font-extrabold prose-headings:text-slate-900 prose-p:text-slate-800 prose-p:leading-[1.85] prose-p:text-[1.05rem] prose-a:text-[#1a6fc4]">
-      {paragraphs.map((para, i) => (
-        <React.Fragment key={i}>
-          <div dangerouslySetInnerHTML={{ __html: para }} />
-          {i === cta1At && <SoftCTA text={advertorial.soft_cta_text_1} ctaUrl={ctaUrl} slug={advertorial.slug} />}
-          {i === cta2At && <SoftCTA text={advertorial.soft_cta_text_2} ctaUrl={ctaUrl} slug={advertorial.slug} />}
-          {i === cta3At && <SoftCTA text={advertorial.soft_cta_text_3} ctaUrl={ctaUrl} slug={advertorial.slug} />}
-        </React.Fragment>
-      ))}
-    </div>
-  );
-}
-
-function StickyBar({ advertorial, ctaUrl }) {
-  const [visible, setVisible] = useState(false);
-  const url = `${ctaUrl}?utm_source=advertorial&utm_medium=advertorial&utm_campaign=${advertorial.slug}`;
-
-  useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 400);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  if (!visible) return null;
-  return (
-    <>
-      {/* Desktop pill */}
-      <a
-        href={url} target="_blank" rel="noopener noreferrer"
-        className="hidden md:block fixed bottom-6 right-6 bg-[#2BB6F6] hover:bg-[#1a9fd8] text-white font-bold px-6 py-3 rounded-full shadow-xl transition-all z-50 text-sm"
-      >
-        Free Claim Check ›
-      </a>
-      {/* Mobile bar */}
-      <a
-        href={url} target="_blank" rel="noopener noreferrer"
-        className="md:hidden fixed bottom-0 left-0 right-0 bg-[#2BB6F6] hover:bg-[#1a9fd8] text-white font-bold py-4 text-center z-50 text-base shadow-2xl"
-      >
-        Start Your Free Claim Check →
-      </a>
-    </>
   );
 }
 

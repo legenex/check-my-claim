@@ -1,10 +1,16 @@
 import React, { useEffect } from "react";
 import Navbar from "@/components/landing/Navbar";
+import ClaimBotWidget from "@/components/claimbot/ClaimBotWidget";
+import { captureIncomingParams } from "@/lib/surveyUrl";
 
 const NO_NAVBAR_PAGES = ["Submitted", "Thanks", "Sorry"];
 
 export default function Layout({ children, currentPageName }) {
   const showNavbar = !NO_NAVBAR_PAGES.includes(currentPageName);
+
+  useEffect(() => {
+    captureIncomingParams();
+  }, []);
 
   useEffect(() => {
     // Meta Pixel
@@ -106,6 +112,7 @@ export default function Layout({ children, currentPageName }) {
     <div>
       {showNavbar && <Navbar />}
       {children}
+      <ClaimBotWidget pageType="landing_page" />
     </div>
   );
 }

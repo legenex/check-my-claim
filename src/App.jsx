@@ -23,6 +23,7 @@ import AdvertorialPage from './pages/AdvertorialPage';
 import SignalDetail from './pages/admin/SignalDetail';
 import SignalSources from './pages/admin/SignalSources';
 import SignalSettings from './pages/admin/SignalSettings';
+import ClaimBotAdminPage from './pages/admin/ClaimBot';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -92,6 +93,7 @@ const AuthenticatedApp = () => {
       <Route path="/admin/advertorials" element={<Advertorials />} />
       <Route path="/admin/advertorials/new" element={<AdvertorialEditor />} />
       <Route path="/admin/advertorials/:id/edit" element={<AdvertorialEditor />} />
+      <Route path="/admin/claimbot" element={<ClaimBotAdminPage />} />
       <Route path="/advertorial/:slug" element={<AdvertorialPage />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>

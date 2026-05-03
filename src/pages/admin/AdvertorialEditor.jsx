@@ -306,8 +306,8 @@ Return as JSON.`,
                 <div className="text-2xl font-bold text-white">{(form.view_count || 0).toLocaleString()}</div>
               </div>
               <div className="bg-[#0a1628] rounded-lg p-4 border border-white/10">
-                <div className="text-xs text-slate-400 mb-1">Conversions</div>
-                <div className="text-2xl font-bold text-[#2BB6F6]">{(form.conversion_count || 0).toLocaleString()}</div>
+                <div className="text-xs text-slate-400 mb-1">Outbound Clicks</div>
+                <div className="text-2xl font-bold text-[#2BB6F6]">{(form.clicks || 0).toLocaleString()}</div>
               </div>
             </div>
           </>

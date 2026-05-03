@@ -70,9 +70,9 @@ export default function Advertorials() {
     fetchAdvertorials();
   };
 
-  const convRate = (adv) => {
-    if (!adv.view_count || adv.view_count === 0) return "0%";
-    return ((adv.conversion_count || 0) / adv.view_count * 100).toFixed(1) + "%";
+  const ctr = (adv) => {
+    if (!adv.view_count || adv.view_count === 0) return "—";
+    return ((adv.clicks || 0) / adv.view_count * 100).toFixed(2) + "%";
   };
 
   return (
@@ -135,10 +135,9 @@ export default function Advertorials() {
                   <th className="px-4 py-3 text-left font-semibold text-white">Title / Headline</th>
                   <th className="px-4 py-3 text-left font-semibold text-slate-400">Category</th>
                   <th className="px-4 py-3 text-left font-semibold text-slate-400">Status</th>
-                  <th className="px-4 py-3 text-left font-semibold text-slate-400">Payout</th>
                   <th className="px-4 py-3 text-left font-semibold text-slate-400">Views</th>
-                  <th className="px-4 py-3 text-left font-semibold text-slate-400">Conv.</th>
-                  <th className="px-4 py-3 text-left font-semibold text-slate-400">Rate</th>
+                  <th className="px-4 py-3 text-left font-semibold text-slate-400">Clicks</th>
+                  <th className="px-4 py-3 text-left font-semibold text-slate-400">CTR</th>
                   <th className="px-4 py-3 text-left font-semibold text-slate-400">Published</th>
                   <th className="px-4 py-3 text-right font-semibold text-slate-400">Actions</th>
                 </tr>
@@ -153,10 +152,9 @@ export default function Advertorials() {
                     </td>
                     <td className="px-4 py-3"><span className="text-xs text-slate-300 bg-white/5 px-2 py-0.5 rounded">{adv.category}</span></td>
                     <td className="px-4 py-3"><span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${STATUS_COLORS[adv.status] || STATUS_COLORS.draft}`}>{adv.status}</span></td>
-                    <td className="px-4 py-3 text-green-400 font-semibold">{adv.payout ? `$${adv.payout}` : "—"}</td>
                     <td className="px-4 py-3 text-slate-300">{(adv.view_count || 0).toLocaleString()}</td>
-                    <td className="px-4 py-3 text-slate-300">{(adv.conversion_count || 0).toLocaleString()}</td>
-                    <td className="px-4 py-3 text-[#2BB6F6] font-semibold">{convRate(adv)}</td>
+                    <td className="px-4 py-3 text-slate-300">{(adv.clicks || 0).toLocaleString()}</td>
+                    <td className="px-4 py-3 text-[#2BB6F6] font-semibold">{ctr(adv)}</td>
                     <td className="px-4 py-3 text-slate-400 text-xs">{adv.published_date ? new Date(adv.published_date).toLocaleDateString() : "—"}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1 justify-end">
