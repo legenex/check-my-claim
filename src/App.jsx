@@ -29,6 +29,12 @@ import ExperimentEditor from './pages/admin/ExperimentEditor';
 import ExperimentPage from './pages/ExperimentPage';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import AdminRouteGuard from '@/components/admin/AdminRouteGuard';
+import DecisionTrees from './pages/admin/DecisionTrees';
+import DecisionTreeBuilder from './pages/admin/DecisionTreeBuilder';
+import DecisionTreeAnalytics from './pages/admin/DecisionTreeAnalytics';
+import ContactFormsPage from './pages/admin/ContactForms';
+import CustomFieldsPage from './pages/admin/CustomFieldsPage';
+import QuizRuntime from './pages/QuizRuntime';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -104,6 +110,12 @@ const AuthenticatedApp = () => {
       <Route path="/advertorial/:slug" element={<AdvertorialPage />} />
       <Route path="/tools/*" element={<ExperimentPage />} />
       <Route path="/community/*" element={<ExperimentPage />} />
+      <Route path="/admin/DecisionTrees" element={<AdminRouteGuard><DecisionTrees /></AdminRouteGuard>} />
+      <Route path="/admin/DecisionTrees/:id/builder" element={<AdminRouteGuard><DecisionTreeBuilder /></AdminRouteGuard>} />
+      <Route path="/admin/DecisionTrees/:id/analytics" element={<AdminRouteGuard><DecisionTreeAnalytics /></AdminRouteGuard>} />
+      <Route path="/admin/ContactForms" element={<AdminRouteGuard><ContactFormsPage /></AdminRouteGuard>} />
+      <Route path="/admin/CustomFields" element={<AdminRouteGuard><CustomFieldsPage /></AdminRouteGuard>} />
+      <Route path="/q/:slug" element={<QuizRuntime />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
