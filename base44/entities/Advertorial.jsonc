@@ -1,6 +1,35 @@
 {
   "name": "Advertorial",
   "type": "object",
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "status": "published"
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
   "properties": {
     "title": {
       "type": "string"
@@ -45,6 +74,16 @@
     "featured_image_alt": {
       "type": "string"
     },
+    "secondary_image_url": {
+      "type": "string",
+      "description": "Optional half-width inline image rendered mid-article (right side, with text wrapping on left)"
+    },
+    "secondary_image_alt": {
+      "type": "string"
+    },
+    "secondary_image_caption": {
+      "type": "string"
+    },
     "body_content": {
       "type": "string",
       "description": "Full article body HTML"
@@ -83,6 +122,11 @@
       "type": "string",
       "default": "https://qualify.checkmyclaim.co/s/mva"
     },
+    "phone_number": {
+      "type": "string",
+      "default": "(844) 840-6905",
+      "description": "Phone shown in top-right 'Prefer to call?' button"
+    },
     "estimated_reading_time": {
       "type": "number"
     },
@@ -108,7 +152,12 @@
       "type": "string"
     },
     "payout": {
-      "type": "number"
+      "type": "number",
+      "description": "Affiliate/network payout per conversion. Hidden from main admin list, editable in detail view."
+    },
+    "utm_medium_label": {
+      "type": "string",
+      "description": "Short identifier used as utm_medium when CTA links forward to the survey."
     },
     "traffic_source_label": {
       "type": "string"
@@ -117,9 +166,10 @@
       "type": "number",
       "default": 0
     },
-    "conversion_count": {
+    "clicks": {
       "type": "number",
-      "default": 0
+      "default": 0,
+      "description": "Total outbound clicks on any CTA."
     }
   },
   "required": [

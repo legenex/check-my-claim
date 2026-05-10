@@ -1,0 +1,63 @@
+{
+  "name": "ClaimBotKnowledgeBase",
+  "type": "object",
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Process",
+        "Eligibility",
+        "Value",
+        "Settlement",
+        "Legal",
+        "Objection Handler",
+        "Other"
+      ]
+    },
+    "content": {
+      "type": "string"
+    },
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "priority": {
+      "type": "number",
+      "default": 50
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "content"
+  ]
+}

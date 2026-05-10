@@ -1,0 +1,79 @@
+{
+  "name": "OfferAnalysis",
+  "type": "object",
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "letter_text": {
+      "type": "string"
+    },
+    "offered_amount": {
+      "type": "number"
+    },
+    "risk_score": {
+      "type": "number"
+    },
+    "missing_damages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "pressure_tactics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "waiver_language": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "counter_range_low": {
+      "type": "number"
+    },
+    "counter_range_high": {
+      "type": "number"
+    },
+    "state": {
+      "type": "string"
+    },
+    "accident_type": {
+      "type": "string"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "utm_source": {
+      "type": "string"
+    },
+    "utm_medium": {
+      "type": "string"
+    }
+  },
+  "required": []
+}

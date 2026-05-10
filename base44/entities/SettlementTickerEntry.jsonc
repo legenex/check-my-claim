@@ -1,0 +1,59 @@
+{
+  "name": "SettlementTickerEntry",
+  "type": "object",
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "state": {
+      "type": "string"
+    },
+    "accident_type": {
+      "type": "string"
+    },
+    "injury_severity": {
+      "type": "string",
+      "enum": [
+        "minor",
+        "moderate",
+        "severe",
+        "catastrophic"
+      ]
+    },
+    "settlement_amount": {
+      "type": "number"
+    },
+    "months_to_settle": {
+      "type": "number"
+    },
+    "had_attorney": {
+      "type": "boolean"
+    },
+    "display_label": {
+      "type": "string"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "settlement_amount",
+    "accident_type"
+  ]
+}

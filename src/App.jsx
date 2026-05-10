@@ -28,6 +28,7 @@ import ExperimentsPage from './pages/admin/Experiments';
 import ExperimentEditor from './pages/admin/ExperimentEditor';
 import ExperimentPage from './pages/ExperimentPage';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+import AdminRouteGuard from '@/components/admin/AdminRouteGuard';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -81,25 +82,25 @@ const AuthenticatedApp = () => {
       ))}
       <Route path="/Blog" element={<BlogPage />} />
       <Route path="/blog/:slug" element={<BlogPostPage />} />
-      <Route path="/admin" element={<AdminDashboard />} />
-      <Route path="/admin/pages" element={<AdminPages />} />
-      <Route path="/admin/blog" element={<AdminBlog />} />
-      <Route path="/admin/seo" element={<AdminSEO />} />
-      <Route path="/admin/analytics" element={<AdminAnalytics />} />
-      <Route path="/admin/integrations" element={<AdminIntegrations />} />
-      <Route path="/admin/users" element={<AdminUserManagement />} />
-      <Route path="/admin/settings" element={<AdminSettings />} />
-      <Route path="/admin/signals" element={<Signals />} />
-      <Route path="/admin/signals/:id" element={<SignalDetail />} />
-      <Route path="/admin/signals/sources" element={<SignalSources />} />
-      <Route path="/admin/signals/settings" element={<SignalSettings />} />
-      <Route path="/admin/advertorials" element={<Advertorials />} />
-      <Route path="/admin/advertorials/new" element={<AdvertorialEditor />} />
-      <Route path="/admin/advertorials/:id/edit" element={<AdvertorialEditor />} />
-      <Route path="/admin/claimbot" element={<ClaimBotAdminPage />} />
-      <Route path="/admin/experiments" element={<ExperimentsPage />} />
-      <Route path="/admin/experiments/new" element={<ExperimentEditor />} />
-      <Route path="/admin/experiments/:id/edit" element={<ExperimentEditor />} />
+      <Route path="/admin" element={<AdminRouteGuard><AdminDashboard /></AdminRouteGuard>} />
+      <Route path="/admin/pages" element={<AdminRouteGuard><AdminPages /></AdminRouteGuard>} />
+      <Route path="/admin/blog" element={<AdminRouteGuard><AdminBlog /></AdminRouteGuard>} />
+      <Route path="/admin/seo" element={<AdminRouteGuard><AdminSEO /></AdminRouteGuard>} />
+      <Route path="/admin/analytics" element={<AdminRouteGuard><AdminAnalytics /></AdminRouteGuard>} />
+      <Route path="/admin/integrations" element={<AdminRouteGuard><AdminIntegrations /></AdminRouteGuard>} />
+      <Route path="/admin/users" element={<AdminRouteGuard><AdminUserManagement /></AdminRouteGuard>} />
+      <Route path="/admin/settings" element={<AdminRouteGuard><AdminSettings /></AdminRouteGuard>} />
+      <Route path="/admin/signals" element={<AdminRouteGuard><Signals /></AdminRouteGuard>} />
+      <Route path="/admin/signals/:id" element={<AdminRouteGuard><SignalDetail /></AdminRouteGuard>} />
+      <Route path="/admin/signals/sources" element={<AdminRouteGuard><SignalSources /></AdminRouteGuard>} />
+      <Route path="/admin/signals/settings" element={<AdminRouteGuard><SignalSettings /></AdminRouteGuard>} />
+      <Route path="/admin/advertorials" element={<AdminRouteGuard><Advertorials /></AdminRouteGuard>} />
+      <Route path="/admin/advertorials/new" element={<AdminRouteGuard><AdvertorialEditor /></AdminRouteGuard>} />
+      <Route path="/admin/advertorials/:id/edit" element={<AdminRouteGuard><AdvertorialEditor /></AdminRouteGuard>} />
+      <Route path="/admin/claimbot" element={<AdminRouteGuard><ClaimBotAdminPage /></AdminRouteGuard>} />
+      <Route path="/admin/experiments" element={<AdminRouteGuard><ExperimentsPage /></AdminRouteGuard>} />
+      <Route path="/admin/experiments/new" element={<AdminRouteGuard><ExperimentEditor /></AdminRouteGuard>} />
+      <Route path="/admin/experiments/:id/edit" element={<AdminRouteGuard><ExperimentEditor /></AdminRouteGuard>} />
       <Route path="/advertorial/:slug" element={<AdvertorialPage />} />
       <Route path="/tools/*" element={<ExperimentPage />} />
       <Route path="/community/*" element={<ExperimentPage />} />

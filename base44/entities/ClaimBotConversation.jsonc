@@ -1,0 +1,64 @@
+{
+  "name": "ClaimBotConversation",
+  "type": "object",
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "session_id": {
+      "type": "string"
+    },
+    "source_page": {
+      "type": "string"
+    },
+    "source_advertorial_slug": {
+      "type": "string"
+    },
+    "device": {
+      "type": "string"
+    },
+    "utm_source": {
+      "type": "string"
+    },
+    "utm_medium": {
+      "type": "string"
+    },
+    "utm_campaign": {
+      "type": "string"
+    },
+    "turn_count": {
+      "type": "number",
+      "default": 0
+    },
+    "survey_clicked": {
+      "type": "boolean",
+      "default": false
+    },
+    "phone_clicked": {
+      "type": "boolean",
+      "default": false
+    },
+    "escalated": {
+      "type": "boolean",
+      "default": false
+    },
+    "last_message_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "session_id"
+  ]
+}

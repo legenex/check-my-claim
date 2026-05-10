@@ -1,0 +1,54 @@
+{
+  "name": "CaseIndexPost",
+  "type": "object",
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "state": {
+      "type": "string"
+    },
+    "accident_type": {
+      "type": "string"
+    },
+    "injury_type": {
+      "type": "string"
+    },
+    "had_attorney": {
+      "type": "boolean"
+    },
+    "settlement_amount": {
+      "type": "number"
+    },
+    "months_to_settle": {
+      "type": "number"
+    },
+    "story_snippet": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "composite_score": {
+      "type": "number"
+    }
+  },
+  "required": []
+}

@@ -1,0 +1,58 @@
+{
+  "name": "InjuryPrediction",
+  "type": "object",
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "crash_type": {
+      "type": "string"
+    },
+    "speed_range": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string"
+    },
+    "seatbelt": {
+      "type": "string"
+    },
+    "predicted_injuries": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "utm_source": {
+      "type": "string"
+    },
+    "utm_medium": {
+      "type": "string"
+    }
+  },
+  "required": []
+}

@@ -1,0 +1,64 @@
+{
+  "description": "Injury-severity tier reference data used by the Claim Estimator.",
+  "name": "InjuryMultiplier",
+  "type": "object",
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "description": {
+      "type": "string"
+    },
+    "display_order": {
+      "default": 50,
+      "type": "number"
+    },
+    "example_injuries": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "is_active": {
+      "default": true,
+      "type": "boolean"
+    },
+    "multiplier_high": {
+      "description": "Top of pain-and-suffering multiplier band",
+      "type": "number"
+    },
+    "multiplier_low": {
+      "description": "Bottom of pain-and-suffering multiplier band",
+      "type": "number"
+    },
+    "tier_key": {
+      "description": "Stable key used in form/code",
+      "type": "string"
+    },
+    "tier_label": {
+      "description": "Display label shown to user",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tier_key",
+    "tier_label",
+    "multiplier_low",
+    "multiplier_high"
+  ]
+}

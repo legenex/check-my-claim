@@ -1,0 +1,73 @@
+{
+  "name": "AdjusterSimulationSession",
+  "type": "object",
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "scenario_id": {
+      "type": "string"
+    },
+    "scenario_label": {
+      "type": "string"
+    },
+    "transcript": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "turns_completed": {
+      "type": "number"
+    },
+    "final_offer": {
+      "type": "number"
+    },
+    "fair_value": {
+      "type": "number"
+    },
+    "money_lost": {
+      "type": "number"
+    },
+    "leverage_score": {
+      "type": "number"
+    },
+    "mistakes_made": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "utm_source": {
+      "type": "string"
+    },
+    "utm_medium": {
+      "type": "string"
+    }
+  },
+  "required": []
+}

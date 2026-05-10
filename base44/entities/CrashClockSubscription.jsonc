@@ -1,0 +1,57 @@
+{
+  "name": "CrashClockSubscription",
+  "type": "object",
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "crash_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "state": {
+      "type": "string"
+    },
+    "sol_years": {
+      "type": "number"
+    },
+    "deadline_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "days_remaining": {
+      "type": "number"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "utm_source": {
+      "type": "string"
+    },
+    "utm_medium": {
+      "type": "string"
+    }
+  },
+  "required": []
+}

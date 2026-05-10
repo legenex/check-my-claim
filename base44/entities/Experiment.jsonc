@@ -1,0 +1,175 @@
+{
+  "description": "Lead-generation experiments / interactive tools hosted on the site.",
+  "name": "Experiment",
+  "type": "object",
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "status": "published"
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "author_name": {
+      "default": "Check My Claim",
+      "type": "string"
+    },
+    "build_status": {
+      "default": "planned",
+      "description": "Engineering state, separate from publication status.",
+      "enum": [
+        "planned",
+        "in_progress",
+        "beta",
+        "live"
+      ],
+      "type": "string"
+    },
+    "category": {
+      "description": "High-level functional category",
+      "enum": [
+        "Estimator",
+        "Simulator",
+        "Analyzer",
+        "Calculator",
+        "Countdown",
+        "Predictor",
+        "Generator",
+        "Map",
+        "Community",
+        "Ticker",
+        "Other"
+      ],
+      "type": "string"
+    },
+    "clicks": {
+      "default": 0,
+      "type": "number"
+    },
+    "config": {
+      "description": "Free-form JSON for tool-specific settings.",
+      "type": "object"
+    },
+    "disclaimer_short": {
+      "default": "This is an estimator/educational tool, not legal advice and not a guarantee of outcome.",
+      "type": "string"
+    },
+    "experiment_type": {
+      "description": "Internal type key. Drives which React component renders the experiment page.",
+      "enum": [
+        "claim_estimator",
+        "adjuster_simulator",
+        "letter_analyzer",
+        "lifestyle_calculator",
+        "crash_clock",
+        "injury_predictor",
+        "letter_generator",
+        "state_map",
+        "case_index",
+        "settlement_ticker",
+        "other"
+      ],
+      "type": "string"
+    },
+    "featured_image_alt": {
+      "type": "string"
+    },
+    "featured_image_url": {
+      "type": "string"
+    },
+    "hero_headline": {
+      "type": "string"
+    },
+    "hero_subheadline": {
+      "type": "string"
+    },
+    "internal_notes": {
+      "type": "string"
+    },
+    "is_featured": {
+      "default": false,
+      "type": "boolean"
+    },
+    "meta_description": {
+      "type": "string"
+    },
+    "meta_title": {
+      "type": "string"
+    },
+    "path": {
+      "type": "string"
+    },
+    "primary_cta_text": {
+      "default": "Connect With a Vetted Attorney",
+      "type": "string"
+    },
+    "primary_cta_url": {
+      "default": "https://qualify.checkmyclaim.co/s/mva",
+      "type": "string"
+    },
+    "short_description": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "status": {
+      "default": "draft",
+      "enum": [
+        "draft",
+        "published",
+        "archived"
+      ],
+      "type": "string"
+    },
+    "submissions": {
+      "default": 0,
+      "type": "number"
+    },
+    "title": {
+      "type": "string"
+    },
+    "tracking_pixel_meta": {
+      "type": "string"
+    },
+    "tracking_pixel_taboola": {
+      "type": "string"
+    },
+    "utm_medium_label": {
+      "type": "string"
+    },
+    "view_count": {
+      "default": 0,
+      "type": "number"
+    }
+  },
+  "required": [
+    "title",
+    "slug",
+    "path",
+    "experiment_type",
+    "status"
+  ]
+}

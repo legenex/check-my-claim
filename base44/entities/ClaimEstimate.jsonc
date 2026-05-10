@@ -1,0 +1,85 @@
+{
+  "name": "ClaimEstimate",
+  "type": "object",
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "state": {
+      "type": "string"
+    },
+    "accident_type": {
+      "type": "string"
+    },
+    "injury_tier": {
+      "type": "string"
+    },
+    "liability": {
+      "type": "string"
+    },
+    "treatment_status": {
+      "type": "string"
+    },
+    "lost_wages_type": {
+      "type": "string"
+    },
+    "medical_bills": {
+      "type": "number"
+    },
+    "range_low": {
+      "type": "number"
+    },
+    "range_high": {
+      "type": "number"
+    },
+    "represented_low": {
+      "type": "number"
+    },
+    "represented_high": {
+      "type": "number"
+    },
+    "economic_damages": {
+      "type": "number"
+    },
+    "non_econ_low": {
+      "type": "number"
+    },
+    "non_econ_high": {
+      "type": "number"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "utm_source": {
+      "type": "string"
+    },
+    "utm_medium": {
+      "type": "string"
+    },
+    "utm_campaign": {
+      "type": "string"
+    }
+  },
+  "required": []
+}

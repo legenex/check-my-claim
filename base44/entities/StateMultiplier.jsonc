@@ -1,0 +1,69 @@
+{
+  "description": "State-level reference data used by the Claim Estimator.",
+  "name": "StateMultiplier",
+  "type": "object",
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "base_multiplier_factor": {
+      "default": 1.0,
+      "type": "number"
+    },
+    "bodily_injury_minimum": {
+      "type": "number"
+    },
+    "comparative_negligence_rule": {
+      "enum": [
+        "pure_comparative",
+        "modified_50",
+        "modified_51",
+        "contributory_negligence"
+      ],
+      "type": "string"
+    },
+    "non_economic_cap_notes": {
+      "type": "string"
+    },
+    "non_economic_damage_cap": {
+      "type": "number"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "state_code": {
+      "description": "2-letter state code",
+      "type": "string"
+    },
+    "state_name": {
+      "type": "string"
+    },
+    "statute_of_limitations_years": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "state_code",
+    "state_name",
+    "statute_of_limitations_years",
+    "comparative_negligence_rule"
+  ]
+}

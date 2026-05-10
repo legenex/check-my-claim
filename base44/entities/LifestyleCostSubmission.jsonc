@@ -1,0 +1,73 @@
+{
+  "name": "LifestyleCostSubmission",
+  "type": "object",
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "state": {
+      "type": "string"
+    },
+    "months_since_crash": {
+      "type": "number"
+    },
+    "medical_bills": {
+      "type": "number"
+    },
+    "sleep_impact": {
+      "type": "number"
+    },
+    "work_impact": {
+      "type": "number"
+    },
+    "parenting_impact": {
+      "type": "number"
+    },
+    "hobbies_impact": {
+      "type": "number"
+    },
+    "intimacy_impact": {
+      "type": "number"
+    },
+    "driving_anxiety": {
+      "type": "number"
+    },
+    "total_low": {
+      "type": "number"
+    },
+    "total_high": {
+      "type": "number"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "utm_source": {
+      "type": "string"
+    },
+    "utm_medium": {
+      "type": "string"
+    }
+  },
+  "required": []
+}

@@ -1,0 +1,44 @@
+{
+  "name": "ClaimBotMessage",
+  "type": "object",
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "conversation_id": {
+      "type": "string"
+    },
+    "session_id": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "user",
+        "assistant"
+      ]
+    },
+    "content": {
+      "type": "string"
+    },
+    "turn_number": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "session_id",
+    "role",
+    "content"
+  ]
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, FileText, BookOpen, Search, BarChart2,
@@ -27,7 +27,12 @@ const navItems = [
 export default function AdminLayout({ children, title, breadcrumbs = [] }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [adminEmail, setAdminEmail] = useState("");
   const location = useLocation();
+
+  useEffect(() => {
+    base44.auth.me().then(u => setAdminEmail(u?.email || u?.full_name || "Admin")).catch(() => {});
+  }, []);
 
   const handleLogout = () => base44.auth.logout("/");
 
@@ -123,14 +128,20 @@ export default function AdminLayout({ children, title, breadcrumbs = [] }) {
               <h1 className="text-sm font-semibold text-white">{title}</h1>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <button className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 relative">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-[#1e90ff] rounded-full"></span>
+          <div className="flex items-center gap-3">
+            {adminEmail && (
+              <span className="hidden md:block text-xs text-slate-400 max-w-[180px] truncate">
+                {adminEmail}
+              </span>
+            )}
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white hover:bg-white/5 transition-all border border-white/10"
+              title="Logout"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Logout</span>
             </button>
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1e90ff] to-blue-700 flex items-center justify-center text-xs font-bold">
-              A
-            </div>
           </div>
         </header>
 

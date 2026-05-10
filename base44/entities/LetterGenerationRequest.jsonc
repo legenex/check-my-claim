@@ -1,0 +1,67 @@
+{
+  "name": "LetterGenerationRequest",
+  "type": "object",
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "state": {
+      "type": "string"
+    },
+    "accident_type": {
+      "type": "string"
+    },
+    "incident_description": {
+      "type": "string"
+    },
+    "injury_description": {
+      "type": "string"
+    },
+    "treatment_description": {
+      "type": "string"
+    },
+    "insurer_name": {
+      "type": "string"
+    },
+    "claim_number": {
+      "type": "string"
+    },
+    "offered_amount": {
+      "type": "number"
+    },
+    "generated_letter": {
+      "type": "string"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "utm_source": {
+      "type": "string"
+    },
+    "utm_medium": {
+      "type": "string"
+    }
+  },
+  "required": []
+}

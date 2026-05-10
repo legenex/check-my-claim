@@ -1,0 +1,129 @@
+{
+  "name": "ClaimBotSettings",
+  "type": "object",
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "bot_name": {
+      "type": "string",
+      "default": "ClaimBot"
+    },
+    "bot_tagline": {
+      "type": "string",
+      "default": "Your free claim assistant"
+    },
+    "bot_avatar_url": {
+      "type": "string"
+    },
+    "greeting_message": {
+      "type": "string"
+    },
+    "input_placeholder": {
+      "type": "string"
+    },
+    "cta_label": {
+      "type": "string"
+    },
+    "cta_url": {
+      "type": "string"
+    },
+    "phone_number": {
+      "type": "string"
+    },
+    "phone_cta_label": {
+      "type": "string"
+    },
+    "primary_color": {
+      "type": "string"
+    },
+    "accent_color": {
+      "type": "string"
+    },
+    "background_color": {
+      "type": "string"
+    },
+    "text_color": {
+      "type": "string"
+    },
+    "position": {
+      "type": "string",
+      "enum": [
+        "bottom-right",
+        "bottom-left"
+      ],
+      "default": "bottom-right"
+    },
+    "launcher_label": {
+      "type": "string"
+    },
+    "auto_open_after_seconds": {
+      "type": "number",
+      "default": 0
+    },
+    "escalation_after_n_turns": {
+      "type": "number",
+      "default": 6
+    },
+    "max_messages_per_session": {
+      "type": "number",
+      "default": 30
+    },
+    "compliance_disclaimer_short": {
+      "type": "string"
+    },
+    "compliance_disclaimer_long": {
+      "type": "string"
+    },
+    "fallback_response": {
+      "type": "string"
+    },
+    "is_enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "show_on_landing_pages": {
+      "type": "boolean",
+      "default": true
+    },
+    "show_on_advertorials": {
+      "type": "boolean",
+      "default": true
+    },
+    "show_on_admin": {
+      "type": "boolean",
+      "default": false
+    },
+    "ai_model": {
+      "type": "string"
+    },
+    "system_prompt_override": {
+      "type": "string"
+    },
+    "embed_token": {
+      "type": "string"
+    },
+    "allowed_domains": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": []
+}
