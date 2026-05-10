@@ -35,6 +35,9 @@ import DecisionTreeAnalytics from './pages/admin/DecisionTreeAnalytics';
 import ContactFormsPage from './pages/admin/ContactForms';
 import CustomFieldsPage from './pages/admin/CustomFieldsPage';
 import QuizRuntime from './pages/QuizRuntime';
+import LandingPages from './pages/admin/LandingPages';
+import LandingPageEditor from './pages/admin/LandingPageEditor';
+import LandingPagePublic from './pages/LandingPagePublic';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -116,6 +119,9 @@ const AuthenticatedApp = () => {
       <Route path="/admin/ContactForms" element={<AdminRouteGuard><ContactFormsPage /></AdminRouteGuard>} />
       <Route path="/admin/CustomFields" element={<AdminRouteGuard><CustomFieldsPage /></AdminRouteGuard>} />
       <Route path="/q/:slug" element={<QuizRuntime />} />
+      <Route path="/admin/LandingPages" element={<AdminRouteGuard><LandingPages /></AdminRouteGuard>} />
+      <Route path="/admin/LandingPages/:id/edit" element={<LandingPageEditor />} />
+      <Route path="/lp/:slug" element={<LandingPagePublic />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
