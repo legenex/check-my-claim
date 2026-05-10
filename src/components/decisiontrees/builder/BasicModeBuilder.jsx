@@ -107,7 +107,9 @@ export default function BasicModeBuilder({ quiz, nodes, edges, setNodes, setEdge
         <NodeInspector
           node={selectedNode}
           edges={edges}
+          allEdges={edges}
           allNodes={nodes}
+          quiz={quiz}
           onUpdate={updateNode}
           onClose={() => setSelectedNodeId(null)}
           onDeleteNode={deleteNode}

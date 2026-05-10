@@ -144,7 +144,9 @@ export default function AdvancedModeBuilder({ quiz, nodes, edges, setNodes, setE
         <NodeInspector
           node={selectedNode}
           edges={edges}
+          allEdges={edges}
           allNodes={nodes}
+          quiz={quiz}
           onUpdate={updateNode}
           onClose={() => setSelectedNodeId(null)}
           onDeleteNode={handleDelete}
