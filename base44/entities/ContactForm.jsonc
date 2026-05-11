@@ -1,0 +1,85 @@
+{
+  "name": "ContactForm",
+  "type": "object",
+  "description": "Lead capture forms used at quiz results steps.",
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "form_type": {
+      "type": "string",
+      "enum": [
+        "qualified",
+        "disqualified",
+        "callback",
+        "generic"
+      ],
+      "default": "generic"
+    },
+    "fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field_key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "placeholder": {
+            "type": "string"
+          },
+          "help_text": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "tcpa_enabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "tcpa_text": {
+      "type": "string"
+    },
+    "trustedform_enabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "submit_button_label": {
+      "type": "string",
+      "default": "Submit"
+    },
+    "success_redirect_url": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

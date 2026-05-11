@@ -1,0 +1,53 @@
+{
+  "name": "QuizTransition",
+  "type": "object",
+  "description": "Derived cache of transitions between QuizSteps. Rebuilt programmatically on every quiz save. Never edit directly.",
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "quiz_id": {
+      "type": "string"
+    },
+    "source_step_id": {
+      "type": "string"
+    },
+    "target_step_id": {
+      "type": "string"
+    },
+    "transition_type": {
+      "type": "string",
+      "enum": [
+        "default",
+        "conditional",
+        "answer",
+        "fallback"
+      ],
+      "default": "default"
+    },
+    "label": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "quiz_id",
+    "source_step_id",
+    "target_step_id",
+    "transition_type"
+  ]
+}

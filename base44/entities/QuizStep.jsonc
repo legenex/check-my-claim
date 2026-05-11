@@ -1,0 +1,237 @@
+{
+  "name": "QuizStep",
+  "type": "object",
+  "description": "A single step/node in a Quiz. Steps are ordered by step_order.",
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "quiz_id": {
+      "type": "string",
+      "description": "FK to Quiz"
+    },
+    "step_id": {
+      "type": "string",
+      "description": "Stable client-generated ID, unique within quiz"
+    },
+    "step_order": {
+      "type": "number",
+      "description": "0-indexed display order"
+    },
+    "step_type": {
+      "type": "string",
+      "enum": [
+        "start",
+        "single_select",
+        "multi_choice",
+        "dropdown",
+        "yes_no",
+        "text_field",
+        "email_input",
+        "phone_input",
+        "number_input",
+        "date_picker",
+        "slider",
+        "address",
+        "decision",
+        "webhook",
+        "form",
+        "notification",
+        "script",
+        "redirect",
+        "results"
+      ]
+    },
+    "label": {
+      "type": "string"
+    },
+    "identifier": {
+      "type": "string"
+    },
+    "title_display": {
+      "type": "string"
+    },
+    "help_text": {
+      "type": "string"
+    },
+    "placeholder": {
+      "type": "string"
+    },
+    "required": {
+      "type": "boolean",
+      "default": false
+    },
+    "answer_options": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "score": {
+            "type": "number",
+            "default": 0
+          },
+          "image_url": {
+            "type": "string"
+          },
+          "tags_to_add": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tags_to_remove": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "is_default": {
+            "type": "boolean",
+            "default": false
+          },
+          "visible_if": {
+            "type": "string"
+          },
+          "custom_field_overrides": {
+            "type": "object"
+          },
+          "target_step_id": {
+            "type": "string",
+            "description": "null = end quiz"
+          }
+        }
+      }
+    },
+    "default_next_step_id": {
+      "type": "string",
+      "description": "null = end quiz"
+    },
+    "custom_field_assignments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "custom_field_id": {
+            "type": "string"
+          },
+          "value_source": {
+            "type": "string"
+          },
+          "default_value": {
+            "type": "string"
+          },
+          "transform": {
+            "type": "string",
+            "enum": [
+              "none",
+              "lowercase",
+              "uppercase",
+              "trim",
+              "phone_format",
+              "state_2letter",
+              "date_iso"
+            ],
+            "default": "none"
+          }
+        }
+      }
+    },
+    "tags_to_add": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tags_to_remove": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "validation_rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rule_type": {
+            "type": "string"
+          },
+          "params": {
+            "type": "object"
+          },
+          "error_message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "scripts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "trigger": {
+            "type": "string",
+            "enum": [
+              "on_enter",
+              "on_exit"
+            ]
+          },
+          "code": {
+            "type": "string"
+          },
+          "is_enabled": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      }
+    },
+    "config": {
+      "type": "object",
+      "description": "Type-specific free-form config"
+    },
+    "position_x": {
+      "type": "number"
+    },
+    "position_y": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "quiz_id",
+    "step_id",
+    "step_order",
+    "step_type"
+  ]
+}

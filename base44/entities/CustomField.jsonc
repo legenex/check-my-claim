@@ -1,0 +1,109 @@
+{
+  "name": "CustomField",
+  "type": "object",
+  "description": "Reusable fields for quiz lead capture. Global or quiz-scoped.",
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "field_key": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "snake_case key used in code and webhooks"
+    },
+    "display_label": {
+      "type": "string"
+    },
+    "field_type": {
+      "type": "string",
+      "enum": [
+        "string",
+        "text",
+        "number",
+        "boolean",
+        "enum",
+        "email",
+        "phone",
+        "date",
+        "datetime",
+        "url",
+        "json",
+        "array_string"
+      ],
+      "default": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Contact",
+        "Accident Details",
+        "Injury",
+        "Liability",
+        "Treatment",
+        "Vehicle",
+        "Insurance",
+        "Attribution",
+        "Lookup",
+        "Custom",
+        "Other"
+      ]
+    },
+    "scope": {
+      "type": "string",
+      "enum": [
+        "global",
+        "quiz"
+      ],
+      "default": "global"
+    },
+    "quiz_id": {
+      "type": "string",
+      "description": "FK to Quiz, nullable for global fields"
+    },
+    "allowed_values": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "default_value": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "is_pii": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_system": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_used_count": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "field_key",
+    "display_label",
+    "field_type",
+    "scope"
+  ]
+}

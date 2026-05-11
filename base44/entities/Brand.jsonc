@@ -1,0 +1,78 @@
+{
+  "name": "Brand",
+  "type": "object",
+  "description": "Brand profile for quiz theming and multi-brand routing.",
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "brand_key": {
+      "type": "string",
+      "description": "Stable snake_case key, e.g. 'cmc'"
+    },
+    "brand_name": {
+      "type": "string"
+    },
+    "primary_color": {
+      "type": "string",
+      "default": "#1e90ff"
+    },
+    "accent_color": {
+      "type": "string",
+      "default": "#22c55e"
+    },
+    "background_color": {
+      "type": "string",
+      "default": "#0b1220"
+    },
+    "text_color": {
+      "type": "string",
+      "default": "#ffffff"
+    },
+    "font_family": {
+      "type": "string",
+      "default": "Inter"
+    },
+    "logo_url": {
+      "type": "string"
+    },
+    "favicon_url": {
+      "type": "string"
+    },
+    "phone_number": {
+      "type": "string"
+    },
+    "tcpa_text": {
+      "type": "string"
+    },
+    "custom_css": {
+      "type": "string"
+    },
+    "match_patterns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Patterns like 'host:checkmyclaim.co', 'param:brand=cmc', 'referrer:pattern'"
+    }
+  },
+  "required": [
+    "brand_key",
+    "brand_name"
+  ]
+}
