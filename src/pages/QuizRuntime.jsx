@@ -1,302 +1,358 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import { captureIncomingParams } from "@/lib/surveyUrl";
 
-function LoadingScreen() {
-  return (
-    <div className="min-h-screen bg-[#0a1628] flex items-center justify-center">
-      <div className="w-8 h-8 border-4 border-slate-700 border-t-[#2BB6F6] rounded-full animate-spin" />
-    </div>
-  );
-}
+const DEFAULT_PHONE = "(844) 840-6905";
 
-function NotFound() {
-  return (
-    <div className="min-h-screen bg-white flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-slate-800 mb-2">Quiz Not Found</h1>
-        <a href="/" className="text-[#2BB6F6] hover:underline">← Back to Check My Claim</a>
-      </div>
-    </div>
-  );
-}
-
+/**
+ * QuizRuntime — renders a published Quiz by slug.
+ * Also exported as a component that accepts quizId + embedded props for /lp pages.
+ */
 export default function QuizRuntime() {
   const { slug } = useParams();
-  const [quiz, setQuiz] = useState(null);
-  const [nodes, setNodes] = useState([]);
-  const [edges, setEdges] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [currentNodeId, setCurrentNodeId] = useState(null);
-  const [fieldValues, setFieldValues] = useState({});
-  const [pathTaken, setPathTaken] = useState([]);
-  const [outcome, setOutcome] = useState(null);
-  const sessionId = useRef(`sess_${Date.now()}_${Math.random().toString(36).slice(2)}`);
-  const runId = useRef(null);
+  return <QuizRuntimeCore slug={slug} embedded={false} />;
+}
 
-  // Get UTM params and brand from URL
+export function QuizRuntimeEmbedded({ quizId, onFirstInteraction }) {
+  return <QuizRuntimeCore quizId={quizId} embedded={true} onFirstInteraction={onFirstInteraction} />;
+}
+
+function QuizRuntimeCore({ slug, quizId, embedded, onFirstInteraction }) {
+  const [quiz, setQuiz] = useState(null);
+  const [brand, setBrand] = useState(null);
+  const [steps, setSteps] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+  const [currentStepId, setCurrentStepId] = useState(null);
+  const [fieldValues, setFieldValues] = useState({});
+  const [tags, setTags] = useState([]);
+  const [pathTaken, setPathTaken] = useState([]);
+  const [finished, setFinished] = useState(false);
+  const hasInteracted = useRef(false);
+  const runId = useRef(null);
+  const sessionId = useRef(`qs_${Date.now()}_${Math.random().toString(36).slice(2)}`);
+
+  // Collect URL params
   const urlParams = new URLSearchParams(window.location.search);
-  const utmSource = urlParams.get("utm_source") || "";
-  const utmMedium = urlParams.get("utm_medium") || "";
-  const utmCampaign = urlParams.get("utm_campaign") || "";
-  const brandParam = urlParams.get("brand") || "";
+  const utmSource = urlParams.get("utm_source") || sessionStorage.getItem("cmc_utm_source") || "";
+  const utmMedium = urlParams.get("utm_medium") || sessionStorage.getItem("cmc_utm_medium") || "";
+  const utmCampaign = urlParams.get("utm_campaign") || sessionStorage.getItem("cmc_utm_campaign") || "";
+  const fbclid = urlParams.get("fbclid") || sessionStorage.getItem("cmc_fbclid") || "";
+  const sid = urlParams.get("sid") || sessionStorage.getItem("cmc_sid") || "";
 
   useEffect(() => {
+    if (!embedded) captureIncomingParams();
     loadQuiz();
-  }, [slug]);
+  }, [slug, quizId]);
 
   const loadQuiz = async () => {
     setLoading(true);
     try {
-      const quizzes = await base44.entities.Quiz.filter({ slug, status: "Published" });
-      if (quizzes.length === 0) { setLoading(false); return; }
-      const q = quizzes[0];
+      let q;
+      if (quizId) {
+        const qs = await base44.entities.Quiz.filter({ id: quizId });
+        q = qs[0];
+      } else {
+        const qs = await base44.entities.Quiz.filter({ slug, status: "published" });
+        q = qs[0];
+      }
+      if (!q) { setNotFound(true); setLoading(false); return; }
       setQuiz(q);
 
-      const [qs, es] = await Promise.all([
-        base44.entities.Question.filter({ quiz_id: q.id }),
-        base44.entities.Edge.filter({ quiz_id: q.id }),
+      const [stepList, brandList] = await Promise.all([
+        base44.entities.QuizStep.filter({ quiz_id: q.id }),
+        q.brand_id ? base44.entities.Brand.filter({ id: q.brand_id }) : Promise.resolve([]),
       ]);
-      setNodes(qs);
-      setEdges(es);
+      const sorted = stepList.slice().sort((a, b) => a.step_order - b.step_order);
+      setSteps(sorted);
+      if (brandList.length) setBrand(brandList[0]);
 
-      // Find start node
-      const startNode = qs.find(n => n.node_type === "start") || qs[0];
-      if (startNode) {
-        setCurrentNodeId(startNode.node_id);
-        setPathTaken([startNode.node_id]);
+      // Set initial attribution fields
+      const initFields = {};
+      if (utmSource) initFields.utm_source = utmSource;
+      if (utmMedium) initFields.utm_medium = utmMedium;
+      if (utmCampaign) initFields.utm_campaign = utmCampaign;
+      if (fbclid) initFields.fbclid = fbclid;
+      if (sid) initFields.sid = sid;
+      setFieldValues(initFields);
+
+      // Start at start_step_id or first step
+      const startId = q.start_step_id || (sorted[0]?.step_id);
+      if (startId) {
+        setCurrentStepId(startId);
+        setPathTaken([startId]);
       }
 
-      // Create run record
-      const run = await base44.entities.DecisionTreeRun.create({
-        quiz_id: q.id,
-        session_id: sessionId.current,
-        brand_id: brandParam,
-        utm_source: utmSource,
-        utm_medium: utmMedium,
-        utm_campaign: utmCampaign,
-        path_taken: startNode ? [startNode.node_id] : [],
-        completed: false,
-      });
-      runId.current = run.id;
+      if (!embedded) {
+        document.title = q.meta_title || q.title || "Quiz";
+      }
     } catch (e) {
-      console.error(e);
+      console.error("QuizRuntime load error:", e);
+      setNotFound(true);
     }
     setLoading(false);
   };
 
-  const updateRun = async (patch) => {
-    if (!runId.current) return;
-    await base44.entities.DecisionTreeRun.update(runId.current, patch);
-  };
-
-  const currentNode = nodes.find(n => n.node_id === currentNodeId);
-
-  const advanceToNode = async (nextNodeId, answer) => {
-    const newPath = [...pathTaken, nextNodeId];
-    setPathTaken(newPath);
-    setCurrentNodeId(nextNodeId);
-    await updateRun({ path_taken: newPath, field_values: fieldValues });
-
-    const nextNode = nodes.find(n => n.node_id === nextNodeId);
-    if (nextNode?.node_type === "outcome" || nextNode?.node_type === "qualified" || nextNode?.node_type === "disqualified") {
-      const outcomeVal = nextNode.node_type === "qualified" ? "qualified" : nextNode.node_type === "disqualified" ? "disqualified" : "completed";
-      setOutcome(outcomeVal);
-      await updateRun({ completed: true, outcome: outcomeVal, path_taken: newPath, field_values: fieldValues });
+  const fireFirstInteraction = () => {
+    if (!hasInteracted.current) {
+      hasInteracted.current = true;
+      onFirstInteraction?.();
     }
   };
 
-  const handleAnswer = async (edgeOrValue) => {
-    // Find next node based on edge condition or value
-    const outEdges = edges.filter(e => e.source_node_id === currentNodeId);
-    let nextEdge = null;
+  const applyTransform = (val, transform) => {
+    if (!transform || transform === "none") return val;
+    if (transform === "lowercase") return String(val).toLowerCase();
+    if (transform === "uppercase") return String(val).toUpperCase();
+    if (transform === "trim") return String(val).trim();
+    return val;
+  };
 
-    if (typeof edgeOrValue === "string" && edgeOrValue.startsWith("edge:")) {
-      // Direct edge id
-      nextEdge = outEdges.find(e => e.id === edgeOrValue.replace("edge:", "")) || outEdges[0];
+  const advanceTo = (nextStepId) => {
+    if (!nextStepId) { setFinished(true); return; }
+    const nextStep = steps.find(s => s.step_id === nextStepId);
+    if (!nextStep) { setFinished(true); return; }
+    setCurrentStepId(nextStepId);
+    setPathTaken(prev => [...prev, nextStepId]);
+  };
+
+  const handleAnswer = (value, step, selectedOption) => {
+    fireFirstInteraction();
+    // Write custom field assignments
+    const newFields = { ...fieldValues };
+    if (step.custom_field_assignments?.length) {
+      step.custom_field_assignments.forEach(a => {
+        let val = value;
+        if (a.value_source === "answer_label" && selectedOption) val = selectedOption.label;
+        if (a.value_source === "static") val = a.default_value || "";
+        newFields[a.custom_field_id] = applyTransform(val, a.transform);
+      });
+    }
+    // Per-answer custom field overrides
+    if (selectedOption?.custom_field_overrides) {
+      Object.entries(selectedOption.custom_field_overrides).forEach(([k, v]) => { newFields[k] = v; });
+    }
+    // Tags
+    const newTags = [...tags];
+    if (selectedOption?.tags_to_add) selectedOption.tags_to_add.forEach(t => { if (!newTags.includes(t)) newTags.push(t); });
+    if (selectedOption?.tags_to_remove) selectedOption.tags_to_remove.forEach(t => { const i = newTags.indexOf(t); if (i > -1) newTags.splice(i, 1); });
+    setFieldValues(newFields);
+    setTags(newTags);
+
+    // Determine next step
+    const nextId = selectedOption?.target_step_id ?? step.default_next_step_id;
+
+    // Auto-advance delay for single_select
+    const autoMs = quiz?.settings?.auto_advance_ms ?? 120;
+    if (step.step_type === "single_select" || step.step_type === "yes_no") {
+      setTimeout(() => advanceTo(nextId), autoMs);
     } else {
-      // Match by condition value or fallback to default
-      nextEdge = outEdges.find(e => e.condition_value === edgeOrValue) ||
-                 outEdges.find(e => !e.condition_value) ||
-                 outEdges[0];
-    }
-
-    if (nextEdge?.target_node_id) {
-      await advanceToNode(nextEdge.target_node_id, edgeOrValue);
+      advanceTo(nextId);
     }
   };
 
-  const handleFieldChange = (key, value) => {
-    setFieldValues(prev => ({ ...prev, [key]: value }));
-  };
+  const brandColor = brand?.primary_color || "#1e90ff";
+  const brandPhone = brand?.phone_number || DEFAULT_PHONE;
 
-  if (loading) return <LoadingScreen />;
-  if (!quiz) return <NotFound />;
+  if (loading) {
+    const spinner = (
+      <div style={{ textAlign: "center", padding: "40px 20px" }}>
+        <div style={{ width: 32, height: 32, border: "4px solid #e2e8f0", borderTopColor: brandColor, borderRadius: "50%", animation: "spin 0.8s linear infinite", margin: "0 auto" }} />
+        <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+      </div>
+    );
+    if (embedded) return spinner;
+    return <div style={{ minHeight: "100vh", background: brand?.background_color || "#0b1220", display: "flex", alignItems: "center", justifyContent: "center" }}>{spinner}</div>;
+  }
 
-  // Apply brand styles from quiz config
-  const brandColor = quiz.brand_color || "#1e90ff";
-  const bgColor = quiz.background_color || "#ffffff";
-  const logoUrl = quiz.logo_url || "";
+  if (notFound || !quiz) {
+    const card = (
+      <div style={{ textAlign: "center", padding: "40px 24px", background: "#fff", borderRadius: 12, maxWidth: 400 }}>
+        <p style={{ fontWeight: 700, color: "#1e293b", marginBottom: 8 }}>Quiz not found.</p>
+        <p style={{ color: "#64748b", fontSize: 14 }}>Please refresh or call us at {brandPhone}</p>
+      </div>
+    );
+    if (embedded) return card;
+    return <div style={{ minHeight: "100vh", background: "#0b1220", display: "flex", alignItems: "center", justifyContent: "center" }}>{card}</div>;
+  }
+
+  const currentStep = steps.find(s => s.step_id === currentStepId);
+
+  const runtimeContent = (
+    <div style={embedded ? {} : { maxWidth: 680, margin: "0 auto", padding: "40px 20px" }}>
+      {/* Progress bar */}
+      {!embedded && quiz.settings?.progress_bar !== false && (
+        <div style={{ height: 4, background: "rgba(255,255,255,0.1)", borderRadius: 2, marginBottom: 32, overflow: "hidden" }}>
+          <div style={{ height: "100%", background: brandColor, borderRadius: 2, transition: "width 0.4s", width: `${Math.min((pathTaken.length / Math.max(steps.length, 1)) * 100, 100)}%` }} />
+        </div>
+      )}
+      {embedded && (
+        <div style={{ height: 4, background: "#e2e8f0", borderRadius: 2, marginBottom: 20, overflow: "hidden" }}>
+          <div style={{ height: "100%", background: brandColor, borderRadius: 2, transition: "width 0.4s", width: `${Math.min((pathTaken.length / Math.max(steps.length, 1)) * 100, 100)}%` }} />
+        </div>
+      )}
+
+      {finished || !currentStep ? (
+        <div style={{ textAlign: "center", padding: "24px 0", color: embedded ? "#1e293b" : "#fff" }}>
+          <p style={{ fontWeight: 700, fontSize: 20 }}>{quiz.settings?.thank_you_message || "Thank you!"}</p>
+        </div>
+      ) : (
+        <StepRenderer
+          step={currentStep}
+          fieldValues={fieldValues}
+          brandColor={brandColor}
+          embedded={embedded}
+          onAnswer={(val, opt) => handleAnswer(val, currentStep, opt)}
+          onAdvance={() => {
+            fireFirstInteraction();
+            const nextId = currentStep.default_next_step_id;
+            setTimeout(() => advanceTo(nextId), quiz?.settings?.auto_advance_ms ?? 120);
+          }}
+        />
+      )}
+    </div>
+  );
+
+  if (embedded) return runtimeContent;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: bgColor }}>
-      {/* Header */}
-      <div className="py-4 px-6 border-b border-slate-200 flex items-center justify-between max-w-2xl mx-auto">
-        {logoUrl ? (
-          <img src={logoUrl} alt="Logo" className="h-8 w-auto" />
-        ) : (
-          <div className="text-lg font-bold" style={{ color: brandColor }}>{quiz.title}</div>
-        )}
-        <div className="text-xs text-slate-400">{pathTaken.length} / {nodes.length} steps</div>
-      </div>
-
-      {/* Progress bar */}
-      <div className="h-1 bg-slate-200">
-        <div className="h-1 transition-all duration-500" style={{ width: `${Math.min((pathTaken.length / Math.max(nodes.length, 1)) * 100, 100)}%`, backgroundColor: brandColor }} />
-      </div>
-
-      {/* Node content */}
-      <div className="max-w-2xl mx-auto px-6 py-10">
-        {outcome ? (
-          <OutcomeScreen outcome={outcome} node={currentNode} brandColor={brandColor} quiz={quiz} />
-        ) : currentNode ? (
-          <NodeRenderer
-            node={currentNode}
-            edges={edges.filter(e => e.source_node_id === currentNodeId)}
-            fieldValues={fieldValues}
-            onAnswer={handleAnswer}
-            onFieldChange={handleFieldChange}
-            brandColor={brandColor}
-          />
-        ) : (
-          <div className="text-center text-slate-400">Loading question...</div>
-        )}
-      </div>
+    <div style={{ minHeight: "100vh", background: brand?.background_color || "#0b1220", fontFamily: brand?.font_family ? `${brand.font_family}, sans-serif` : "Inter, sans-serif" }}>
+      {/* Standalone header */}
+      <header style={{ background: brand?.background_color || "#0b1220", borderBottom: "1px solid rgba(255,255,255,0.08)", padding: "12px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 50 }}>
+        <div style={{ fontWeight: 700, color: brandColor, fontSize: 18 }}>{quiz.title}</div>
+        <a href={`tel:${brandPhone.replace(/\D/g, "")}`}
+          style={{ background: brandColor, color: "#fff", fontWeight: 700, fontSize: 12, padding: "8px 16px", borderRadius: 99, textDecoration: "none" }}>
+          CLICK HERE TO CALL
+        </a>
+      </header>
+      {runtimeContent}
     </div>
   );
 }
 
-function NodeRenderer({ node, edges, fieldValues, onAnswer, onFieldChange, brandColor }) {
-  const [inputValue, setInputValue] = useState(fieldValues[node.field_key] || "");
+function StepRenderer({ step, fieldValues, brandColor, embedded, onAnswer, onAdvance }) {
+  const [inputVal, setInputVal] = useState("");
+  const config = step.config || {};
+  const textColor = embedded ? "#1e293b" : "#fff";
+  const subColor = embedded ? "#475569" : "rgba(255,255,255,0.7)";
 
-  const config = node.config || {};
-  const label = node.label || node.node_type;
-  const options = config.options || edges.map(e => ({ label: e.label || e.condition_value || "Continue", value: e.condition_value || "default", edgeId: e.id }));
+  // start — auto-advance
+  useEffect(() => {
+    if (step.step_type === "start") {
+      const timer = setTimeout(onAdvance, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [step.step_id]);
 
-  const handleSubmit = () => {
-    if (node.field_key) onFieldChange(node.field_key, inputValue);
-    onAnswer(inputValue);
-  };
+  // Phase 2/3 placeholder — auto-advance
+  const PHASE1 = ["start", "single_select", "text_field", "results"];
+  if (!PHASE1.includes(step.step_type)) {
+    return (
+      <div style={{ background: embedded ? "#fffbeb" : "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.3)", borderRadius: 12, padding: "20px 24px", textAlign: "center" }}>
+        <p style={{ color: "#f59e0b", fontWeight: 700, marginBottom: 8 }}>This step type is available in Phase 2 or Phase 3</p>
+        <p style={{ color: subColor, fontSize: 13 }}>Advancing automatically...</p>
+        <AutoAdvanceEffect onAdvance={onAdvance} delay={1500} />
+      </div>
+    );
+  }
 
-  // Multiple choice / yes-no / button options
-  if (["question", "yes_no", "multiple_choice", "single_choice"].includes(node.node_type)) {
+  if (step.step_type === "start") {
+    return (
+      <div style={{ textAlign: "center" }}>
+        {step.label && <p style={{ color: subColor, fontSize: 16 }}>{step.label}</p>}
+        <div style={{ marginTop: 12, color: subColor, fontSize: 14 }}>Starting...</div>
+      </div>
+    );
+  }
+
+  if (step.step_type === "single_select") {
+    const options = step.answer_options || [];
     return (
       <div>
-        <h2 className="text-2xl font-bold text-slate-800 mb-2">{label}</h2>
-        {config.description && <p className="text-slate-500 mb-6">{config.description}</p>}
-        <div className="space-y-3 mt-6">
+        {step.label && <h2 style={{ fontSize: embedded ? 20 : 26, fontWeight: 700, color: textColor, marginBottom: step.help_text ? 8 : 20, lineHeight: 1.3 }}>{step.label}</h2>}
+        {step.help_text && <p style={{ color: subColor, fontSize: 14, marginBottom: 20 }}>{step.help_text}</p>}
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {options.map((opt, i) => (
-            <button
-              key={i}
-              onClick={() => onAnswer(opt.value || `edge:${opt.edgeId}`)}
-              className="w-full text-left px-5 py-4 rounded-xl border-2 border-slate-200 hover:border-opacity-100 font-semibold text-slate-700 hover:text-white transition-all duration-150"
-              style={{ "--hover-bg": brandColor }}
-              onMouseEnter={e => { e.currentTarget.style.backgroundColor = brandColor; e.currentTarget.style.borderColor = brandColor; e.currentTarget.style.color = "#fff"; }}
-              onMouseLeave={e => { e.currentTarget.style.backgroundColor = ""; e.currentTarget.style.borderColor = ""; e.currentTarget.style.color = ""; }}
-            >
-              {opt.label}
-            </button>
+            <ChoiceButton key={opt.id || i} label={opt.label} brandColor={brandColor} embedded={embedded}
+              onClick={() => onAnswer(opt.value, opt)} />
           ))}
         </div>
       </div>
     );
   }
 
-  // Text input / date / number
-  if (["text_input", "date_input", "number_input", "email_input", "phone_input"].includes(node.node_type)) {
-    const inputType = node.node_type === "date_input" ? "date" : node.node_type === "number_input" ? "number" : node.node_type === "email_input" ? "email" : node.node_type === "phone_input" ? "tel" : "text";
+  if (step.step_type === "text_field") {
     return (
       <div>
-        <h2 className="text-2xl font-bold text-slate-800 mb-2">{label}</h2>
-        {config.description && <p className="text-slate-500 mb-6">{config.description}</p>}
+        {step.label && <h2 style={{ fontSize: embedded ? 20 : 26, fontWeight: 700, color: textColor, marginBottom: 8, lineHeight: 1.3 }}>{step.label}</h2>}
+        {step.help_text && <p style={{ color: subColor, fontSize: 14, marginBottom: 16 }}>{step.help_text}</p>}
         <input
-          type={inputType}
-          value={inputValue}
-          onChange={e => setInputValue(e.target.value)}
-          placeholder={config.placeholder || ""}
-          className="w-full border-2 border-slate-200 rounded-xl px-4 py-3 text-lg focus:outline-none mt-4"
-          style={{ "--focus-border": brandColor }}
+          type="text"
+          value={inputVal}
+          onChange={e => setInputVal(e.target.value)}
+          onKeyDown={e => e.key === "Enter" && inputVal && onAnswer(inputVal, null)}
+          placeholder={step.placeholder || ""}
+          style={{ width: "100%", border: `2px solid ${embedded ? "#e2e8f0" : "rgba(255,255,255,0.2)"}`, borderRadius: 12, padding: "14px 16px", fontSize: 16, background: embedded ? "#fff" : "rgba(255,255,255,0.05)", color: textColor, outline: "none", boxSizing: "border-box", marginTop: 8 }}
           onFocus={e => e.target.style.borderColor = brandColor}
-          onBlur={e => e.target.style.borderColor = ""}
+          onBlur={e => e.target.style.borderColor = embedded ? "#e2e8f0" : "rgba(255,255,255,0.2)"}
+          autoFocus
         />
-        <button
-          onClick={handleSubmit}
-          disabled={!inputValue}
-          className="mt-4 w-full py-3 rounded-xl font-bold text-white text-lg disabled:opacity-40 transition-all"
-          style={{ backgroundColor: brandColor }}
-        >
+        <button onClick={() => onAnswer(inputVal, null)} disabled={!inputVal}
+          style={{ marginTop: 12, width: "100%", padding: "14px", borderRadius: 12, fontWeight: 700, color: "#fff", fontSize: 16, border: "none", cursor: "pointer", background: inputVal ? brandColor : "#cbd5e1", transition: "all 0.2s" }}>
           Continue →
         </button>
       </div>
     );
   }
 
-  // Info / statement node
-  if (["info", "statement", "start"].includes(node.node_type)) {
+  if (step.step_type === "results") {
+    const template = config.result_template || "<p>Thank you!</p>";
+    const dynamicFields = config.dynamic_fields || [];
+    let rendered = template;
+    dynamicFields.forEach(k => {
+      // Try to find value by field_key (since fieldValues uses custom_field_id keys too, try both)
+      const val = fieldValues[k] || Object.values(fieldValues).find((_, i) => Object.keys(fieldValues)[i] === k) || "";
+      rendered = rendered.replace(new RegExp(`\\{${k}\\}`, "g"), val || "");
+    });
+    // Also try direct key match
+    Object.entries(fieldValues).forEach(([k, v]) => {
+      rendered = rendered.replace(new RegExp(`\\{${k}\\}`, "g"), v || "");
+    });
     return (
-      <div className="text-center">
-        <h2 className="text-3xl font-bold text-slate-800 mb-4">{label}</h2>
-        {config.description && <p className="text-slate-600 mb-8 text-lg">{config.description}</p>}
-        <button
-          onClick={() => onAnswer("default")}
-          className="px-10 py-4 rounded-xl font-bold text-white text-lg transition-all"
-          style={{ backgroundColor: brandColor }}
-        >
-          {config.cta_text || "Get Started →"}
-        </button>
+      <div>
+        {step.label && <h2 style={{ fontSize: embedded ? 20 : 26, fontWeight: 700, color: textColor, marginBottom: 16 }}>{step.label}</h2>}
+        <div style={{ color: textColor }} dangerouslySetInnerHTML={{ __html: rendered }} />
       </div>
     );
   }
 
-  // Fallback: just show a continue button
+  return null;
+}
+
+function ChoiceButton({ label, brandColor, embedded, onClick }) {
+  const [hov, setHov] = useState(false);
   return (
-    <div>
-      <h2 className="text-2xl font-bold text-slate-800 mb-6">{label}</h2>
-      <button
-        onClick={() => onAnswer("default")}
-        className="w-full py-3 rounded-xl font-bold text-white text-lg transition-all"
-        style={{ backgroundColor: brandColor }}
-      >
-        Continue →
-      </button>
-    </div>
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        width: "100%", textAlign: "left", padding: "14px 18px", borderRadius: 12,
+        border: `2px solid ${hov ? brandColor : (embedded ? "#e2e8f0" : "rgba(255,255,255,0.2)")}`,
+        background: hov ? brandColor : (embedded ? "#f8fafc" : "rgba(255,255,255,0.05)"),
+        color: hov ? "#fff" : (embedded ? "#1e293b" : "#fff"),
+        fontWeight: 600, fontSize: 15, cursor: "pointer", transition: "all 0.12s ease",
+      }}>
+      {label}
+    </button>
   );
 }
 
-function OutcomeScreen({ outcome, node, brandColor, quiz }) {
-  const config = node?.config || {};
-  const isQualified = outcome === "qualified";
-  const ctaUrl = config.cta_url || quiz.primary_cta_url || "https://qualify.checkmyclaim.co/s/mva";
-  const ctaText = config.cta_text || (isQualified ? "Connect With an Attorney →" : "Learn More →");
-  const heading = config.heading || node?.label || (isQualified ? "You May Qualify!" : "Thank You");
-  const message = config.message || node?.description || (isQualified ? "Based on your answers, you may be eligible for compensation." : "Thank you for completing the quiz.");
-
-  return (
-    <div className="text-center">
-      <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl ${isQualified ? "bg-green-100" : "bg-slate-100"}`}>
-        {isQualified ? "✓" : "✗"}
-      </div>
-      <h2 className="text-3xl font-bold text-slate-800 mb-4">{heading}</h2>
-      <p className="text-slate-600 mb-8 text-lg">{message}</p>
-      {isQualified && (
-        <a
-          href={ctaUrl}
-          className="inline-block px-10 py-4 rounded-xl font-bold text-white text-lg transition-all"
-          style={{ backgroundColor: brandColor }}
-        >
-          {ctaText}
-        </a>
-      )}
-    </div>
-  );
+function AutoAdvanceEffect({ onAdvance, delay = 1000 }) {
+  useEffect(() => {
+    const t = setTimeout(onAdvance, delay);
+    return () => clearTimeout(t);
+  }, []);
+  return null;
 }

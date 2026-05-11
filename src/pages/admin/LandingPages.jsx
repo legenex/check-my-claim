@@ -61,8 +61,18 @@ export default function LandingPages() {
     return matchSearch && matchStatus && matchCampaign;
   });
 
+  const validateQuiz = (page) => {
+    if (!page.quiz_id) return false;
+    const quiz = quizzes.find(q => q.id === page.quiz_id);
+    return quiz && quiz.status === "published";
+  };
+
   const toggleStatus = async (page) => {
     const next = page.status === "published" ? "draft" : "published";
+    if (next === "published" && !validateQuiz(page)) {
+      alert("Cannot publish: select a published Quiz in the Hero & Quiz tab.");
+      return;
+    }
     const patch = { status: next };
     if (next === "published") { patch.published_at = new Date().toISOString(); patch.version = (page.version || 1) + 1; }
     await base44.entities.LandingPage.update(page.id, patch);
@@ -196,7 +206,7 @@ export default function LandingPages() {
               <tbody>
                 {filtered.map(page => {
                   const brand = page.brand_id ? brandMap[page.brand_id] : null;
-                  const quiz = page.decision_tree_quiz_id ? quizMap[page.decision_tree_quiz_id] : null;
+                  const quiz = page.quiz_id ? quizMap[page.quiz_id] : null;
                   return (
                     <tr key={page.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                       <td className="px-4 py-3">
@@ -229,13 +239,13 @@ export default function LandingPages() {
                         ) : "—"}
                       </td>
                       <td className="px-4 py-3">
-                        {quiz ? (
-                          <Link to="/admin/DecisionTrees" className="text-xs text-[#1e90ff] hover:underline truncate block max-w-[120px]">
-                            {quiz.title}
-                          </Link>
-                        ) : (
-                          <span className="text-xs text-red-400">⚠ Not set</span>
-                        )}
+                       {quiz ? (
+                         <Link to="/admin/QuizBuilder" className="text-xs text-[#1e90ff] hover:underline truncate block max-w-[120px]">
+                           {quiz.title}
+                         </Link>
+                       ) : (
+                         <span className="text-xs text-red-400">⚠ Not set</span>
+                       )}
                       </td>
                       <td className="px-4 py-3">
                         <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${STATUS_COLORS[page.status] || STATUS_COLORS.draft}`}>

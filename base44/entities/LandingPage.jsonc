@@ -1,0 +1,330 @@
+{
+  "name": "LandingPage",
+  "description": "Marketing landing pages that render at /lp/{slug} with an embedded Quiz hero.",
+  "type": "object",
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "status": "published"
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Internal admin title."
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL-safe path. Public URL = /lp/{slug}."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "published",
+        "archived"
+      ],
+      "default": "draft"
+    },
+    "campaign_type": {
+      "type": "string",
+      "enum": [
+        "MVA",
+        "Mass Tort",
+        "Workers Comp",
+        "Slip and Fall",
+        "Med Mal",
+        "Custom"
+      ],
+      "default": "MVA"
+    },
+    "brand_id": {
+      "type": "string",
+      "description": "Foreign key to Brand."
+    },
+    "is_default_for_campaign": {
+      "type": "boolean",
+      "default": false
+    },
+    "quiz_id": {
+      "type": "string",
+      "description": "Foreign key to Quiz. The quiz that renders inside the hero card."
+    },
+    "decision_tree_starts_visible": {
+      "type": "boolean",
+      "default": true
+    },
+    "decision_tree_card_style": {
+      "type": "string",
+      "enum": [
+        "white_navy",
+        "navy_glow",
+        "minimal"
+      ],
+      "default": "white_navy"
+    },
+    "hero_eyebrow": {
+      "type": "string"
+    },
+    "hero_headline": {
+      "type": "string"
+    },
+    "hero_subheadline": {
+      "type": "string"
+    },
+    "hero_subheadline_helper": {
+      "type": "string"
+    },
+    "hero_phone_label": {
+      "type": "string",
+      "default": "If you'd prefer to speak to someone right away, please call:"
+    },
+    "show_hero_phone_cta": {
+      "type": "boolean",
+      "default": true
+    },
+    "trust_stat_1_value": {
+      "type": "string"
+    },
+    "trust_stat_1_label": {
+      "type": "string"
+    },
+    "trust_stat_2_value": {
+      "type": "string"
+    },
+    "trust_stat_2_label": {
+      "type": "string"
+    },
+    "trust_stat_3_value": {
+      "type": "string"
+    },
+    "trust_stat_3_label": {
+      "type": "string"
+    },
+    "benefits_section_title": {
+      "type": "string"
+    },
+    "benefits_section_subtitle": {
+      "type": "string"
+    },
+    "benefits_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "icon": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "recent_wins_title": {
+      "type": "string"
+    },
+    "recent_wins_subtitle": {
+      "type": "string"
+    },
+    "recent_wins_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "string"
+          },
+          "name_initials": {
+            "type": "string"
+          },
+          "age": {
+            "type": "number"
+          },
+          "location": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "guarantee_title": {
+      "type": "string"
+    },
+    "guarantee_eyebrow": {
+      "type": "string"
+    },
+    "guarantee_body_html": {
+      "type": "string"
+    },
+    "guarantee_bullets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "testimonials_title": {
+      "type": "string"
+    },
+    "testimonials_subtitle": {
+      "type": "string"
+    },
+    "testimonials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "quote": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "time_ago": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "number"
+          },
+          "initials": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "faq_title": {
+      "type": "string"
+    },
+    "faq_subtitle": {
+      "type": "string"
+    },
+    "faq_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string"
+          },
+          "answer": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "show_footer_disclaimer": {
+      "type": "boolean",
+      "default": true
+    },
+    "footer_disclaimer_html": {
+      "type": "string"
+    },
+    "meta_title": {
+      "type": "string"
+    },
+    "meta_description": {
+      "type": "string"
+    },
+    "og_image_url": {
+      "type": "string"
+    },
+    "favicon_url": {
+      "type": "string"
+    },
+    "global_pixels": {
+      "type": "object",
+      "properties": {
+        "meta_pixel_id": {
+          "type": "string"
+        },
+        "google_analytics_id": {
+          "type": "string"
+        },
+        "google_ads_id": {
+          "type": "string"
+        },
+        "tiktok_pixel_id": {
+          "type": "string"
+        },
+        "taboola_pixel_id": {
+          "type": "string"
+        },
+        "trustedform_field_id": {
+          "type": "string"
+        }
+      }
+    },
+    "custom_head_html": {
+      "type": "string"
+    },
+    "custom_body_html": {
+      "type": "string"
+    },
+    "view_count": {
+      "type": "number",
+      "default": 0
+    },
+    "unique_visitors": {
+      "type": "number",
+      "default": 0
+    },
+    "total_quiz_starts": {
+      "type": "number",
+      "default": 0
+    },
+    "notes": {
+      "type": "string"
+    },
+    "is_template": {
+      "type": "boolean",
+      "default": false
+    },
+    "thumbnail_url": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "version": {
+      "type": "number",
+      "default": 1
+    },
+    "published_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "published_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "slug",
+    "status"
+  ]
+}

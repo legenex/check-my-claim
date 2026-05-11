@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import AdminRouteGuard from "@/components/admin/AdminRouteGuard";
+
 import LandingPageEditorTopBar from "@/components/landingpages/LandingPageEditorTopBar";
 import LandingPageEditorTabs from "@/components/landingpages/LandingPageEditorTabs";
 import LandingPagePreview from "@/components/landingpages/LandingPagePreview";
@@ -13,6 +14,7 @@ export default function LandingPageEditor() {
   const [quizzes, setQuizzes] = useState([]);
   const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [publishError, setPublishError] = useState(null);
   const [saving, setSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState(null);
   const [activeTab, setActiveTab] = useState("hero");
@@ -58,6 +60,17 @@ export default function LandingPageEditor() {
   };
 
   const publishPage = async () => {
+    // Validate quiz_id
+    if (!page.quiz_id) {
+      setPublishError("Cannot publish: select a published Quiz in the Hero & Quiz tab.");
+      return;
+    }
+    const matchingQuiz = quizzes.find(q => q.id === page.quiz_id);
+    if (!matchingQuiz || matchingQuiz.status !== "published") {
+      setPublishError("Cannot publish: the selected Quiz must be published first.");
+      return;
+    }
+    setPublishError(null);
     await savePage({
       status: "published",
       published_at: new Date().toISOString(),
@@ -100,6 +113,11 @@ export default function LandingPageEditor() {
           onPublish={publishPage}
           onBack={() => navigate("/admin/LandingPages")}
         />
+        {publishError && (
+          <div className="bg-red-900/30 border-b border-red-500/30 px-4 py-2 flex-shrink-0">
+            <p className="text-red-300 text-xs">⚠ {publishError}</p>
+          </div>
+        )}
         <div className="flex-1 flex overflow-hidden">
           {/* Left: tabs */}
           <div className="w-96 flex-shrink-0 bg-[#0f1e35] border-r border-white/10 overflow-y-auto">

@@ -3,7 +3,7 @@ import React from "react";
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/a32c079ff_DarkMode-PrimaryLogo_CheckMyClaim.png";
 
 export default function LandingPagePreview({ page, previewMode, quizzes, brands }) {
-  const quiz = page?.decision_tree_quiz_id ? quizzes.find(q => q.id === page.decision_tree_quiz_id) : null;
+  const quiz = page?.quiz_id ? quizzes.find(q => q.id === page.quiz_id) : null;
   const brand = page?.brand_id ? brands.find(b => b.id === page.brand_id) : null;
   const phone = brand?.phone_number || "(844) 840-6905";
 

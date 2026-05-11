@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { captureIncomingParams } from "@/lib/surveyUrl";
 import ClaimBotWidget from "@/components/claimbot/ClaimBotWidget";
-import EmbeddedQuiz from "@/components/landingpages/EmbeddedQuiz";
+import { QuizRuntimeEmbedded } from "@/pages/QuizRuntime";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/a32c079ff_DarkMode-PrimaryLogo_CheckMyClaim.png";
 const DEFAULT_PHONE = "(844) 840-6905";
@@ -27,7 +27,7 @@ export default function LandingPagePublic() {
 
   const loadPage = async () => {
     try {
-      const pages = await base44.entities.LandingPage.filter({ slug, status: "published" });
+      const pages = await base44.entities.LandingPage.filter({ slug });
       if (!pages.length) { setNotFound(true); setLoading(false); return; }
       const p = pages[0];
       setPage(p);
@@ -160,12 +160,12 @@ export default function LandingPagePublic() {
             margin: "0 auto 32px",
             textAlign: "left",
           }}>
-            {page.decision_tree_quiz_id ? (
-              <EmbeddedQuiz quizId={page.decision_tree_quiz_id} onFirstInteraction={onQuizStart} />
+            {page.quiz_id ? (
+              <QuizRuntimeEmbedded quizId={page.quiz_id} onFirstInteraction={onQuizStart} />
             ) : (
-              <div style={{ textAlign: "center", padding: "40px 20px", color: "#92400e", background: "#fffbeb", borderRadius: 12 }}>
-                <div style={{ fontWeight: 700, marginBottom: 8 }}>⚠ No Decision Tree configured</div>
-                <p style={{ fontSize: 13, color: "#78350f" }}>Contact your administrator to set a Decision Tree for this landing page.</p>
+              <div style={{ textAlign: "center", padding: "40px 20px", background: "#fff8f0", borderRadius: 12, border: "1px solid #fed7aa" }}>
+                <p style={{ fontWeight: 700, color: "#92400e", marginBottom: 8 }}>This page is temporarily unavailable.</p>
+                <p style={{ fontSize: 13, color: "#78350f" }}>Please refresh in a moment or call us at {phone}.</p>
               </div>
             )}
           </div>

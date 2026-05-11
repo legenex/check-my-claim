@@ -72,13 +72,13 @@ function HeroTab({ page, quizzes, set }) {
       <Field label="Helper text">
         <input value={page.hero_subheadline_helper || ""} onChange={e => set("hero_subheadline_helper", e.target.value)} className={inputCls} placeholder="Select The Type Of Accident..." />
       </Field>
-      <Field label="Decision Tree (Quiz) *">
-        <select value={page.decision_tree_quiz_id || ""} onChange={e => set("decision_tree_quiz_id", e.target.value)} className={inputCls}>
+      <Field label="Quiz (Decision Tree) *">
+        <select value={page.quiz_id || ""} onChange={e => set("quiz_id", e.target.value)} className={inputCls}>
           <option value="">— Pick a published quiz —</option>
-          {quizzes.map(q => <option key={q.id} value={q.id}>{q.title} ({q.campaign_type || "Custom"})</option>)}
+          {quizzes.map(q => <option key={q.id} value={q.id}>{q.title}</option>)}
         </select>
-        {!page.decision_tree_quiz_id && (
-          <p className="text-xs text-amber-400 mt-1">⚠ Pick a Decision Tree to render this page correctly</p>
+        {!page.quiz_id && (
+          <p className="text-xs text-amber-400 mt-1">⚠ Pick a Quiz to render this page correctly</p>
         )}
       </Field>
       <Field label="Quiz card style">

@@ -1,0 +1,193 @@
+{
+  "name": "Quiz",
+  "type": "object",
+  "description": "Top-level quiz container. Steps stored in QuizStep.",
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "status": "published"
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL-safe identifier. Public path /q/{slug}"
+    },
+    "description": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "published",
+        "archived"
+      ],
+      "default": "draft"
+    },
+    "version": {
+      "type": "number",
+      "default": 1
+    },
+    "published_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "published_by": {
+      "type": "string"
+    },
+    "brand_id": {
+      "type": "string",
+      "description": "FK to Brand"
+    },
+    "settings": {
+      "type": "object",
+      "properties": {
+        "auto_advance_ms": {
+          "type": "number",
+          "default": 120
+        },
+        "progress_bar": {
+          "type": "boolean",
+          "default": true
+        },
+        "show_back_button": {
+          "type": "boolean",
+          "default": true
+        },
+        "tcpa_enabled": {
+          "type": "boolean"
+        },
+        "tcpa_text": {
+          "type": "string"
+        },
+        "trustedform_enabled": {
+          "type": "boolean"
+        },
+        "save_partial_leads": {
+          "type": "boolean",
+          "default": true
+        },
+        "session_timeout_minutes": {
+          "type": "number",
+          "default": 60
+        },
+        "url_param_brand_match": {
+          "type": "boolean",
+          "default": true
+        },
+        "thank_you_message": {
+          "type": "string"
+        },
+        "score_enabled": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "global_pixels": {
+      "type": "object",
+      "properties": {
+        "meta_pixel_id": {
+          "type": "string"
+        },
+        "google_analytics_id": {
+          "type": "string"
+        },
+        "google_ads_id": {
+          "type": "string"
+        },
+        "tiktok_pixel_id": {
+          "type": "string"
+        },
+        "taboola_pixel_id": {
+          "type": "string"
+        },
+        "trustedform_field_id": {
+          "type": "string"
+        }
+      }
+    },
+    "global_scripts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "trigger": {
+            "type": "string",
+            "enum": [
+              "on_load",
+              "on_start",
+              "on_complete",
+              "on_disqualify",
+              "on_partial_save"
+            ]
+          },
+          "code": {
+            "type": "string"
+          },
+          "is_enabled": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      }
+    },
+    "start_step_id": {
+      "type": "string",
+      "description": "References QuizStep.step_id"
+    },
+    "is_template": {
+      "type": "boolean",
+      "default": false
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "notes": {
+      "type": "string"
+    },
+    "thumbnail_url": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "slug"
+  ]
+}
