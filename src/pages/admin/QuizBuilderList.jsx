@@ -2,21 +2,19 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { base44 } from "@/api/base44Client";
-import {
-  Plus, Search, Edit, Trash2, Copy, ExternalLink,
-  ToggleLeft, ToggleRight, Archive, ClipboardList
-} from "lucide-react";
+import { Plus, Search, Edit, Trash2, Copy, ExternalLink, ToggleLeft, ToggleRight, Archive, ClipboardList } from "lucide-react";
 
-const STATUS_COLORS = {
-  published: "bg-green-500/20 text-green-400 border border-green-500/30",
-  draft: "bg-slate-500/20 text-slate-400 border border-slate-500/30",
-  archived: "bg-red-500/20 text-red-400 border border-red-500/30",
+const STATUS_CONFIG = {
+  published: { bg: "rgba(52,211,153,0.12)", text: "#34d399", border: "rgba(52,211,153,0.25)" },
+  draft:     { bg: "rgba(100,116,139,0.15)", text: "#94a3b8", border: "rgba(100,116,139,0.2)" },
+  archived:  { bg: "rgba(251,71,133,0.12)", text: "#fb7185", border: "rgba(251,71,133,0.2)" },
 };
 
 export default function QuizBuilderList() {
   const navigate = useNavigate();
   const [quizzes, setQuizzes] = useState([]);
   const [brands, setBrands] = useState([]);
+  const [themes, setThemes] = useState([]);
   const [stepCounts, setStepCounts] = useState({});
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -30,14 +28,15 @@ export default function QuizBuilderList() {
 
   const fetchData = async () => {
     setLoading(true);
-    const [qs, bs, steps] = await Promise.all([
+    const [qs, bs, steps, th] = await Promise.all([
       base44.entities.Quiz.list("-updated_date", 200),
       base44.entities.Brand.list(),
       base44.entities.QuizStep.list("-created_date", 500),
+      base44.entities.Theme.list("-updated_date", 100),
     ]);
     setQuizzes(qs);
     setBrands(bs);
-    // Count steps per quiz
+    setThemes(th);
     const counts = {};
     steps.forEach(s => { counts[s.quiz_id] = (counts[s.quiz_id] || 0) + 1; });
     setStepCounts(counts);
@@ -45,6 +44,7 @@ export default function QuizBuilderList() {
   };
 
   const brandMap = Object.fromEntries(brands.map(b => [b.id, b]));
+  const themeMap = Object.fromEntries(themes.map(t => [t.id, t]));
 
   const filtered = quizzes.filter(q => {
     const matchSearch = !search || q.title?.toLowerCase().includes(search.toLowerCase()) || q.slug?.toLowerCase().includes(search.toLowerCase());
@@ -57,14 +57,9 @@ export default function QuizBuilderList() {
     setCreating(true);
     const slug = `quiz-${Date.now().toString(36)}`;
     const quiz = await base44.entities.Quiz.create({
-      title: "New Quiz",
-      slug,
-      status: "draft",
-      version: 1,
-      start_step_id: null,
+      title: "New Quiz", slug, status: "draft", version: 1, start_step_id: null,
       settings: { auto_advance_ms: 120, progress_bar: true, show_back_button: true, save_partial_leads: true, score_enabled: false },
     });
-    // Create default start + results steps
     const startId = `s_start_${Math.random().toString(36).slice(2, 8)}`;
     const resultsId = `s_results_${Math.random().toString(36).slice(2, 8)}`;
     await base44.entities.QuizStep.bulkCreate([
@@ -83,15 +78,13 @@ export default function QuizBuilderList() {
       title: `${quiz.title} (Copy)`, slug: newSlug, status: "draft", version: 1,
       published_at: undefined, published_by: undefined,
     });
-    // Deep-copy steps with fresh step_ids
     const steps = await base44.entities.QuizStep.filter({ quiz_id: quiz.id });
     const idMap = {};
     steps.forEach(s => { idMap[s.step_id] = `s_${Math.random().toString(36).slice(2, 8)}`; });
     const remapId = (id) => id ? (idMap[id] || id) : null;
     const newSteps = steps.map(s => ({
       ...s, id: undefined, created_date: undefined, updated_date: undefined,
-      quiz_id: newQuiz.id,
-      step_id: idMap[s.step_id],
+      quiz_id: newQuiz.id, step_id: idMap[s.step_id],
       default_next_step_id: remapId(s.default_next_step_id),
       answer_options: (s.answer_options || []).map(o => ({ ...o, target_step_id: remapId(o.target_step_id) })),
     }));
@@ -144,28 +137,28 @@ export default function QuizBuilderList() {
             {quizzes.filter(q => q.status === "published").length} published · {quizzes.length} total
           </p>
         </div>
-        <button
-          onClick={createNew}
-          disabled={creating}
-          className="flex items-center gap-2 bg-[#1e90ff] hover:bg-blue-600 disabled:opacity-50 text-white font-bold px-5 py-2.5 rounded-lg text-sm transition-all"
-        >
+        <button onClick={createNew} disabled={creating}
+          className="flex items-center gap-2 font-bold px-5 py-2.5 rounded-lg text-sm transition-all text-white disabled:opacity-50"
+          style={{ background: "#8b5cf6", boxShadow: "0 4px 16px rgba(139,92,246,0.3)" }}>
           <Plus className="w-4 h-4" /> {creating ? "Creating..." : "New Quiz"}
         </button>
       </div>
 
       {/* Filters */}
-      <div className="bg-[#0f1e35] rounded-xl p-4 mb-6 border border-white/10 flex flex-wrap gap-3 items-center">
-        <div className="flex items-center gap-2 bg-[#0a1628] border border-white/10 rounded-lg px-3 py-2 flex-1 min-w-[200px]">
+      <div className="rounded-xl p-4 mb-6 border flex flex-wrap gap-3 items-center" style={{ background: "rgba(20,18,40,0.6)", borderColor: "rgba(255,255,255,0.06)" }}>
+        <div className="flex items-center gap-2 rounded-lg px-3 py-2 flex-1 min-w-[200px]" style={{ background: "rgba(10,10,31,0.6)", border: "1px solid rgba(255,255,255,0.06)" }}>
           <Search className="w-4 h-4 text-slate-400" />
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by title or slug..."
             className="bg-transparent text-sm text-white placeholder-slate-500 focus:outline-none flex-1" />
         </div>
         <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
-          className="bg-[#0a1628] border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+          className="rounded-lg px-3 py-2 text-sm text-white focus:outline-none"
+          style={{ background: "rgba(10,10,31,0.6)", border: "1px solid rgba(255,255,255,0.06)" }}>
           {["All", "Published", "Draft", "Archived"].map(s => <option key={s}>{s}</option>)}
         </select>
         <select value={brandFilter} onChange={e => setBrandFilter(e.target.value)}
-          className="bg-[#0a1628] border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+          className="rounded-lg px-3 py-2 text-sm text-white focus:outline-none"
+          style={{ background: "rgba(10,10,31,0.6)", border: "1px solid rgba(255,255,255,0.06)" }}>
           <option value="All">All Brands</option>
           {brands.map(b => <option key={b.id} value={b.id}>{b.brand_name}</option>)}
         </select>
@@ -179,99 +172,110 @@ export default function QuizBuilderList() {
         )}
       </div>
 
-      {/* Table */}
-      <div className="bg-[#0f1e35] rounded-xl border border-white/10 overflow-hidden">
+      {/* Quiz cards */}
+      <div className="space-y-2">
         {loading ? (
           <div className="p-8 text-center text-slate-400">Loading quizzes...</div>
         ) : filtered.length === 0 ? (
           <div className="p-8 text-center">
             <ClipboardList className="w-12 h-12 text-slate-600 mx-auto mb-3" />
             <p className="text-slate-400 mb-2">No quizzes yet.</p>
-            <button onClick={createNew} className="text-[#1e90ff] hover:underline text-sm">Create your first quiz →</button>
+            <button onClick={createNew} className="text-[#8b5cf6] hover:underline text-sm">Create your first quiz →</button>
           </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-[#0a1628] border-b border-white/10">
-                <tr>
-                  <th className="w-10 px-4 py-3">
-                    <input type="checkbox" checked={selected.length === filtered.length && filtered.length > 0}
-                      onChange={e => setSelected(e.target.checked ? filtered.map(q => q.id) : [])} className="rounded" />
-                  </th>
-                  <th className="px-4 py-3 text-left font-semibold text-white">Title / Slug</th>
-                  <th className="px-4 py-3 text-left font-semibold text-slate-400">Brand</th>
-                  <th className="px-4 py-3 text-left font-semibold text-slate-400">Steps</th>
-                  <th className="px-4 py-3 text-left font-semibold text-slate-400">Status</th>
-                  <th className="px-4 py-3 text-left font-semibold text-slate-400">v</th>
-                  <th className="px-4 py-3 text-left font-semibold text-slate-400">Last Edited</th>
-                  <th className="px-4 py-3 text-right font-semibold text-slate-400">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map(quiz => {
-                  const brand = quiz.brand_id ? brandMap[quiz.brand_id] : null;
-                  return (
-                    <tr key={quiz.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                      <td className="px-4 py-3">
-                        <input type="checkbox" checked={selected.includes(quiz.id)}
-                          onChange={e => setSelected(prev => e.target.checked ? [...prev, quiz.id] : prev.filter(id => id !== quiz.id))}
-                          className="rounded" />
-                      </td>
-                      <td className="px-4 py-3 max-w-xs">
-                        <Link to={`/admin/QuizBuilder/${quiz.id}`} className="text-white font-semibold hover:text-[#1e90ff] transition-colors truncate block">
-                          {quiz.title}
-                        </Link>
-                        <div className="text-slate-500 text-xs mt-0.5">/q/{quiz.slug}</div>
-                      </td>
-                      <td className="px-4 py-3 text-slate-300 text-xs">
-                        {brand ? (
-                          <span className="flex items-center gap-1.5">
-                            <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: brand.primary_color || "#1e90ff" }} />
-                            {brand.brand_name}
-                          </span>
-                        ) : "—"}
-                      </td>
-                      <td className="px-4 py-3 text-slate-300">{stepCounts[quiz.id] || 0}</td>
-                      <td className="px-4 py-3">
-                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${STATUS_COLORS[quiz.status] || STATUS_COLORS.draft}`}>
-                          {quiz.status || "draft"}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-slate-400">{quiz.version || 1}</td>
-                      <td className="px-4 py-3 text-slate-500 text-xs">
-                        {quiz.updated_date ? new Date(quiz.updated_date).toLocaleDateString() : "—"}
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-1 justify-end">
-                          <Link to={`/admin/QuizBuilder/${quiz.id}`} title="Edit" className="p-1.5 text-slate-400 hover:text-white transition-colors"><Edit className="w-3.5 h-3.5" /></Link>
-                          {quiz.status === "published" && (
-                            <a href={`/q/${quiz.slug}`} target="_blank" rel="noopener noreferrer" title="View Public" className="p-1.5 text-slate-400 hover:text-white transition-colors"><ExternalLink className="w-3.5 h-3.5" /></a>
-                          )}
-                          <button onClick={() => duplicateQuiz(quiz)} title="Duplicate" className="p-1.5 text-slate-400 hover:text-white transition-colors"><Copy className="w-3.5 h-3.5" /></button>
-                          <button onClick={() => toggleStatus(quiz)} title="Toggle Status" className="p-1.5 text-slate-400 hover:text-white transition-colors">
-                            {quiz.status === "published" ? <ToggleRight className="w-4 h-4 text-green-400" /> : <ToggleLeft className="w-4 h-4" />}
-                          </button>
-                          <button onClick={() => archiveQuiz(quiz.id)} title="Archive" className="p-1.5 text-slate-400 hover:text-white transition-colors"><Archive className="w-3.5 h-3.5" /></button>
-                          <button onClick={() => setDeleteConfirm(quiz.id)} title="Delete" className="p-1.5 text-red-400 hover:text-red-300 transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
+        ) : filtered.map(quiz => {
+          const brand = quiz.brand_id ? brandMap[quiz.brand_id] : null;
+          const theme = quiz.theme_id ? themeMap[quiz.theme_id] : null;
+          const st = STATUS_CONFIG[quiz.status] || STATUS_CONFIG.draft;
+          return (
+            <div key={quiz.id}
+              className="flex items-center gap-4 px-4 py-3 rounded-xl border transition-all group"
+              style={{
+                background: "rgba(20,18,40,0.55)",
+                borderColor: "rgba(255,255,255,0.06)",
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = "rgba(30,28,55,0.7)"}
+              onMouseLeave={e => e.currentTarget.style.background = "rgba(20,18,40,0.55)"}>
+              {/* Checkbox */}
+              <input type="checkbox" checked={selected.includes(quiz.id)}
+                onChange={e => setSelected(prev => e.target.checked ? [...prev, quiz.id] : prev.filter(id => id !== quiz.id))}
+                className="rounded flex-shrink-0" />
+
+              {/* Theme swatch */}
+              {theme?.tokens?.primary ? (
+                <div className="flex items-center gap-0.5 flex-shrink-0">
+                  <div style={{ width: 8, height: 8, borderRadius: 2, background: theme.tokens.primary }} />
+                  <div style={{ width: 8, height: 8, borderRadius: 2, background: theme.tokens.accent || "#888" }} />
+                </div>
+              ) : (
+                <div style={{ width: 18, height: 8, borderRadius: 2, background: brand?.primary_color || "rgba(255,255,255,0.1)" }} />
+              )}
+
+              {/* Title / slug */}
+              <div className="flex-1 min-w-0">
+                <Link to={`/admin/QuizBuilder/${quiz.id}`}
+                  className="font-semibold text-sm hover:underline truncate block transition-colors"
+                  style={{ color: "#f1f5f9" }}>
+                  {quiz.title}
+                </Link>
+                <div className="text-xs mt-0.5" style={{ color: "#64748b" }}>/q/{quiz.slug}</div>
+              </div>
+
+              {/* Brand */}
+              <div className="text-xs text-slate-400 w-28 truncate hidden sm:block">
+                {brand ? (
+                  <span className="flex items-center gap-1">
+                    <div className="w-2 h-2 rounded-full" style={{ background: brand.primary_color || "#888" }} />
+                    {brand.brand_name}
+                  </span>
+                ) : "—"}
+              </div>
+
+              {/* Theme */}
+              <div className="text-xs text-slate-500 w-28 truncate hidden md:block">{theme?.name || "—"}</div>
+
+              {/* Steps */}
+              <div className="text-xs text-slate-300 w-12 text-center hidden lg:block">{stepCounts[quiz.id] || 0} steps</div>
+
+              {/* Status */}
+              <span className="text-xs font-semibold px-2 py-0.5 rounded-full flex-shrink-0"
+                style={{ background: st.bg, color: st.text, border: `1px solid ${st.border}` }}>
+                {quiz.status || "draft"}
+              </span>
+
+              {/* Version */}
+              <div className="text-xs text-slate-500 w-6 text-center hidden xl:block">v{quiz.version || 1}</div>
+
+              {/* Date */}
+              <div className="text-xs text-slate-600 w-20 hidden xl:block">
+                {quiz.updated_date ? new Date(quiz.updated_date).toLocaleDateString() : "—"}
+              </div>
+
+              {/* Actions */}
+              <div className="flex items-center gap-1 flex-shrink-0">
+                <Link to={`/admin/QuizBuilder/${quiz.id}`} title="Edit" className="p-1.5 text-slate-400 hover:text-white transition-colors"><Edit className="w-3.5 h-3.5" /></Link>
+                {quiz.status === "published" && (
+                  <a href={`/q/${quiz.slug}`} target="_blank" rel="noopener noreferrer" title="View Public" className="p-1.5 text-slate-400 hover:text-white transition-colors"><ExternalLink className="w-3.5 h-3.5" /></a>
+                )}
+                <button onClick={() => duplicateQuiz(quiz)} title="Duplicate" className="p-1.5 text-slate-400 hover:text-white transition-colors"><Copy className="w-3.5 h-3.5" /></button>
+                <button onClick={() => toggleStatus(quiz)} title="Toggle Status" className="p-1.5 text-slate-400 hover:text-white transition-colors">
+                  {quiz.status === "published" ? <ToggleRight className="w-4 h-4 text-green-400" /> : <ToggleLeft className="w-4 h-4" />}
+                </button>
+                <button onClick={() => archiveQuiz(quiz.id)} title="Archive" className="p-1.5 text-slate-400 hover:text-white transition-colors"><Archive className="w-3.5 h-3.5" /></button>
+                <button onClick={() => setDeleteConfirm(quiz.id)} title="Delete" className="p-1.5 text-red-400 hover:text-red-300 transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {deleteConfirm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-[#0f1e35] border border-white/10 rounded-xl p-6 max-w-sm w-full mx-4">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="rounded-xl p-6 max-w-sm w-full mx-4" style={{ background: "rgba(20,18,40,0.95)", border: "1px solid rgba(255,255,255,0.1)" }}>
             <h3 className="text-white font-bold mb-2">Delete Quiz?</h3>
-            <p className="text-slate-400 text-sm mb-4">Permanently deletes the quiz and all its steps. Cannot be undone.</p>
+            <p className="text-slate-400 text-sm mb-4">Permanently deletes the quiz and all its steps.</p>
             <div className="flex gap-3">
               <button onClick={() => deleteQuiz(deleteConfirm)} className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-lg text-sm">Delete</button>
-              <button onClick={() => setDeleteConfirm(null)} className="flex-1 bg-white/10 hover:bg-white/20 text-white font-semibold py-2 rounded-lg text-sm">Cancel</button>
+              <button onClick={() => setDeleteConfirm(null)} className="flex-1 text-white font-semibold py-2 rounded-lg text-sm" style={{ background: "rgba(255,255,255,0.1)" }}>Cancel</button>
             </div>
           </div>
         </div>

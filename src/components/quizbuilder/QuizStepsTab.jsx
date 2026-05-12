@@ -76,7 +76,10 @@ export default function QuizStepsTab({ quiz, steps, onUpdateStep, onAddStep, onD
 
           <button
             onClick={() => setShowAddModal(true)}
-            className="w-full flex items-center justify-center gap-2 border-2 border-dashed border-white/20 hover:border-[#1e90ff] text-slate-400 hover:text-[#1e90ff] py-4 rounded-xl text-sm font-semibold transition-all"
+            className="w-full flex items-center justify-center gap-2 border-2 border-dashed py-4 rounded-xl text-sm font-semibold transition-all"
+            style={{ borderColor: "var(--theme-border-emphasis, rgba(139,92,246,0.3))", color: "var(--theme-text-faint, #64748b)" }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--theme-primary, #8b5cf6)"; e.currentTarget.style.color = "var(--theme-primary, #8b5cf6)"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--theme-border-emphasis, rgba(139,92,246,0.3))"; e.currentTarget.style.color = "var(--theme-text-faint, #64748b)"; }}
           >
             <Plus className="w-4 h-4" /> Add Step
           </button>

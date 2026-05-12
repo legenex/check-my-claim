@@ -36,7 +36,7 @@ export default function StepCard({ step, index, totalSteps, allSteps, onUpdate, 
   const isPhase1 = PHASE1_TYPES.includes(step.step_type);
 
   return (
-    <div className="bg-[#0f1e35] border border-white/10 rounded-xl overflow-hidden">
+    <div style={{ background: "var(--theme-surface-glass, rgba(20,18,40,0.6))", border: "1px solid var(--theme-border-subtle, rgba(255,255,255,0.06))", borderLeft: `3px solid ${color}`, borderRadius: "var(--theme-radius-card, 16px)" }} className="overflow-hidden">
       {/* Collapsed header */}
       <div className="flex items-center gap-3 p-3">
         <div className="cursor-grab text-slate-600 flex-shrink-0">
@@ -71,10 +71,10 @@ export default function StepCard({ step, index, totalSteps, allSteps, onUpdate, 
 
       {/* Expanded body */}
       {expanded && (
-        <div className="border-t border-white/5 p-4">
+        <div className="p-4" style={{ borderTop: "1px solid var(--theme-border-subtle, rgba(255,255,255,0.05))" }}>
           {!isPhase1 ? (
-            <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-4">
-              <p className="text-amber-300 text-sm font-semibold mb-2">Available in Phase 2 or Phase 3</p>
+            <div className="rounded-lg p-4" style={{ background: "rgba(139,92,246,0.06)", border: "1px solid rgba(139,92,246,0.15)" }}>
+              <p className="text-sm font-semibold mb-2" style={{ color: "var(--theme-primary, #8b5cf6)" }}>Available in Phase 2 or Phase 3</p>
               <div className="text-xs text-slate-400 space-y-1">
                 <div>step_id: <span className="text-slate-300 font-mono">{step.step_id}</span></div>
                 <div>step_type: <span className="text-slate-300">{step.step_type}</span></div>

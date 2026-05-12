@@ -35,6 +35,8 @@ import QuizRuntime from './pages/QuizRuntime';
 import LandingPages from './pages/admin/LandingPages';
 import LandingPageEditor from './pages/admin/LandingPageEditor';
 import LandingPagePublic from './pages/LandingPagePublic';
+import ThemesList from './pages/admin/ThemesList';
+import ThemeEditor from './pages/admin/ThemeEditor';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -115,6 +117,8 @@ const AuthenticatedApp = () => {
       <Route path="/admin/DecisionTrees" element={<AdminRouteGuard><QuizBuilderList /></AdminRouteGuard>} />
       <Route path="/admin/DecisionTrees/:id/builder" element={<AdminRouteGuard><QuizBuilderList /></AdminRouteGuard>} />
       <Route path="/q/:slug" element={<QuizRuntime />} />
+      <Route path="/admin/Themes" element={<AdminRouteGuard><ThemesList /></AdminRouteGuard>} />
+      <Route path="/admin/Themes/:id" element={<AdminRouteGuard><ThemeEditor /></AdminRouteGuard>} />
       <Route path="/admin/LandingPages" element={<AdminRouteGuard><LandingPages /></AdminRouteGuard>} />
       <Route path="/admin/LandingPages/:id/edit" element={<LandingPageEditor />} />
       <Route path="/lp/:slug" element={<LandingPagePublic />} />

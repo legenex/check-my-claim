@@ -6,15 +6,19 @@ import QuizEditorTopBar from "@/components/quizbuilder/QuizEditorTopBar";
 import QuizStepsTab from "@/components/quizbuilder/QuizStepsTab";
 import QuizCanvasTab from "@/components/quizbuilder/QuizCanvasTab";
 import QuizSettingsTab from "@/components/quizbuilder/QuizSettingsTab";
+import { applyThemeVars, MIDNIGHT_GLASS_FALLBACK, themeFromBrand } from "@/lib/themeTokens";
 
 const TABS = ["Steps", "Canvas", "Settings"];
 
 export default function QuizBuilderEditor() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const rootRef = useRef(null);
+
   const [quiz, setQuiz] = useState(null);
   const [steps, setSteps] = useState([]);
   const [brands, setBrands] = useState([]);
+  const [themes, setThemes] = useState([]);
   const [allQuizzes, setAllQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -28,19 +32,35 @@ export default function QuizBuilderEditor() {
 
   const loadData = async () => {
     setLoading(true);
-    const [quizList, stepList, brandList, allQs] = await Promise.all([
+    const [quizList, stepList, brandList, allQs, themeList] = await Promise.all([
       base44.entities.Quiz.filter({ id }),
       base44.entities.QuizStep.filter({ quiz_id: id }),
       base44.entities.Brand.list(),
       base44.entities.Quiz.list("-updated_date", 200),
+      base44.entities.Theme.list("-updated_date", 100),
     ]);
     const q = quizList[0] || null;
     setQuiz(q);
     setSteps(stepList.slice().sort((a, b) => a.step_order - b.step_order));
     setBrands(brandList);
     setAllQuizzes(allQs);
+    setThemes(themeList);
     setLoading(false);
   };
+
+  // Apply theme CSS vars whenever quiz.theme_id or themes change
+  useEffect(() => {
+    if (!rootRef.current || !quiz) return;
+    let theme = null;
+    if (quiz.theme_id && themes.length) {
+      theme = themes.find(t => t.id === quiz.theme_id) || null;
+    }
+    if (!theme && quiz.brand_id && brands.length) {
+      const brand = brands.find(b => b.id === quiz.brand_id);
+      theme = brand ? themeFromBrand(brand) : MIDNIGHT_GLASS_FALLBACK;
+    }
+    applyThemeVars(rootRef.current, theme || MIDNIGHT_GLASS_FALLBACK);
+  }, [quiz?.theme_id, quiz?.brand_id, themes, brands]);
 
   const updateQuiz = useCallback((patch) => {
     setQuiz(prev => ({ ...prev, ...patch }));
@@ -63,12 +83,9 @@ export default function QuizBuilderEditor() {
     setLastSaved(new Date());
   };
 
-  // Rebuild QuizTransition cache
   const rebuildTransitions = useCallback(async (stepsArr) => {
-    // Delete existing transitions
     const existing = await base44.entities.QuizTransition.filter({ quiz_id: id });
     await Promise.all(existing.map(t => base44.entities.QuizTransition.delete(t.id)));
-    // Emit new transitions
     const transitions = [];
     stepsArr.forEach(step => {
       if (step.default_next_step_id) {
@@ -105,7 +122,6 @@ export default function QuizBuilderEditor() {
       default_next_step_id: null, answer_options: [], config: {},
     };
     const created = await base44.entities.QuizStep.create(newStep);
-    // Auto-chain: if previous last step is non-branching/non-terminal, link it to new step
     const BRANCHING = ["single_select", "multi_choice", "dropdown", "yes_no", "decision", "webhook"];
     const TERMINAL = ["results", "redirect"];
     if (steps.length > 0) {
@@ -137,7 +153,6 @@ export default function QuizBuilderEditor() {
   const reorderSteps = useCallback(async (newSteps) => {
     const BRANCHING = ["single_select", "multi_choice", "dropdown", "yes_no", "decision", "webhook"];
     const TERMINAL = ["results", "redirect"];
-    // Update step_order and auto-chain defaults
     const updated = newSteps.map((s, i) => {
       const next = newSteps[i + 1];
       let defaultNext = s.default_next_step_id;
@@ -147,11 +162,7 @@ export default function QuizBuilderEditor() {
       return { ...s, step_order: i, default_next_step_id: defaultNext };
     });
     setSteps(updated);
-    // Set first step as start_step_id
-    if (updated.length > 0) {
-      updateQuiz({ start_step_id: updated[0].step_id });
-    }
-    // Persist all
+    if (updated.length > 0) updateQuiz({ start_step_id: updated[0].step_id });
     await Promise.all(updated.map(s => base44.entities.QuizStep.update(s.id, { step_order: s.step_order, default_next_step_id: s.default_next_step_id })));
     await rebuildTransitions(updated);
   }, [rebuildTransitions, updateQuiz]);
@@ -160,13 +171,11 @@ export default function QuizBuilderEditor() {
     const errors = [];
     if (!quiz.title) errors.push("Title is required.");
     if (!quiz.slug) errors.push("Slug is required.");
-    // Slug uniqueness
     const existing = allQuizzes.filter(q => q.slug === quiz.slug && q.id !== id);
     if (existing.length) errors.push(`Slug "${quiz.slug}" is already in use.`);
     const startStep = steps.find(s => s.step_type === "start");
     if (!startStep) errors.push("At least one step with type 'start' is required.");
     if (!quiz.start_step_id || !steps.find(s => s.step_id === quiz.start_step_id)) errors.push("start_step_id must point to an existing step.");
-    // Reference integrity
     const stepIds = new Set(steps.map(s => s.step_id));
     steps.forEach(s => {
       if (s.default_next_step_id && !stepIds.has(s.default_next_step_id)) errors.push(`Step "${s.title_display}" has a broken default_next_step_id.`);
@@ -185,20 +194,24 @@ export default function QuizBuilderEditor() {
     setTimeout(() => setHighlightStepId(null), 2000);
   };
 
+  const handleThemeChange = (themeId) => {
+    updateQuiz({ theme_id: themeId });
+  };
+
   if (loading) return (
     <AdminRouteGuard>
-      <div className="fixed inset-0 bg-[#0a1628] flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-slate-700 border-t-[#1e90ff] rounded-full animate-spin" />
+      <div className="fixed inset-0 flex items-center justify-center" style={{ background: "var(--theme-background, #0a0a1f)" }}>
+        <div className="w-8 h-8 border-4 border-slate-700 rounded-full animate-spin" style={{ borderTopColor: "var(--theme-primary, #8b5cf6)" }} />
       </div>
     </AdminRouteGuard>
   );
 
   if (!quiz) return (
     <AdminRouteGuard>
-      <div className="fixed inset-0 bg-[#0a1628] flex items-center justify-center text-white">
+      <div className="fixed inset-0 flex items-center justify-center" style={{ background: "#0a0a1f" }}>
         <div className="text-center">
-          <p className="text-xl font-bold mb-2">Quiz not found</p>
-          <button onClick={() => navigate("/admin/QuizBuilder")} className="text-[#1e90ff] hover:underline text-sm">← Back to Quiz Builder</button>
+          <p className="text-xl font-bold mb-2 text-white">Quiz not found</p>
+          <button onClick={() => navigate("/admin/QuizBuilder")} className="text-[#8b5cf6] hover:underline text-sm">← Back to Quiz Builder</button>
         </div>
       </div>
     </AdminRouteGuard>
@@ -206,35 +219,57 @@ export default function QuizBuilderEditor() {
 
   return (
     <AdminRouteGuard>
-      <div className="fixed inset-0 bg-[#0a1628] flex flex-col overflow-hidden">
-        <QuizEditorTopBar
-          quiz={quiz}
-          brands={brands}
-          allQuizzes={allQuizzes}
-          saving={saving}
-          lastSaved={lastSaved}
-          publishErrors={publishErrors}
-          onTitleChange={t => updateQuiz({ title: t })}
-          onSlugChange={s => updateQuiz({ slug: s })}
-          onBrandChange={b => updateQuiz({ brand_id: b })}
-          onPublish={validateAndPublish}
-          onBack={() => navigate("/admin/QuizBuilder")}
-        />
+      <div
+        ref={rootRef}
+        className="fixed inset-0 flex flex-col overflow-hidden"
+        style={{ background: "var(--theme-background-gradient, #0a0a1f)" }}
+      >
+        {/* Top toolbar — glass panel */}
+        <div style={{
+          background: "var(--theme-surface-glass, rgba(20,18,40,0.7))",
+          borderBottom: "1px solid var(--theme-border-subtle, rgba(255,255,255,0.06))",
+          backdropFilter: "blur(16px)",
+          flexShrink: 0,
+        }}>
+          <QuizEditorTopBar
+            quiz={quiz}
+            brands={brands}
+            themes={themes}
+            allQuizzes={allQuizzes}
+            saving={saving}
+            lastSaved={lastSaved}
+            publishErrors={publishErrors}
+            onTitleChange={t => updateQuiz({ title: t })}
+            onSlugChange={s => updateQuiz({ slug: s })}
+            onBrandChange={b => updateQuiz({ brand_id: b })}
+            onThemeChange={handleThemeChange}
+            onPublish={validateAndPublish}
+            onBack={() => navigate("/admin/QuizBuilder")}
+          />
+        </div>
+
+        {/* Publish errors */}
         {publishErrors.length > 0 && (
-          <div className="bg-red-900/30 border-b border-red-500/30 px-4 py-2 flex-shrink-0">
-            {publishErrors.map((e, i) => <p key={i} className="text-red-300 text-xs">⚠ {e}</p>)}
+          <div className="flex-shrink-0 px-4 py-2" style={{ background: "rgba(251,71,133,0.08)", borderBottom: "1px solid rgba(251,71,133,0.2)" }}>
+            {publishErrors.map((e, i) => <p key={i} className="text-xs" style={{ color: "var(--theme-error, #fb7185)" }}>⚠ {e}</p>)}
           </div>
         )}
-        {/* Tabs */}
-        <div className="bg-[#0f1e35] border-b border-white/10 flex flex-shrink-0">
+
+        {/* Tab strip */}
+        <div className="flex flex-shrink-0" style={{ borderBottom: "1px solid var(--theme-border-subtle, rgba(255,255,255,0.06))", background: "var(--theme-surface-glass, rgba(20,18,40,0.5))" }}>
           {TABS.map(tab => (
             <button key={tab} onClick={() => setActiveTab(tab)}
-              className={`px-6 py-2.5 text-sm font-semibold transition-colors border-b-2 ${activeTab === tab ? "text-white border-[#1e90ff]" : "text-slate-400 border-transparent hover:text-white"}`}>
+              className="px-6 py-2.5 text-sm font-semibold transition-colors border-b-2"
+              style={{
+                color: activeTab === tab ? "var(--theme-text-primary, #f1f5f9)" : "var(--theme-text-faint, #64748b)",
+                borderBottomColor: activeTab === tab ? "var(--theme-primary, #8b5cf6)" : "transparent",
+              }}>
               {tab}
             </button>
           ))}
         </div>
 
+        {/* Content */}
         <div className="flex-1 overflow-hidden">
           {activeTab === "Steps" && (
             <QuizStepsTab
@@ -248,18 +283,10 @@ export default function QuizBuilderEditor() {
             />
           )}
           {activeTab === "Canvas" && (
-            <QuizCanvasTab
-              quiz={quiz}
-              steps={steps}
-              onNodeClick={handleCanvasNodeClick}
-            />
+            <QuizCanvasTab quiz={quiz} steps={steps} onNodeClick={handleCanvasNodeClick} />
           )}
           {activeTab === "Settings" && (
-            <QuizSettingsTab
-              quiz={quiz}
-              brands={brands}
-              onUpdate={updateQuiz}
-            />
+            <QuizSettingsTab quiz={quiz} brands={brands} onUpdate={updateQuiz} />
           )}
         </div>
       </div>
