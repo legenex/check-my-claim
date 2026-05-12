@@ -1,0 +1,225 @@
+{
+  "name": "Theme",
+  "type": "object",
+  "description": "Reusable visual theme tokens for quizzes and editors.",
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "brand": {
+      "type": "string"
+    },
+    "mood": {
+      "type": "string"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "source_screenshot_url": {
+      "type": "string"
+    },
+    "variant": {
+      "type": "string",
+      "enum": [
+        "polished",
+        "bold",
+        "minimal",
+        "custom"
+      ],
+      "default": "custom"
+    },
+    "ai_generated": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_system": {
+      "type": "boolean",
+      "default": false
+    },
+    "tokens": {
+      "type": "object",
+      "properties": {
+        "primary": {
+          "type": "string"
+        },
+        "primary_hover": {
+          "type": "string"
+        },
+        "primary_glow": {
+          "type": "string"
+        },
+        "accent": {
+          "type": "string"
+        },
+        "background": {
+          "type": "string"
+        },
+        "background_gradient": {
+          "type": "string"
+        },
+        "surface_glass": {
+          "type": "string"
+        },
+        "surface_elevated": {
+          "type": "string"
+        },
+        "border_subtle": {
+          "type": "string"
+        },
+        "border_emphasis": {
+          "type": "string"
+        },
+        "text_primary": {
+          "type": "string"
+        },
+        "text_muted": {
+          "type": "string"
+        },
+        "text_faint": {
+          "type": "string"
+        },
+        "success": {
+          "type": "string"
+        },
+        "warning": {
+          "type": "string"
+        },
+        "error": {
+          "type": "string"
+        },
+        "font_heading": {
+          "type": "string"
+        },
+        "font_body": {
+          "type": "string"
+        },
+        "font_mono": {
+          "type": "string"
+        },
+        "font_display": {
+          "type": "string"
+        },
+        "font_heading_weight": {
+          "type": "number",
+          "default": 600
+        },
+        "letter_spacing_tight": {
+          "type": "string"
+        },
+        "radius_card": {
+          "type": "number"
+        },
+        "radius_button": {
+          "type": "number"
+        },
+        "radius_input": {
+          "type": "number"
+        },
+        "shadow_card": {
+          "type": "string"
+        },
+        "shadow_button": {
+          "type": "string"
+        },
+        "density": {
+          "type": "string",
+          "enum": [
+            "compact",
+            "comfortable"
+          ],
+          "default": "comfortable"
+        }
+      }
+    },
+    "node_accents": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "type": "object",
+          "properties": {
+            "color": {
+              "type": "string"
+            },
+            "glow": {
+              "type": "string"
+            }
+          }
+        },
+        "logic": {
+          "type": "object",
+          "properties": {
+            "color": {
+              "type": "string"
+            },
+            "glow": {
+              "type": "string"
+            }
+          }
+        },
+        "action": {
+          "type": "object",
+          "properties": {
+            "color": {
+              "type": "string"
+            },
+            "glow": {
+              "type": "string"
+            }
+          }
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "color": {
+              "type": "string"
+            },
+            "glow": {
+              "type": "string"
+            }
+          }
+        },
+        "dq": {
+          "type": "object",
+          "properties": {
+            "color": {
+              "type": "string"
+            },
+            "glow": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

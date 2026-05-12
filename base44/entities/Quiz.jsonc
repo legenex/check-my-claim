@@ -66,6 +66,10 @@
       "type": "string",
       "description": "FK to Brand"
     },
+    "theme_id": {
+      "type": "string",
+      "description": "FK to Theme. When null, falls back to Brand-derived theming."
+    },
     "settings": {
       "type": "object",
       "properties": {
