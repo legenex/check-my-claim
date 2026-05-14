@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { buildSurveyUrl, captureIncomingParams, incrementExpClicks, incrementExpViews } from "@/lib/surveyUrl";
-import { ExperimentHeader, DisclaimerStrip, ExperimentCTA, ExperimentFooter, HowItWorks, Testimonials, FAQ, LeadForm } from "./shared/ExperimentLayout";
+import { Clock, TrendingUp, ChevronDown, ChevronUp, CheckCircle, Shield, Star, ArrowRight, Phone } from "lucide-react";
 import SettlementTickerMini from "./shared/SettlementTickerMini";
-import { Clock, TrendingUp, ChevronDown, ChevronUp, CheckCircle } from "lucide-react";
+
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/a32c079ff_DarkMode-PrimaryLogo_CheckMyClaim.png";
+const PHONE = "(844) 840-6905";
+const PHONE_RAW = "8448406905";
+const PARTNERS_URL = "https://checkmyclaim.co/PartnerList";
 
 const fmt = (n) => "$" + Math.round(n || 0).toLocaleString();
 
@@ -53,168 +57,290 @@ const MISSED_WORK_OPTIONS = [
   { value: "unable_to_return", label: "Unable to return to my job", wages: 75000, futureWages: 90000 },
 ];
 
+// ─── Header ───────────────────────────────────────────────────────────────
+function Header({ experiment }) {
+  return (
+    <header className="bg-[#0a1628] border-b border-white/10 px-4 py-3">
+      <div className="max-w-3xl mx-auto flex items-center justify-between">
+        <a href="/"><img src={LOGO_URL} alt="Check My Claim" className="h-8 w-auto" /></a>
+        <a href={`tel:${PHONE_RAW}`}
+          onClick={() => experiment && incrementExpClicks(experiment, base44)}
+          className="bg-[#2BB6F6] hover:bg-[#1a9fd8] text-white text-sm font-bold px-4 py-2 rounded-lg flex items-center gap-2 transition-all">
+          <Phone className="w-3.5 h-3.5" /> {PHONE}
+        </a>
+      </div>
+    </header>
+  );
+}
+
+// ─── Full advertorial-style footer ────────────────────────────────────────
+function Footer() {
+  return (
+    <footer className="bg-[#0a1628] text-slate-400 px-6 py-10 text-xs leading-relaxed">
+      <div className="max-w-4xl mx-auto space-y-4">
+        <p className="text-slate-600 text-xs">
+          <strong className="text-slate-500">EDUCATIONAL TOOL</strong> — This tool provides general information only. It is not a lawyer and does not provide legal advice and is not a guarantee or prediction of outcome.
+        </p>
+        <p>
+          <strong className="text-slate-300">DISCLAIMER:</strong> checkmyclaim.co is not a law firm or an attorney referral service. This advertisement is not legal advice and is not a guarantee or prediction of the outcome of your legal matter. Every case is different, and the outcome depends on the laws, facts, and circumstances unique to each case. Hiring an attorney is an important decision that should not be based solely on advertising. Request free information about your attorney's background and experience.{" "}
+          <strong>CA RESIDENTS:</strong> Paid attorney advertising on behalf of jointly advertising independent attorneys, including: The Law Offices of Larry H. Parker, San Antonio, CA. A full listing of attorney sponsors can be found{" "}
+          <a href={PARTNERS_URL} className="text-[#2BB6F6] underline" target="_blank" rel="noopener noreferrer">here</a>.{" "}
+          Check My Claim is not a law firm and does not provide legal services. You can request an attorney by name. This advertising does not imply a higher quality of legal services than that provided by other attorneys. Please note that past results showcased in advertisements do not dictate future results. If you live in AL, FL, MO, NY, or WY,{" "}
+          <a href="https://checkmyclaim.co/disclosures/" className="text-[#2BB6F6] underline">click here</a> for additional information about attorney advertising in your state.
+        </p>
+        <p>
+          We use cookies to personalize content and to analyze our traffic. We also share information about your use of our site with our analytics partners who may combine it with other information that you've provided to them or that they've collected from your use of their services.{" "}
+          <a href="https://dsar.cptn.co/dsar/0ca83d86-1ffc-4e4e-afad-2edb0fd5440b" className="text-[#2BB6F6] underline">Request access to your data</a>.
+        </p>
+        <p className="text-slate-500">© 2026 Check My Claim. All rights reserved. | checkmyclaim.co</p>
+      </div>
+    </footer>
+  );
+}
+
+// ─── Progress bar ─────────────────────────────────────────────────────────
 function ProgressBar({ step, total }) {
   return (
     <div className="px-4 pt-5 pb-2 max-w-2xl mx-auto w-full">
       <div className="flex justify-between mb-2">
-        <span className="text-xs text-slate-400">Step {step + 1} of {total}</span>
-        <span className="text-xs text-slate-400">{Math.round(((step + 1) / total) * 100)}%</span>
+        <span className="text-xs text-slate-400">Question {step + 1} of {total}</span>
+        <span className="text-xs font-semibold text-[#2BB6F6]">{Math.round(((step + 1) / total) * 100)}%</span>
       </div>
       <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-        <div className="h-full bg-[#2BB6F6] transition-all duration-500" style={{ width: `${((step + 1) / total) * 100}%` }} />
+        <div className="h-full bg-gradient-to-r from-[#2BB6F6] to-[#1e90ff] transition-all duration-500 rounded-full" style={{ width: `${((step + 1) / total) * 100}%` }} />
       </div>
     </div>
   );
 }
 
+// ─── TCPA disclaimer ──────────────────────────────────────────────────────
+function TCPADisclaimer() {
+  return (
+    <p className="text-[10px] text-slate-500 leading-relaxed mt-4 text-center max-w-lg mx-auto">
+      By submitting this form, I expressly consent to be contacted by Check My Claim and its{" "}
+      <a href={PARTNERS_URL} className="text-[#2BB6F6] underline" target="_blank" rel="noopener noreferrer">attorney partners</a>{" "}
+      via phone calls, text messages, and emails at the number and address I provided, even if I am on a Do Not Call registry. I understand that consent is not a condition of purchase or legal representation. Message &amp; data rates may apply. I have read and agree to the{" "}
+      <a href="/PrivacyPolicy" className="text-[#2BB6F6] underline">Privacy Policy</a> and{" "}
+      <a href="/TermsOfService" className="text-[#2BB6F6] underline">Terms of Service</a>.
+    </p>
+  );
+}
+
+// ─── Opt-in gate (shown instead of results) ───────────────────────────────
+function OptInGate({ results, experiment, onSubmit, submitting, error }) {
+  const [form, setForm] = useState({ first_name: "", last_name: "", phone: "", email: "", zip: "" });
+
+  const formatPhone = (val) => {
+    const digits = val.replace(/\D/g, "").slice(0, 10);
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 6) return `(${digits.slice(0,3)}) ${digits.slice(3)}`;
+    return `(${digits.slice(0,3)}) ${digits.slice(3,6)}-${digits.slice(6)}`;
+  };
+
+  const handlePhone = (e) => setForm(f => ({ ...f, phone: formatPhone(e.target.value) }));
+
+  const phoneDigits = form.phone.replace(/\D/g, "");
+  const isValidPhone = phoneDigits.length === 10;
+  const isValidZip = /^\d{5}$/.test(form.zip);
+  const canSubmit = form.first_name && form.last_name && isValidPhone && form.email && isValidZip;
+
+  const { estimateLow, estimateHigh } = results;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-[#0a1628] via-[#0d1f3c] to-[#0a1628] flex flex-col">
+      <Header experiment={experiment} />
+
+      <div className="flex-1 flex items-center justify-center px-4 py-10">
+        <div className="max-w-xl w-full">
+
+          {/* Teaser banner — big and persuasive */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/40 text-green-400 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
+              <CheckCircle className="w-3.5 h-3.5" /> Your Estimate Is Ready
+            </div>
+            <h1 className="text-4xl md:text-5xl font-black text-white mb-3 leading-tight">
+              Your claim may be worth more than you think
+            </h1>
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#2BB6F6] to-emerald-400 blur-sm select-none">
+                {fmt(estimateLow)} – {fmt(estimateHigh)}
+              </div>
+            </div>
+            <div className="inline-block bg-yellow-400/10 border border-yellow-400/30 text-yellow-300 text-sm font-semibold px-5 py-2 rounded-xl mb-5">
+              🔒 Unlock your full breakdown — takes 30 seconds
+            </div>
+            <p className="text-slate-300 text-base leading-relaxed max-w-md mx-auto">
+              Insurers count on you <strong className="text-white">not knowing this number</strong>. Their first offer is typically <span className="text-red-400 font-bold">25% or less</span> of what a represented claimant receives. Enter your info below to reveal your full estimate and get matched with a vetted attorney in your state — <span className="text-green-400 font-semibold">free, no obligation</span>.
+            </p>
+          </div>
+
+          {/* Trust badges */}
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+            {["✓ 50,000+ Wins", "✓ $50M+ Recovered", "✓ 100% Free", "✓ No Win, No Fee"].map(b => (
+              <span key={b} className="bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold px-3 py-1.5 rounded-full">{b}</span>
+            ))}
+          </div>
+
+          {/* Form card */}
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm">
+            <h2 className="text-lg font-bold text-white mb-1 text-center">See Your Full Estimate</h2>
+            <p className="text-slate-400 text-sm text-center mb-5">We'll match you with the best attorney for your case.</p>
+
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <input value={form.first_name} onChange={e => setForm(f => ({ ...f, first_name: e.target.value }))}
+                  placeholder="First Name" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-sm" />
+                <input value={form.last_name} onChange={e => setForm(f => ({ ...f, last_name: e.target.value }))}
+                  placeholder="Last Name" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-sm" />
+              </div>
+              <input type="tel" value={form.phone} onChange={handlePhone}
+                placeholder="Mobile Number (US)" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-sm"
+                maxLength={14} />
+              {form.phone && !isValidPhone && <p className="text-amber-400 text-xs px-1">Please enter a valid 10-digit US number.</p>}
+              <input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                placeholder="Email Address" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-sm" />
+              <input value={form.zip} onChange={e => setForm(f => ({ ...f, zip: e.target.value.replace(/\D/g,"").slice(0,5) }))}
+                placeholder="Zip Code" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-sm"
+                maxLength={5} />
+              {form.zip.length === 5 && !isValidZip && <p className="text-amber-400 text-xs px-1">Please enter a valid 5-digit zip code.</p>}
+
+              {error && <p className="text-red-400 text-sm text-center">{error}</p>}
+
+              <button onClick={() => canSubmit && onSubmit(form)} disabled={!canSubmit || submitting}
+                className="w-full py-4 rounded-xl font-black text-lg text-white transition-all disabled:opacity-40 flex items-center justify-center gap-2"
+                style={{ background: canSubmit ? "linear-gradient(135deg, #2BB6F6, #1e90ff)" : "rgba(100,116,139,0.4)", boxShadow: canSubmit ? "0 8px 24px rgba(43,182,246,0.4)" : "none" }}>
+                {submitting ? "Connecting you..." : <><ArrowRight className="w-5 h-5" /> Reveal My Estimate &amp; Get Matched</>}
+              </button>
+            </div>
+
+            <TCPADisclaimer />
+          </div>
+
+          {/* Social proof */}
+          <div className="mt-6 grid grid-cols-3 gap-3">
+            {[
+              { stars: 5, quote: "Almost accepted $12K. Tool said $68K–$95K. Got $81,500.", by: "Marcus T., TX" },
+              { stars: 5, quote: "47 days left on my SOL. Filed just in time. Life-changing.", by: "David R., FL" },
+              { stars: 5, quote: "The adjuster was offering pennies. This opened my eyes.", by: "Priya M., CA" },
+            ].map((r, i) => (
+              <div key={i} className="bg-white/5 border border-white/8 rounded-xl p-3">
+                <div className="flex gap-0.5 mb-1.5">{[...Array(r.stars)].map((_,j) => <Star key={j} className="w-3 h-3 fill-yellow-400 text-yellow-400" />)}</div>
+                <p className="text-slate-300 text-xs leading-relaxed mb-1.5">"{r.quote}"</p>
+                <p className="text-slate-500 text-[10px] font-semibold">{r.by}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <Footer />
+    </div>
+  );
+}
+
+// ─── Results page (shown AFTER opt-in) ───────────────────────────────────
 function ResultsPage({ results, experiment }) {
   const [methodologyOpen, setMethodologyOpen] = useState(true);
-  const [submitted, setSubmitted] = useState(false);
   const { estimateLow, estimateHigh, bills, futureMedical, lostWages, futureWages, economicDamages,
     nonEconLow, nonEconHigh, multLow, multHigh, stateFactor, liabilityFactor, capApplied, neoCap,
-    daysRemaining, solDeadline, stateData, injuryTier, sessionId, answers } = results;
+    daysRemaining, solDeadline, stateData, injuryTier, answers } = results;
 
   const stateName = stateData?.state_name || answers.state;
   const typicalFirstOffer = Math.round(estimateLow * 0.25);
   const solColor = daysRemaining === null ? "text-slate-400" : daysRemaining < 90 ? "text-red-500" : daysRemaining < 365 ? "text-amber-500" : "text-green-500";
   const accidentLabel = ACCIDENT_TYPES.find(a => a.value === answers.accident_type)?.label || answers.accident_type;
 
-  const handleLeadSave = async (form) => {
-    const stored = (k) => sessionStorage.getItem(`cmc_${k}`) || "";
-    await base44.entities.ClaimEstimate.create({
-      session_id: sessionId,
-      state: answers.state,
-      incident_date: answers.incident_date,
-      accident_type: answers.accident_type,
-      liability_clarity: answers.liability_clarity,
-      injury_severity_tier: answers.injury_severity_tier,
-      treatment_status: answers.treatment_status,
-      missed_work: answers.missed_work,
-      total_medical_bills: parseFloat(answers.total_medical_bills) || 0,
-      notes: answers.notes || "",
-      economic_damages: economicDamages,
-      non_economic_low: nonEconLow,
-      non_economic_high: nonEconHigh,
-      multiplier_low: multLow,
-      multiplier_high: multHigh,
-      state_factor: stateFactor,
-      liability_factor: liabilityFactor,
-      estimate_low: estimateLow,
-      estimate_high: estimateHigh,
-      methodology_notes: capApplied ? `Non-economic cap of ${fmt(neoCap)} applied for ${stateName}` : "",
-      full_name: form.full_name,
-      email: form.email,
-      phone: form.phone,
-      utm_source: stored("utm_source") || "CMC-Site",
-      utm_medium: stored("utm_medium") || "estimator",
-      utm_campaign: stored("utm_campaign") || "Experiment",
-      source_path: "/tools/claim-estimator",
-      status: "lead_captured",
-      lead_captured_at: new Date().toISOString(),
-      estimate_run_at: new Date().toISOString(),
-    });
-    if (experiment) {
-      await base44.entities.Experiment.update(experiment.id, { submissions: (experiment.submissions || 0) + 1 }).catch(() => {});
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-white">
-      <ExperimentHeader experiment={experiment} />
-      <DisclaimerStrip text="Educational estimator only — not legal advice. Every case is different." />
+    <div className="min-h-screen bg-gradient-to-b from-[#0a1628] via-[#0d1f3c] to-[#060e1e]">
+      <Header experiment={experiment} />
 
       <div className="max-w-4xl mx-auto px-4 py-10">
-        {/* Range hero */}
-        <div className="text-center mb-8">
-          <div className="inline-block bg-green-50 border border-green-200 text-green-700 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">
-            Estimated Represented-Case Value Range
+        {/* Success banner */}
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/40 text-green-400 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
+            <CheckCircle className="w-3.5 h-3.5" /> Estimate Unlocked
           </div>
-          <div className="text-5xl md:text-7xl font-black text-slate-900 mb-3">
-            {fmt(estimateLow)} – {fmt(estimateHigh)}
+          <div className="text-5xl md:text-7xl font-black text-white mb-3">
+            {fmt(estimateLow)}<span className="text-slate-400 mx-2">–</span>{fmt(estimateHigh)}
           </div>
-          <p className="text-slate-500 text-sm mb-6">Based on cases in {stateName} involving {accidentLabel} and {injuryTier?.tier_label || "your injury type"}. Past results do not guarantee future outcomes.</p>
+          <p className="text-slate-400 text-sm mb-4">
+            Based on cases in {stateName} involving {accidentLabel} and {injuryTier?.tier_label || "your injury type"}.
+          </p>
           <div className="flex flex-wrap justify-center gap-3">
-            {[
-              "Includes future medical projection",
-              `Adjusted for ${stateName} rules`,
-              "Reflects represented-case uplift"
-            ].map(t => (
-              <span key={t} className="bg-blue-50 border border-blue-100 text-blue-700 text-xs font-semibold px-3 py-1.5 rounded-full">{t}</span>
+            {["Includes future medical projection", `Adjusted for ${stateName} rules`, "Reflects represented-case uplift"].map(t => (
+              <span key={t} className="bg-[#2BB6F6]/10 border border-[#2BB6F6]/20 text-[#2BB6F6] text-xs font-semibold px-3 py-1.5 rounded-full">{t}</span>
             ))}
           </div>
         </div>
 
         {/* Methodology breakdown */}
-        <div className="bg-slate-50 rounded-2xl border border-slate-200 mb-8 overflow-hidden">
+        <div className="bg-white/5 border border-white/10 rounded-2xl mb-8 overflow-hidden">
           <button onClick={() => setMethodologyOpen(o => !o)}
-            className="w-full flex items-center justify-between px-6 py-4 font-bold text-slate-900 hover:bg-slate-100 transition-colors">
-            <span>📊 Methodology Breakdown (expanded by default)</span>
-            {methodologyOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            className="w-full flex items-center justify-between px-6 py-4 font-bold text-white hover:bg-white/5 transition-colors">
+            <span>📊 Methodology Breakdown</span>
+            {methodologyOpen ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
           </button>
           {methodologyOpen && (
             <div className="px-6 pb-6">
               <table className="w-full text-sm">
-                <tbody className="divide-y divide-slate-200">
+                <tbody className="divide-y divide-white/5">
                   {[
                     ["Current medical bills", fmt(bills)],
-                    [`Future medical projection (${Math.round(TREATMENT_OPTIONS.find(t=>t.value===answers.treatment_status)?.futureFactor*100||20)}% of current)`, fmt(futureMedical)],
+                    [`Future medical projection (${Math.round((TREATMENT_OPTIONS.find(t=>t.value===answers.treatment_status)?.futureFactor||0.20)*100)}% of current)`, fmt(futureMedical)],
                     ["Lost wages estimate", fmt(lostWages)],
                     ["Future lost wages projection", fmt(futureWages)],
                     ["Subtotal — Economic Damages", fmt(economicDamages), true],
-                    [`Pain & suffering multiplier band`, `${multLow}× – ${multHigh}×`],
+                    [`Pain & suffering multiplier`, `${multLow}× – ${multHigh}×`],
                     ["Non-economic damages range", `${fmt(nonEconLow)} – ${fmt(nonEconHigh)}`],
-                    [`${stateName} adjustment factor`, `${stateFactor}×`],
-                    ["Liability adjustment factor", `${(liabilityFactor * 100).toFixed(0)}%`],
-                    [capApplied ? `${stateName} non-economic cap applied` : `${stateName} non-economic cap`, capApplied ? fmt(neoCap) : "No cap"],
-                    ["IRC representation uplift (2.0× – 3.5×)", "Applied"],
+                    [`${stateName} adjustment`, `${stateFactor}×`],
+                    ["Liability factor", `${(liabilityFactor*100).toFixed(0)}%`],
+                    [capApplied ? `${stateName} non-economic cap applied` : `${stateName} cap`, capApplied ? fmt(neoCap) : "No cap"],
+                    ["Attorney representation uplift (2.0×–3.5×)", "Applied"],
                     ["Final Estimated Range", `${fmt(estimateLow)} – ${fmt(estimateHigh)}`, true],
                   ].map(([label, val, bold], i) => (
-                    <tr key={i} className={bold ? "bg-blue-50" : ""}>
-                      <td className={`py-2.5 ${bold ? "font-bold text-blue-900" : "text-slate-600"}`}>{label}</td>
-                      <td className={`py-2.5 text-right font-semibold ${bold ? "text-blue-900 font-black" : "text-slate-800"}`}>{val}</td>
+                    <tr key={i} className={bold ? "bg-[#2BB6F6]/10" : ""}>
+                      <td className={`py-2.5 ${bold ? "font-bold text-[#2BB6F6]" : "text-slate-400"}`}>{label}</td>
+                      <td className={`py-2.5 text-right font-semibold ${bold ? "text-[#2BB6F6] font-black" : "text-slate-200"}`}>{val}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
               {stateData?.comparative_negligence_rule && (
-                <p className="text-xs text-slate-500 mt-3">{stateName} uses <strong>{stateData.comparative_negligence_rule.replace(/_/g, " ")}</strong> negligence rules.</p>
+                <p className="text-xs text-slate-500 mt-3">{stateName} uses <strong className="text-slate-400">{stateData.comparative_negligence_rule.replace(/_/g," ")}</strong> negligence rules.</p>
               )}
-              {capApplied && <p className="text-xs text-amber-600 mt-2">⚠ {stateName} has a non-economic damages cap of {fmt(neoCap)} which has been applied to the high-end estimate.</p>}
+              {capApplied && <p className="text-xs text-amber-400 mt-2">⚠ {stateName} has a non-economic damages cap of {fmt(neoCap)} applied to high-end estimate.</p>}
             </div>
           )}
         </div>
 
+        {/* SOL + First Offer */}
         <div className="grid md:grid-cols-2 gap-6 mb-8">
-          {/* SOL Clock */}
-          <div className={`rounded-2xl p-6 border-2 ${daysRemaining !== null && daysRemaining < 90 ? "bg-red-50 border-red-200" : "bg-slate-50 border-slate-200"}`}>
+          <div className={`rounded-2xl p-6 border-2 ${daysRemaining !== null && daysRemaining < 90 ? "bg-red-500/10 border-red-500/30" : "bg-white/5 border-white/10"}`}>
             <div className="flex items-center gap-2 mb-3">
               <Clock className={`w-5 h-5 ${solColor}`} />
-              <h3 className="font-bold text-slate-900">Your {stateName} SOL Clock</h3>
+              <h3 className="font-bold text-white">Your {stateName} SOL Clock</h3>
             </div>
             {daysRemaining !== null ? (
               <>
                 <div className={`text-4xl font-black mb-1 ${solColor}`}>{daysRemaining.toLocaleString()} days</div>
-                <div className="text-sm text-slate-500">remaining before {solDeadline?.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</div>
-                <div className="text-xs text-slate-400 mt-1">{stateData?.statute_of_limitations_years || 2}-year SOL in {stateName}</div>
+                <div className="text-sm text-slate-400">remaining before {solDeadline?.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</div>
+                <div className="text-xs text-slate-500 mt-1">{stateData?.statute_of_limitations_years || 2}-year SOL in {stateName}</div>
                 {daysRemaining < 180 && (
-                  <div className={`mt-3 text-xs font-semibold ${daysRemaining < 90 ? "text-red-600" : "text-amber-700"}`}>
+                  <div className={`mt-3 text-xs font-semibold ${daysRemaining < 90 ? "text-red-400" : "text-amber-400"}`}>
                     ⚠ {daysRemaining < 90 ? "URGENT — your window is closing fast." : "Less than 6 months remain."}
                   </div>
                 )}
               </>
-            ) : (
-              <p className="text-slate-500 text-sm">No incident date provided.</p>
-            )}
+            ) : <p className="text-slate-500 text-sm">No incident date provided.</p>}
           </div>
 
-          {/* Typical First Offer */}
-          <div className="bg-orange-50 border-2 border-orange-200 rounded-2xl p-6">
+          <div className="bg-orange-500/10 border-2 border-orange-500/30 rounded-2xl p-6">
             <div className="flex items-center gap-2 mb-3">
-              <TrendingUp className="w-5 h-5 text-orange-500" />
-              <h3 className="font-bold text-slate-900">Typical First Offer</h3>
+              <TrendingUp className="w-5 h-5 text-orange-400" />
+              <h3 className="font-bold text-white">Typical First Offer</h3>
             </div>
-            <div className="text-4xl font-black text-orange-600 mb-1">{fmt(typicalFirstOffer)}</div>
-            <p className="text-xs text-slate-500">Insurers typically open at ~25% of actual represented value. That's approximately {Math.round((typicalFirstOffer / estimateHigh) * 100)}% of your high-end estimate.</p>
+            <div className="text-4xl font-black text-orange-400 mb-1">{fmt(typicalFirstOffer)}</div>
+            <p className="text-xs text-slate-400">Insurers typically open at ~25% of actual represented value — approximately {Math.round((typicalFirstOffer/estimateHigh)*100)}% of your high-end estimate.</p>
           </div>
         </div>
 
@@ -224,82 +350,128 @@ function ResultsPage({ results, experiment }) {
         </div>
 
         {/* Educational content */}
-        <div className="prose prose-slate max-w-none mb-10 space-y-8">
-          <div>
-            <h2 className="text-2xl font-extrabold text-slate-900">How This Estimate Was Built</h2>
-            <p className="text-slate-600 leading-relaxed">Every dollar in this estimate traces back to a specific, documented category of damages. We start with your current medical bills — but that's only the beginning. Future medical care often represents 20–50% of total medical costs, particularly if you're still in treatment or haven't yet been evaluated for long-term needs. Lost wages are valued conservatively; what many people don't realize is that future lost earning capacity — the income you'll never collect because of how this injury changes your career trajectory — can dwarf the immediate wage loss.</p>
-            <p className="text-slate-600 leading-relaxed mt-3">On top of economic damages, we apply an injury-appropriate multiplier for pain and suffering. This is where attorney representation makes the biggest difference: insurance companies use low multipliers when negotiating with unrepresented claimants. A vetted attorney forces the conversation to the high end of the multiplier band — and sometimes beyond.</p>
-          </div>
-          <div>
-            <h2 className="text-2xl font-extrabold text-slate-900">Why First Offers Are Almost Always Lower Than This Range</h2>
-            <p className="text-slate-600 leading-relaxed">The Insurance Research Council has published data for decades showing that represented claimants receive, on average, 3.5× more than unrepresented claimants for comparable injuries. Insurance companies know this. Their first offer is calibrated specifically for people who are unrepresented, financially stressed, and unfamiliar with claims math. The offer often arrives before you know the full extent of your injuries — deliberately.</p>
-          </div>
-          <div>
-            <h2 className="text-2xl font-extrabold text-slate-900">What's Missing From Your Number That an Attorney Would Add</h2>
-            <ul className="list-disc pl-5 space-y-2 text-slate-600">
-              <li><strong>Diminished vehicle value</strong> — your car is worth less now even after repair. Insurance owes you the difference.</li>
-              <li><strong>Full future-care projection</strong> — a life-care planner can quantify ongoing treatment needs worth tens of thousands more.</li>
-              <li><strong>Lost earning capacity</strong> — not just days missed, but permanent career impact if your injury limits future work.</li>
-              <li><strong>Household services damages</strong> — if you can no longer mow, cook, or parent the same way, that's quantifiable.</li>
-              <li><strong>Loss of consortium</strong> — available in most states when injury impacts a spousal relationship.</li>
-              <li><strong>Punitive damages</strong> — available in cases of egregious conduct (DUI, street racing, etc.).</li>
+        <div className="space-y-8 mb-10">
+          {[
+            {
+              h: "How This Estimate Was Built",
+              p: "Every dollar traces back to a specific, documented damage category. We start with current medical bills — but future medical care often represents 20–50% of total costs. Lost wages are valued conservatively; future lost earning capacity can dwarf immediate wage loss. On top of economic damages, we apply an injury-appropriate multiplier for pain and suffering. Attorney representation makes the biggest difference here — insurance companies use low multipliers for unrepresented claimants."
+            },
+            {
+              h: "Why First Offers Are Almost Always Lower",
+              p: "The Insurance Research Council has documented for decades that represented claimants receive 3.5× more than unrepresented claimants for comparable injuries. Insurance companies know this. Their first offer is calibrated specifically for people who are unrepresented, financially stressed, and unfamiliar with claims math. The offer often arrives before you know the full extent of your injuries — deliberately."
+            }
+          ].map((item, i) => (
+            <div key={i} className="bg-white/5 border border-white/8 rounded-2xl p-6">
+              <h2 className="text-xl font-extrabold text-white mb-3">{item.h}</h2>
+              <p className="text-slate-400 leading-relaxed text-sm">{item.p}</p>
+            </div>
+          ))}
+
+          <div className="bg-white/5 border border-white/8 rounded-2xl p-6">
+            <h2 className="text-xl font-extrabold text-white mb-4">What's Missing That an Attorney Would Add</h2>
+            <ul className="space-y-2">
+              {[
+                ["Diminished vehicle value", "your car is worth less even after repair."],
+                ["Full future-care projection", "a life-care planner can quantify ongoing needs worth tens of thousands more."],
+                ["Lost earning capacity", "permanent career impact if your injury limits future work."],
+                ["Household services damages", "if you can no longer perform daily tasks, that's quantifiable."],
+                ["Loss of consortium", "available in most states when injury impacts a spousal relationship."],
+                ["Punitive damages", "available in cases of egregious conduct (DUI, street racing, etc.)."],
+              ].map(([title, desc], j) => (
+                <li key={j} className="flex gap-3 text-sm">
+                  <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                  <span><strong className="text-slate-200">{title}</strong> <span className="text-slate-400">— {desc}</span></span>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
 
-        <Testimonials quotes={[
-          { text: "I almost accepted $12,000 before I ran this. It estimated $68,000–$95,000. I got an attorney. Settled for $81,500.", author: "Marcus T. — Houston, TX" },
-          { text: "The methodology breakdown made me realize my future medical costs weren't even being discussed by the adjuster. Game-changer.", author: "Priya M. — Sacramento, CA" },
-          { text: "Didn't know about the SOL clock. I had 47 days left. Filed just in time.", author: "David R. — Orlando, FL" },
-        ]} />
-
-        <FAQ items={[
-          { q: "How accurate is this estimate?", a: "It's built on the same methodology personal injury attorneys use — economic damages plus a multiplier for pain and suffering, adjusted for state rules and liability. It won't match your final settlement exactly (every case is unique), but it gives you a defensible, realistic range to negotiate from." },
-          { q: "Why does it say 'represented case value'?", a: "The Insurance Research Council has documented for decades that represented claimants settle 3.5× higher on average. This estimate shows what an attorney-negotiated settlement typically looks like — not what the insurer's first offer will be." },
-          { q: "What's the statute of limitations?", a: "Every state has a deadline to file a lawsuit. Once it expires, you lose your right to sue. The clock starts on the date of the accident, and missing it eliminates nearly all leverage." },
-          { q: "Can I run this if I haven't gotten all my medical bills yet?", a: "Yes. Enter what you have. Treatment-status and future-medical projection factors are built in to account for ongoing care." },
+        {/* FAQ */}
+        <DarkFAQ items={[
+          { q: "How accurate is this estimate?", a: "Built on the same methodology PI attorneys use — economic damages plus a multiplier adjusted for state rules and liability. It won't match your final settlement exactly, but it gives you a defensible, realistic range to negotiate from." },
+          { q: "Why does it say 'represented case value'?", a: "The Insurance Research Council has documented that represented claimants settle 3.5× higher on average. This estimate shows what an attorney-negotiated settlement typically looks like — not what the insurer's first offer will be." },
+          { q: "What's the statute of limitations?", a: "Every state has a deadline to file. Once it expires, you lose your right to sue. The clock starts on the accident date, and missing it eliminates nearly all leverage." },
           { q: "Will the insurance company see this?", a: "No. This tool is completely private. Your estimate is stored securely and only shared with the attorney you choose to connect with." },
-          { q: "Does this estimate include pain and suffering?", a: "Yes. Non-economic damages (pain, suffering, loss of enjoyment, emotional distress) are the largest component in most cases and are reflected in the multiplier section of the methodology breakdown." },
+          { q: "Does this include pain and suffering?", a: "Yes. Non-economic damages are the largest component in most cases and are reflected in the multiplier section of the breakdown above." },
         ]} />
 
-        {/* Lead capture */}
-        <div className="mt-10">
-          <LeadForm
-            headline={`Get This Estimate Reviewed by a Vetted Attorney in ${stateName} — Free`}
-            subtext="They'll review your range within 20 minutes and tell you if it's realistic for your specific case. No obligation. No upfront cost. No win, no fee."
-            experiment={experiment}
-            utmMedium={experiment?.utm_medium_label || "estimator"}
-            utmContent="lead_captured"
-            extraParams={{ state: answers.state, accident_type: answers.accident_type }}
-            onSuccess={handleLeadSave}
-          />
+        {/* Final CTA */}
+        <div className="mt-10 bg-gradient-to-br from-[#0d2044] to-[#1a3a6b] border border-[#2BB6F6]/20 rounded-2xl p-8 text-center">
+          <div className="flex justify-center gap-3 mb-5 flex-wrap">
+            {["✓ 50,000+ Wins", "✓ $50M+ Recovered", "✓ 100% Free"].map(b => (
+              <span key={b} className="bg-white/10 text-slate-200 text-xs font-semibold px-4 py-1.5 rounded-full">{b}</span>
+            ))}
+          </div>
+          <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-3">Ready to Talk to an Attorney?</h2>
+          <p className="text-slate-300 mb-6 text-sm">A vetted attorney in {stateName || "your state"} will review your range within 20 minutes. No obligation. No upfront cost.</p>
+          <a href={buildSurveyUrl({ linkId: "cta_results", utmMedium: "estimator", utmCampaign: "Experiment" })} target="_blank" rel="noopener noreferrer"
+            className="inline-block bg-[#2BB6F6] hover:bg-[#1a9fd8] text-white font-bold text-lg px-10 py-4 rounded-xl transition-all shadow-lg shadow-[#2BB6F6]/30">
+            Connect With a Vetted Attorney →
+          </a>
+          <p className="text-xs text-slate-500 mt-4">No win, no fee. Free consultation.</p>
         </div>
       </div>
 
-      <ExperimentCTA experiment={experiment} utmMedium="estimator" stateName={stateData?.state_name} />
-      <ExperimentFooter />
+      <Footer />
     </div>
   );
 }
 
+function DarkFAQ({ items }) {
+  const [open, setOpen] = useState(null);
+  return (
+    <div className="mb-8">
+      <h2 className="text-xl font-extrabold text-white mb-4 text-center">Frequently Asked Questions</h2>
+      <div className="space-y-2">
+        {items.map((item, i) => (
+          <div key={i} className="border border-white/10 rounded-xl overflow-hidden bg-white/5">
+            <button onClick={() => setOpen(open === i ? null : i)}
+              className="w-full text-left px-5 py-4 flex items-center justify-between font-semibold text-slate-200 hover:bg-white/5 transition-colors text-sm">
+              <span>{item.q}</span>
+              <span className="text-slate-500 text-lg ml-4 flex-shrink-0">{open === i ? "−" : "+"}</span>
+            </button>
+            {open === i && <div className="px-5 py-4 text-slate-400 text-sm leading-relaxed border-t border-white/5">{item.a}</div>}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Multi-choice option button with auto-next ────────────────────────────
+function OptionButton({ label, selected, onClick }) {
+  return (
+    <button onClick={onClick}
+      className={`w-full text-left px-5 py-4 rounded-xl border-2 font-medium transition-all ${selected ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/30 hover:bg-white/8"}`}>
+      {label}
+    </button>
+  );
+}
+
+// ─── Main component ───────────────────────────────────────────────────────
 export default function ClaimEstimatorPage({ experiment }) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
   const [injuryTiers, setInjuryTiers] = useState([]);
   const [stateData, setStateData] = useState(null);
   const [results, setResults] = useState(null);
+  const [showOptIn, setShowOptIn] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [sessionId] = useState(() => "est_" + Math.random().toString(36).substr(2, 12));
+  const autoNextTimer = useRef(null);
 
   const STEPS = [
     { id: "injury_severity_tier", title: "How serious are your injuries?", subtitle: "This is the single biggest driver of claim value." },
     { id: "accident_type", title: "What type of accident was it?", subtitle: "Different accidents carry different insurance coverage." },
-    { id: "incident_date", title: "When did it happen?", subtitle: "We use this to compute your statute of limitations urgency." },
+    { id: "incident_date", title: "When did it happen?", subtitle: "We use this to calculate your statute of limitations urgency." },
     { id: "state", title: "Where did it happen?", subtitle: "State laws significantly affect your claim value and timeline." },
     { id: "liability_clarity", title: "How clear is fault?", subtitle: "Liability clarity is one of the biggest value drivers." },
     { id: "treatment_status", title: "Are you still in treatment?", subtitle: "Documented treatment is critical to your claim." },
     { id: "missed_work", title: "Have you missed work?", subtitle: "Lost wages are recoverable economic damages." },
     { id: "total_medical_bills", title: "Total medical bills so far?", subtitle: "Include ER, imaging, specialists, PT, prescriptions." },
-    { id: "notes", title: "Anything else to know? (optional)", subtitle: "This helps personalize your results. 200 characters max." },
+    { id: "notes", title: "Anything else? (optional)", subtitle: "This helps personalize your results. 200 characters max." },
   ];
 
   useEffect(() => {
@@ -318,26 +490,37 @@ export default function ClaimEstimatorPage({ experiment }) {
   const currentVal = answers[currentStep.id];
 
   const canProceed = () => {
-    if (currentStep.id === "notes") return true; // optional
+    if (currentStep.id === "notes") return true;
     if (currentStep.id === "total_medical_bills") return currentVal !== undefined && currentVal !== "" && !isNaN(parseFloat(currentVal)) && parseFloat(currentVal) >= 0;
     return !!currentVal;
   };
 
-  const computeResults = () => {
-    const bills = parseFloat(answers.total_medical_bills) || 0;
-    const treatment = TREATMENT_OPTIONS.find(t => t.value === answers.treatment_status);
+  // Auto-advance for multiple-choice answers
+  const pickAndAutoNext = (fieldId, value) => {
+    const newAnswers = { ...answers, [fieldId]: value };
+    setAnswers(newAnswers);
+    if (autoNextTimer.current) clearTimeout(autoNextTimer.current);
+    autoNextTimer.current = setTimeout(() => {
+      if (step < STEPS.length - 1) setStep(s => s + 1);
+      else computeResultsFromAnswers(newAnswers);
+    }, 300);
+  };
+
+  const computeResultsFromAnswers = (ans = answers) => {
+    const bills = parseFloat(ans.total_medical_bills) || 0;
+    const treatment = TREATMENT_OPTIONS.find(t => t.value === ans.treatment_status);
     const futureFactor = treatment?.futureFactor || 0.20;
     const futureMedical = bills * futureFactor;
-    const missedWork = MISSED_WORK_OPTIONS.find(m => m.value === answers.missed_work);
+    const missedWork = MISSED_WORK_OPTIONS.find(m => m.value === ans.missed_work);
     const lostWages = missedWork?.wages || 0;
     const futureWages = missedWork?.futureWages || 0;
     const economicDamages = bills + futureMedical + lostWages + futureWages;
     const medicalTotal = bills + futureMedical;
-    const injuryTier = injuryTiers.find(t => t.tier_key === answers.injury_severity_tier);
+    const injuryTier = injuryTiers.find(t => t.tier_key === ans.injury_severity_tier);
     const multLow = injuryTier?.multiplier_low || 1.5;
     const multHigh = injuryTier?.multiplier_high || 3.0;
     const stateFactor = stateData?.base_multiplier_factor || 1.0;
-    const liabilityObj = LIABILITY_OPTIONS.find(l => l.value === answers.liability_clarity);
+    const liabilityObj = LIABILITY_OPTIONS.find(l => l.value === ans.liability_clarity);
     const liabilityFactor = liabilityObj?.factor || 0.75;
     const neoCap = stateData?.non_economic_damage_cap || null;
 
@@ -353,37 +536,25 @@ export default function ClaimEstimatorPage({ experiment }) {
     const repHigh = baseHigh * 3.5;
 
     const solYears = stateData?.statute_of_limitations_years || 2;
-    const incidentDate = answers.incident_date ? new Date(answers.incident_date) : null;
+    const incidentDate = ans.incident_date ? new Date(ans.incident_date) : null;
     const solDeadline = incidentDate ? new Date(incidentDate.getFullYear() + solYears, incidentDate.getMonth(), incidentDate.getDate()) : null;
     const daysRemaining = solDeadline ? Math.max(0, Math.floor((solDeadline - new Date()) / (1000 * 60 * 60 * 24))) : null;
 
-    // Save estimate_run record
     const stored = (k) => sessionStorage.getItem(`cmc_${k}`) || "";
     base44.entities.ClaimEstimate.create({
-      session_id: sessionId,
-      state: answers.state,
-      incident_date: answers.incident_date,
-      accident_type: answers.accident_type,
-      liability_clarity: answers.liability_clarity,
-      injury_severity_tier: answers.injury_severity_tier,
-      treatment_status: answers.treatment_status,
-      missed_work: answers.missed_work,
-      total_medical_bills: bills,
-      notes: answers.notes || "",
+      session_id: sessionId, state: ans.state, incident_date: ans.incident_date,
+      accident_type: ans.accident_type, liability_clarity: ans.liability_clarity,
+      injury_severity_tier: ans.injury_severity_tier, treatment_status: ans.treatment_status,
+      missed_work: ans.missed_work, total_medical_bills: bills, notes: ans.notes || "",
       economic_damages: economicDamages,
-      non_economic_low: Math.round(nonEconLow),
-      non_economic_high: Math.round(nonEconHigh),
-      multiplier_low: multLow,
-      multiplier_high: multHigh,
-      state_factor: stateFactor,
-      liability_factor: liabilityFactor,
-      estimate_low: Math.round(repLow / 500) * 500,
-      estimate_high: Math.round(repHigh / 500) * 500,
+      non_economic_low: Math.round(nonEconLow), non_economic_high: Math.round(nonEconHigh),
+      multiplier_low: multLow, multiplier_high: multHigh,
+      state_factor: stateFactor, liability_factor: liabilityFactor,
+      estimate_low: Math.round(repLow / 500) * 500, estimate_high: Math.round(repHigh / 500) * 500,
       utm_source: stored("utm_source") || "CMC-Site",
       utm_medium: stored("utm_medium") || "estimator",
       utm_campaign: stored("utm_campaign") || "Experiment",
-      source_path: "/tools/claim-estimator",
-      status: "estimate_run",
+      source_path: "/tools/claim-estimator", status: "estimate_run",
       estimate_run_at: new Date().toISOString(),
     }).catch(() => {});
 
@@ -393,29 +564,90 @@ export default function ClaimEstimatorPage({ experiment }) {
       bills, futureMedical, lostWages, futureWages, economicDamages,
       nonEconLow: Math.round(nonEconLow), nonEconHigh: Math.round(nonEconHigh),
       multLow, multHigh, stateFactor, liabilityFactor, capApplied, neoCap,
-      daysRemaining, solDeadline, stateData, injuryTier, sessionId, answers,
+      daysRemaining, solDeadline, stateData, injuryTier, sessionId, answers: ans,
     });
+    setShowOptIn(true);
   };
 
   const next = () => {
     if (step < STEPS.length - 1) setStep(s => s + 1);
-    else computeResults();
+    else computeResultsFromAnswers();
   };
 
-  if (results) return <ResultsPage results={results} experiment={experiment} />;
+  const handleOptInSubmit = async (form) => {
+    setSubmitting(true);
+    setSubmitError("");
+    try {
+      const stored = (k) => sessionStorage.getItem(`cmc_${k}`) || "";
+      await base44.entities.ClaimEstimate.create({
+        session_id: sessionId,
+        state: answers.state,
+        incident_date: answers.incident_date,
+        accident_type: answers.accident_type,
+        liability_clarity: answers.liability_clarity,
+        injury_severity_tier: answers.injury_severity_tier,
+        treatment_status: answers.treatment_status,
+        missed_work: answers.missed_work,
+        total_medical_bills: parseFloat(answers.total_medical_bills) || 0,
+        notes: answers.notes || "",
+        economic_damages: results.economicDamages,
+        estimate_low: results.estimateLow,
+        estimate_high: results.estimateHigh,
+        full_name: `${form.first_name} ${form.last_name}`.trim(),
+        email: form.email,
+        phone: form.phone,
+        zip: form.zip,
+        utm_source: stored("utm_source") || "CMC-Site",
+        utm_medium: stored("utm_medium") || "estimator",
+        utm_campaign: stored("utm_campaign") || "Experiment",
+        source_path: "/tools/claim-estimator",
+        status: "lead_captured",
+        lead_captured_at: new Date().toISOString(),
+        estimate_run_at: new Date().toISOString(),
+      });
+      if (experiment) await incrementExpClicks(experiment, base44).catch(() => {});
+      setShowOptIn(false);
+    } catch {
+      setSubmitError("Something went wrong. Please try again.");
+    }
+    setSubmitting(false);
+  };
+
+  // Show opt-in gate before results
+  if (showOptIn && results) {
+    return <OptInGate results={results} experiment={experiment} onSubmit={handleOptInSubmit} submitting={submitting} error={submitError} />;
+  }
+
+  // Show results after opt-in
+  if (results && !showOptIn) {
+    return <ResultsPage results={results} experiment={experiment} />;
+  }
+
+  // ─── Quiz steps ───────────────────────────────────────────────────────
+  const MULTI_CHOICE_STEPS = ["injury_severity_tier", "accident_type", "liability_clarity", "treatment_status", "missed_work"];
+  const isMultiChoice = MULTI_CHOICE_STEPS.includes(currentStep.id);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0a1628] to-[#0d1f3c] flex flex-col">
-      <ExperimentHeader experiment={experiment} />
-      <DisclaimerStrip text={experiment?.disclaimer_short} />
+    <div className="min-h-screen bg-gradient-to-b from-[#0a1628] via-[#0d1f3c] to-[#0a1628] flex flex-col">
+      <Header experiment={experiment} />
 
-      {/* Hero — shown only on step 0 */}
+      {/* Hero — step 0 only */}
       {step === 0 && (
         <div className="text-center px-4 pt-10 pb-4 max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-3">
+          <div className="inline-flex items-center gap-2 bg-[#2BB6F6]/15 border border-[#2BB6F6]/30 text-[#2BB6F6] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
+            <Shield className="w-3.5 h-3.5" /> Free — No Obligation
+          </div>
+          <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-3">
             {experiment?.hero_headline || "What Is Your Injury Claim Actually Worth?"}
           </h1>
-          <p className="text-slate-300 text-lg mb-2">{experiment?.hero_subheadline || "Answer 9 quick questions. Get a transparent, methodology-backed estimate in under 2 minutes."}</p>
+          <p className="text-slate-300 text-lg mb-2">
+            {experiment?.hero_subheadline || "Answer 9 quick questions. Get a transparent, methodology-backed estimate in under 2 minutes."}
+          </p>
+          <div className="flex flex-wrap justify-center gap-3 mt-5">
+            {["✓ Based on real case data", "✓ State-adjusted", "✓ Includes pain & suffering", "✓ 100% private"].map(b => (
+              <span key={b} className="bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold px-3 py-1.5 rounded-full">{b}</span>
+            ))}
+          </div>
         </div>
       )}
 
@@ -424,14 +656,15 @@ export default function ClaimEstimatorPage({ experiment }) {
       <div className="flex-1 flex items-start justify-center px-4 py-8">
         <div className="max-w-2xl w-full">
           <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-2">{currentStep.title}</h2>
-          <p className="text-slate-400 mb-6">{currentStep.subtitle}</p>
+          <p className="text-slate-400 mb-6 text-sm">{currentStep.subtitle}</p>
 
-          {/* INJURY TIER — visual cards */}
+          {/* INJURY TIER */}
           {currentStep.id === "injury_severity_tier" && (
             <div className="grid grid-cols-1 gap-3">
               {injuryTiers.map(tier => (
-                <button key={tier.tier_key} onClick={() => setAnswers(a => ({ ...a, injury_severity_tier: tier.tier_key }))}
-                  className={`w-full text-left px-5 py-4 rounded-xl border-2 transition-all ${currentVal === tier.tier_key ? "border-[#2BB6F6] bg-[#2BB6F6]/10" : "border-white/10 bg-white/5 hover:border-white/30"}`}>
+                <button key={tier.tier_key}
+                  onClick={() => pickAndAutoNext("injury_severity_tier", tier.tier_key)}
+                  className={`w-full text-left px-5 py-4 rounded-xl border-2 transition-all ${currentVal === tier.tier_key ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/30"}`}>
                   <div className={`font-bold text-base mb-1 ${currentVal === tier.tier_key ? "text-white" : "text-slate-200"}`}>{tier.tier_label}</div>
                   {tier.description && <div className="text-xs text-slate-400 mb-1">{tier.description}</div>}
                   {tier.example_injuries?.length > 0 && <div className="text-xs text-slate-500">e.g. {tier.example_injuries.slice(0, 3).join(", ")}</div>}
@@ -444,8 +677,9 @@ export default function ClaimEstimatorPage({ experiment }) {
           {currentStep.id === "accident_type" && (
             <div className="grid grid-cols-2 gap-3">
               {ACCIDENT_TYPES.map(opt => (
-                <button key={opt.value} onClick={() => setAnswers(a => ({ ...a, accident_type: opt.value }))}
-                  className={`text-left px-4 py-4 rounded-xl border-2 font-medium transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/10 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/30"}`}>
+                <button key={opt.value}
+                  onClick={() => pickAndAutoNext("accident_type", opt.value)}
+                  className={`text-left px-4 py-4 rounded-xl border-2 font-medium transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/30"}`}>
                   <div className="text-2xl mb-1">{opt.icon}</div>
                   <div className="text-sm">{opt.label}</div>
                 </button>
@@ -473,8 +707,9 @@ export default function ClaimEstimatorPage({ experiment }) {
           {currentStep.id === "liability_clarity" && (
             <div className="grid grid-cols-1 gap-3">
               {LIABILITY_OPTIONS.map(opt => (
-                <button key={opt.value} onClick={() => setAnswers(a => ({ ...a, liability_clarity: opt.value }))}
-                  className={`w-full text-left px-5 py-4 rounded-xl border-2 font-medium transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/10 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/30"}`}>
+                <button key={opt.value}
+                  onClick={() => pickAndAutoNext("liability_clarity", opt.value)}
+                  className={`w-full text-left px-5 py-4 rounded-xl border-2 font-medium transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/30"}`}>
                   <span className="mr-2">{opt.icon}</span>{opt.label}
                 </button>
               ))}
@@ -485,8 +720,9 @@ export default function ClaimEstimatorPage({ experiment }) {
           {currentStep.id === "treatment_status" && (
             <div className="grid grid-cols-1 gap-3">
               {TREATMENT_OPTIONS.map(opt => (
-                <button key={opt.value} onClick={() => setAnswers(a => ({ ...a, treatment_status: opt.value }))}
-                  className={`w-full text-left px-5 py-4 rounded-xl border-2 transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/10" : "border-white/10 bg-white/5 hover:border-white/30"}`}>
+                <button key={opt.value}
+                  onClick={() => pickAndAutoNext("treatment_status", opt.value)}
+                  className={`w-full text-left px-5 py-4 rounded-xl border-2 transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/30"}`}>
                   <div className={`font-semibold ${currentVal === opt.value ? "text-white" : "text-slate-200"}`}>{opt.label}</div>
                   <div className="text-xs text-slate-400">{opt.sub}</div>
                 </button>
@@ -498,8 +734,9 @@ export default function ClaimEstimatorPage({ experiment }) {
           {currentStep.id === "missed_work" && (
             <div className="grid grid-cols-1 gap-3">
               {MISSED_WORK_OPTIONS.map(opt => (
-                <button key={opt.value} onClick={() => setAnswers(a => ({ ...a, missed_work: opt.value }))}
-                  className={`w-full text-left px-5 py-4 rounded-xl border-2 font-medium transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/10 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/30"}`}>
+                <button key={opt.value}
+                  onClick={() => pickAndAutoNext("missed_work", opt.value)}
+                  className={`w-full text-left px-5 py-4 rounded-xl border-2 font-medium transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/30"}`}>
                   <span>{opt.label}</span>
                   {opt.wages > 0 && <span className="ml-2 text-xs text-slate-400">(~{fmt(opt.wages)} assumed)</span>}
                 </button>
@@ -515,7 +752,7 @@ export default function ClaimEstimatorPage({ experiment }) {
                 <input type="number" min="0" step="500" value={currentVal || ""} onChange={e => setAnswers(a => ({ ...a, total_medical_bills: e.target.value }))}
                   placeholder="0" className="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-4 text-slate-800 text-2xl font-bold focus:outline-none focus:border-[#2BB6F6]" />
               </div>
-              <p className="text-xs text-slate-400 mt-2">Enter 0 if bills haven't arrived yet — estimate still works.</p>
+              <p className="text-xs text-slate-500 mt-2">Enter 0 if bills haven't arrived yet — estimate still works.</p>
             </div>
           )}
 
@@ -526,32 +763,49 @@ export default function ClaimEstimatorPage({ experiment }) {
               rows={4} className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:border-[#2BB6F6] resize-none" />
           )}
 
+          {/* Nav buttons */}
           <div className="flex items-center justify-between mt-8">
             <button onClick={() => setStep(s => Math.max(0, s - 1))} disabled={step === 0}
               className="px-5 py-3 bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white font-semibold rounded-xl text-sm transition-all">
               ← Back
             </button>
-            <button onClick={next} disabled={!canProceed()}
-              className="px-8 py-3 bg-[#2BB6F6] hover:bg-[#1a9fd8] disabled:opacity-40 text-white font-bold rounded-xl text-sm transition-all">
-              {step === STEPS.length - 1 ? "Calculate My Estimate →" : "Next →"}
-            </button>
+            {(!isMultiChoice || currentStep.id === "total_medical_bills" || currentStep.id === "notes" || currentStep.id === "incident_date" || currentStep.id === "state") && (
+              <button onClick={next} disabled={!canProceed()}
+                className="px-8 py-3 bg-[#2BB6F6] hover:bg-[#1a9fd8] disabled:opacity-40 text-white font-bold rounded-xl text-sm transition-all">
+                {step === STEPS.length - 1 ? "Calculate My Estimate →" : "Next →"}
+              </button>
+            )}
           </div>
 
-          <p className="text-xs text-slate-600 text-center mt-4">Educational estimator only — not legal advice.</p>
+          {isMultiChoice && <p className="text-xs text-slate-600 text-center mt-3">Select an option to continue automatically</p>}
         </div>
       </div>
 
-      {/* Below-tool content (visible after hero) */}
+      {/* How it works — only step 0 */}
       {step === 0 && (
-        <div className="bg-white">
-          <HowItWorks steps={[
-            { icon: "📋", title: "Answer 9 questions", desc: "Injury type, accident details, treatment status, bills." },
-            { icon: "⚙️", title: "We run the math", desc: "Economic + non-economic damages, state adjustments, representation uplift." },
-            { icon: "📊", title: "See the breakdown", desc: "Transparent methodology — every dollar explained." },
-            { icon: "⚖️", title: "Connect (optional)", desc: "A vetted attorney reviews your range for free." },
-          ]} />
+        <div className="border-t border-white/5 bg-white/3 py-12 px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-xl font-extrabold text-white text-center mb-8">How This Works</h2>
+            <div className="grid md:grid-cols-4 gap-6">
+              {[
+                { icon: "📋", title: "Answer 9 questions", desc: "Injury type, accident details, treatment status, bills." },
+                { icon: "⚙️", title: "We run the math", desc: "Economic + non-economic damages, state adjustments, representation uplift." },
+                { icon: "🔒", title: "Unlock your estimate", desc: "Enter your info so we can match you with the right attorney." },
+                { icon: "⚖️", title: "Get matched free", desc: "A vetted attorney reviews your range at no cost. No win, no fee." },
+              ].map((s, i) => (
+                <div key={i} className="text-center">
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-2xl mx-auto mb-3">{s.icon}</div>
+                  <div className="text-xs font-bold text-[#2BB6F6] uppercase tracking-widest mb-1">Step {i + 1}</div>
+                  <div className="font-bold text-slate-200 mb-1 text-sm">{s.title}</div>
+                  <div className="text-xs text-slate-500">{s.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
+
+      <Footer />
     </div>
   );
 }
