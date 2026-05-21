@@ -4,6 +4,9 @@ import { base44 } from "@/api/base44Client";
 import { captureIncomingParams } from "@/lib/surveyUrl";
 import ClaimBotWidget from "@/components/claimbot/ClaimBotWidget";
 import { QuizRuntimeEmbedded } from "@/pages/QuizRuntime";
+import AuthorityBriefRenderer from "@/components/landing/AuthorityBriefRenderer";
+import EmpatheticStoryRenderer from "@/components/landing/EmpatheticStoryRenderer";
+import BoldModernRenderer from "@/components/landing/BoldModernRenderer";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/a32c079ff_DarkMode-PrimaryLogo_CheckMyClaim.png";
 const DEFAULT_PHONE = "(844) 840-6905";
@@ -17,9 +20,9 @@ export default function LandingPagePublic() {
   const [brand, setBrand] = useState(null);
   const [template, setTemplate] = useState(null);
   const [quizTheme, setQuizTheme] = useState(null);
+  const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
-  const [openFaq, setOpenFaq] = useState(null);
   const quizRef = useRef(null);
 
   useEffect(() => {
@@ -58,6 +61,12 @@ export default function LandingPagePublic() {
       if (themeId) {
         const ths = await base44.entities.QuizTheme.filter({ id: themeId });
         if (ths.length) setQuizTheme(ths[0]);
+      }
+
+      // Load quiz
+      if (p.quiz_id) {
+        const qs = await base44.entities.Quiz.filter({ id: p.quiz_id });
+        if (qs.length) setQuizzes(qs);
       }
 
       // Load brand
@@ -107,11 +116,42 @@ export default function LandingPagePublic() {
 
   const phone = brand?.phone_number || page?.brand_phone || DEFAULT_PHONE;
   const telNum = phone.replace(/\D/g, "");
+  const isPreview = new URLSearchParams(window.location.search).get('preview') === '1';
+  const quiz = quizzes[0];
+
+  // Route to appropriate renderer based on template_key
+  switch (page.template_key) {
+    case "authority-brief":
+      return <AuthorityBriefRenderer landingPage={page} template={template} brand={brand} quizTheme={quizTheme} quiz={quiz} isPreview={isPreview} />;
+    case "empathetic-story":
+      return <EmpatheticStoryRenderer landingPage={page} template={template} brand={brand} quizTheme={quizTheme} quiz={quiz} isPreview={isPreview} />;
+    case "bold-modern":
+      return <BoldModernRenderer landingPage={page} template={template} brand={brand} quizTheme={quizTheme} quiz={quiz} isPreview={isPreview} />;
+    default:
+      // Fall back to classic rendering (existing code below)
+      return <ClassicRenderer page={page} brand={brand} quizTheme={quizTheme} template={template} phone={phone} telNum={telNum} quiz={quiz} isPreview={isPreview} />;
+  }
+}
+
+// Classic renderer (existing implementation - kept for backwards compatibility)
+function ClassicRenderer({ page, brand, quizTheme, template, phone, telNum, quiz, isPreview }) {
+  const [openFaq, setOpenFaq] = useState(null);
+  const quizRef = useRef(null);
   const stats = [
     { value: page.trust_stat_1_value || "$50M+", label: page.trust_stat_1_label || "Recovered" },
     { value: page.trust_stat_2_value || "50,000+", label: page.trust_stat_2_label || "Total Client Wins" },
     { value: page.trust_stat_3_value || "100%", label: page.trust_stat_3_label || "Free" },
   ];
+
+  const scrollToQuiz = () => quizRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const onQuizStart = () => {
+    if (!page) return;
+    const key = `cmc_lp_started_${page.slug}`;
+    if (!sessionStorage.getItem(key)) {
+      sessionStorage.setItem(key, "1");
+      base44.entities.LandingPage.update(page.id, { total_quiz_starts: (page.total_quiz_starts || 0) + 1 }).catch(() => {});
+    }
+  };
 
   return (
     <div style={{ background: "#0b1220", minHeight: "100vh", fontFamily: "Inter, sans-serif" }}>
@@ -175,8 +215,8 @@ export default function LandingPagePublic() {
             margin: "0 auto 32px",
             textAlign: "left",
           }}>
-            {page.quiz_id ? (
-              <QuizRuntimeEmbedded quizId={page.quiz_id} onFirstInteraction={onQuizStart} quizThemeId={page.embedded_quiz_theme_id || template?.embedded_quiz_theme_id} />
+            {quiz ? (
+              <QuizRuntimeEmbedded quizId={quiz.id} onFirstInteraction={onQuizStart} quizThemeId={page.embedded_quiz_theme_id || template?.embedded_quiz_theme_id} />
             ) : (
               <div style={{ textAlign: "center", padding: "40px 20px", background: "#fff8f0", borderRadius: 12, border: "1px solid #fed7aa" }}>
                 <p style={{ fontWeight: 700, color: "#92400e", marginBottom: 8 }}>This page is temporarily unavailable.</p>
@@ -411,6 +451,8 @@ export default function LandingPagePublic() {
     </div>
   );
 }
+
+
 
 function injectMetaPixel(pixelId) {
   if (!pixelId || document.getElementById("meta-pixel-lp")) return;
