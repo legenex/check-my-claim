@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { base44 } from "@/api/base44Client";
-import { Plus, Search, Edit, Trash2, Copy, ToggleLeft, ToggleRight, Archive, ClipboardList, X } from "lucide-react";
+import { Plus, Search, Edit, Trash2, Copy, ToggleLeft, ToggleRight, Archive, ClipboardList, X, Eye } from "lucide-react";
 
 const FORM_TYPE_COLORS = {
   qualified: "bg-green-500/20 text-green-400 border border-green-500/30",
@@ -146,6 +146,7 @@ export default function ContactForms() {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1 justify-end">
                         <Link to={`/admin/ContactForms/${form.id}/edit`} title="Edit" className="p-1.5 text-slate-400 hover:text-white transition-colors"><Edit className="w-3.5 h-3.5" /></Link>
+                        <a href={`/lp/test-preview?form=${form.id}`} target="_blank" rel="noopener noreferrer" title="Preview" className="p-1.5 text-slate-400 hover:text-white transition-colors"><Eye className="w-3.5 h-3.5" /></a>
                         <button onClick={() => duplicateForm(form)} title="Duplicate" className="p-1.5 text-slate-400 hover:text-white transition-colors"><Copy className="w-3.5 h-3.5" /></button>
                         <button onClick={() => setDeleteConfirm(form.id)} title="Delete" className="p-1.5 text-red-400 hover:text-red-300 transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
                       </div>

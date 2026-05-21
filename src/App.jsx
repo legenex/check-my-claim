@@ -38,6 +38,7 @@ import LandingPagePublic from './pages/LandingPagePublic';
 import ThemesList from './pages/admin/ThemesList';
 import ThemeEditor from './pages/admin/ThemeEditor';
 import ContactForms from './pages/admin/ContactForms';
+import ContactFormEditor from './pages/admin/ContactFormEditor';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -122,7 +123,9 @@ const AuthenticatedApp = () => {
       <Route path="/admin/Themes/:id" element={<AdminRouteGuard><ThemeEditor /></AdminRouteGuard>} />
       <Route path="/admin/LandingPages" element={<AdminRouteGuard><LandingPages /></AdminRouteGuard>} />
       <Route path="/admin/LandingPages/:id/edit" element={<LandingPageEditor />} />
+      <Route path="/admin/LandingPages/new" element={<LandingPageEditor />} />
       <Route path="/admin/ContactForms" element={<AdminRouteGuard><ContactForms /></AdminRouteGuard>} />
+      <Route path="/admin/ContactForms/:id/edit" element={<ContactFormEditor />} />
       <Route path="/lp/:slug" element={<LandingPagePublic />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
