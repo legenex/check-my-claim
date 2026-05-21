@@ -52,6 +52,8 @@ export default function LandingPageEditor() {
   const [publishErrors, setPublishErrors] = useState([]);
   const autoSaveTimer = useRef(null);
 
+  const sensors = useSensors(useSensor(PointerSensor), useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }));
+
   useEffect(() => { loadData(); }, [id]);
 
   const loadData = async () => {
@@ -225,7 +227,7 @@ export default function LandingPageEditor() {
                   <h3 className="font-semibold">Benefits Items</h3>
                   <Button size="sm" onClick={() => updatePage({ benefits_items: [...(page.benefits_items || []), { icon: "✦", label: "New Benefit" }] })}><Plus className="w-4 h-4 mr-1" /> Add</Button>
                 </div>
-                <DndContext sensors={useSensors(useSensor(PointerSensor), useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }))} collisionDetection={closestCenter} onDragEnd={(e) => {
+                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => {
                   const { active, over } = e;
                   if (active.id !== over.id) {
                     const oldIndex = (page.benefits_items || []).findIndex(i => i.label === active.id);
@@ -240,8 +242,8 @@ export default function LandingPageEditor() {
                         updatePage({ benefits_items: newItems });
                       }}>
                         <div className="grid grid-cols-2 gap-2">
-                          <Input value={item.icon || ""} onChange={(e) => onChange("icon", e.target.value)} placeholder="Icon" className="text-xs" />
-                          <Input value={item.label || ""} onChange={(e) => onChange("label", e.target.value)} placeholder="Label" className="text-xs" />
+                          <Input value={item.icon || ""} onChange={(e) => { const newItems = (page.benefits_items || []).map((it, idx) => idx === i ? { ...it, icon: e.target.value } : it); updatePage({ benefits_items: newItems }); }} placeholder="Icon" className="text-xs" />
+                          <Input value={item.label || ""} onChange={(e) => { const newItems = (page.benefits_items || []).map((it, idx) => idx === i ? { ...it, label: e.target.value } : it); updatePage({ benefits_items: newItems }); }} placeholder="Label" className="text-xs" />
                         </div>
                       </SortableItem>
                     ))}
@@ -264,7 +266,7 @@ export default function LandingPageEditor() {
                   <h3 className="font-semibold">Win Cards</h3>
                   <Button size="sm" onClick={() => updatePage({ recent_wins_items: [...(page.recent_wins_items || []), { amount: "$0", name_initials: "XX", age: 0, location: "" }] })}><Plus className="w-4 h-4 mr-1" /> Add</Button>
                 </div>
-                <DndContext sensors={useSensors(useSensor(PointerSensor), useSensor(KeyboardSensor))} collisionDetection={closestCenter} onDragEnd={(e) => {
+                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => {
                   const { active, over } = e;
                   if (active.id !== over.id) {
                     const oldIndex = (page.recent_wins_items || []).findIndex(i => i.amount === active.id);
@@ -279,10 +281,10 @@ export default function LandingPageEditor() {
                         updatePage({ recent_wins_items: newItems });
                       }}>
                         <div className="grid grid-cols-4 gap-2">
-                          <Input value={win.amount || ""} onChange={(e) => onChange("amount", e.target.value)} placeholder="Amount" className="text-xs" />
-                          <Input value={win.name_initials || ""} onChange={(e) => onChange("name_initials", e.target.value)} placeholder="Initials" className="text-xs" />
-                          <Input type="number" value={win.age || 0} onChange={(e) => onChange("age", parseInt(e.target.value))} placeholder="Age" className="text-xs" />
-                          <Input value={win.location || ""} onChange={(e) => onChange("location", e.target.value)} placeholder="Location" className="text-xs" />
+                          <Input value={win.amount || ""} onChange={(e) => { const newItems = (page.recent_wins_items || []).map((w, idx) => idx === i ? { ...w, amount: e.target.value } : w); updatePage({ recent_wins_items: newItems }); }} placeholder="Amount" className="text-xs" />
+                          <Input value={win.name_initials || ""} onChange={(e) => { const newItems = (page.recent_wins_items || []).map((w, idx) => idx === i ? { ...w, name_initials: e.target.value } : w); updatePage({ recent_wins_items: newItems }); }} placeholder="Initials" className="text-xs" />
+                          <Input type="number" value={win.age || 0} onChange={(e) => { const newItems = (page.recent_wins_items || []).map((w, idx) => idx === i ? { ...w, age: parseInt(e.target.value) } : w); updatePage({ recent_wins_items: newItems }); }} placeholder="Age" className="text-xs" />
+                          <Input value={win.location || ""} onChange={(e) => { const newItems = (page.recent_wins_items || []).map((w, idx) => idx === i ? { ...w, location: e.target.value } : w); updatePage({ recent_wins_items: newItems }); }} placeholder="Location" className="text-xs" />
                         </div>
                       </SortableItem>
                     ))}

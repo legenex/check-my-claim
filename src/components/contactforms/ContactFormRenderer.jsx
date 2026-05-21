@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 
-const DEFAULT_TCPA_TEXT = `By clicking "${label}", you agree to our Terms of Service and Privacy Policy. You may receive calls/texts from us or our partner attorneys at the number provided. Consent is not a condition of purchase. Msg/data rates may apply. <a href="/partners" target="_blank" class="underline">Click here to view a list of our network attorneys.</a>`;
+// DEFAULT_TCPA_TEXT removed - use form.tcpa_text directly
 
 export default function ContactFormRenderer({ formId, quizTheme, onSuccess, onError, urlParams = {} }) {
   const [form, setForm] = useState(null);
