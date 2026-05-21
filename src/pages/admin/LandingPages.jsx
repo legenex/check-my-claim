@@ -6,7 +6,7 @@ import {
   Plus, Search, Edit, Trash2, Copy, ExternalLink, ToggleLeft, ToggleRight,
   Archive, BarChart2, Layout, Sparkles, ChevronDown, Star
 } from "lucide-react";
-import NewLandingPageModal from "@/components/landingpages/NewLandingPageModal";
+import ChooseTemplateModal from "@/components/landingpages/ChooseTemplateModal";
 
 const STATUS_COLORS = {
   published: "bg-green-500/20 text-green-400 border border-green-500/30",
@@ -28,6 +28,7 @@ export default function LandingPages() {
   const [pages, setPages] = useState([]);
   const [brands, setBrands] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
+  const [templates, setTemplates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -40,19 +41,22 @@ export default function LandingPages() {
 
   const fetchData = async () => {
     setLoading(true);
-    const [lps, brandList, quizList] = await Promise.all([
+    const [lps, brandList, quizList, tplList] = await Promise.all([
       base44.entities.LandingPage.list("-updated_date", 200),
       base44.entities.DecisionTreeBrand.list(),
       base44.entities.Quiz.list("-updated_date", 200),
+      base44.entities.LandingPageTemplate.list(),
     ]);
     setPages(lps);
     setBrands(brandList);
     setQuizzes(quizList);
+    setTemplates(tplList);
     setLoading(false);
   };
 
   const brandMap = Object.fromEntries(brands.map(b => [b.id, b]));
   const quizMap = Object.fromEntries(quizzes.map(q => [q.id, q]));
+  const templateMap = Object.fromEntries(templates.map(t => [t.template_key, t]));
 
   const filtered = pages.filter(p => {
     const matchSearch = !search || p.title?.toLowerCase().includes(search.toLowerCase()) || p.slug?.toLowerCase().includes(search.toLowerCase());
@@ -192,9 +196,10 @@ export default function LandingPages() {
                       onChange={e => setSelected(e.target.checked ? filtered.map(p => p.id) : [])} className="rounded" />
                   </th>
                   <th className="px-4 py-3 text-left font-semibold text-white">Title / Slug</th>
+                  <th className="px-4 py-3 text-left font-semibold text-slate-400">Template</th>
                   <th className="px-4 py-3 text-left font-semibold text-slate-400">Campaign</th>
                   <th className="px-4 py-3 text-left font-semibold text-slate-400">Brand</th>
-                  <th className="px-4 py-3 text-left font-semibold text-slate-400">Decision Tree</th>
+                  <th className="px-4 py-3 text-left font-semibold text-slate-400">Embedded Quiz</th>
                   <th className="px-4 py-3 text-left font-semibold text-slate-400">Status</th>
                   <th className="px-4 py-3 text-left font-semibold text-slate-400">v</th>
                   <th className="px-4 py-3 text-left font-semibold text-slate-400">Views</th>
@@ -226,6 +231,16 @@ export default function LandingPages() {
                         <div className="text-slate-500 text-xs mt-0.5">/lp/{page.slug}</div>
                       </td>
                       <td className="px-4 py-3">
+                        {page.template_key ? (
+                          <div className="text-xs">
+                            <div className="font-semibold text-slate-200">{templateMap[page.template_key]?.template_name || page.template_key}</div>
+                            <div className="text-slate-500 text-[10px]">{templateMap[page.template_key]?.embedded_quiz_theme_id ? "Custom quiz theme" : "Default theme"}</div>
+                          </div>
+                        ) : (
+                          <span className="text-xs text-slate-500">—</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3">
                         <span className={`text-xs font-semibold px-2 py-0.5 rounded ${CAMPAIGN_COLORS[page.campaign_type] || CAMPAIGN_COLORS.Custom}`}>
                           {page.campaign_type || "Custom"}
                         </span>
@@ -239,13 +254,18 @@ export default function LandingPages() {
                         ) : "—"}
                       </td>
                       <td className="px-4 py-3">
-                       {quiz ? (
-                         <Link to="/admin/QuizBuilder" className="text-xs text-[#1e90ff] hover:underline truncate block max-w-[120px]">
-                           {quiz.title}
-                         </Link>
-                       ) : (
-                         <span className="text-xs text-red-400">⚠ Not set</span>
-                       )}
+                        {quiz ? (
+                          <div className="text-xs">
+                            <Link to={`/admin/QuizBuilder/${quiz.id}`} className="text-[#1e90ff] hover:underline truncate block max-w-[150px]">
+                              {quiz.title}
+                            </Link>
+                            {page.embedded_quiz_theme_id && (
+                              <div className="text-slate-500 text-[10px] mt-0.5">Theme: Custom</div>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-xs text-red-400">⚠ Not set</span>
+                        )}
                       </td>
                       <td className="px-4 py-3">
                         <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${STATUS_COLORS[page.status] || STATUS_COLORS.draft}`}>
@@ -293,9 +313,9 @@ export default function LandingPages() {
       )}
 
       {showNewModal && (
-        <NewLandingPageModal
+        <ChooseTemplateModal
           onClose={() => setShowNewModal(false)}
-          onCreated={(id) => navigate(`/admin/LandingPages/${id}/edit`)}
+          onTemplateChoose={(id) => navigate(`/admin/LandingPages/${id}/edit`)}
           existingPages={pages}
         />
       )}

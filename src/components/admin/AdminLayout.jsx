@@ -20,6 +20,7 @@ const navItems = [
   { label: "ClaimBot", icon: Bot, path: "/admin/claimbot" },
   { label: "Experiments", icon: Beaker, path: "/admin/experiments" },
   { label: "Quiz Builder", icon: ClipboardList, path: "/admin/QuizBuilder" },
+  { label: "Contact Forms", icon: ClipboardList, path: "/admin/ContactForms" },
   { label: "Themes", icon: Palette, path: "/admin/Themes" },
   { label: "Landing Pages", icon: Layout, path: "/admin/LandingPages" },
   { label: "Integrations", icon: Puzzle, path: "/admin/integrations" },

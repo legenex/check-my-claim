@@ -15,6 +15,8 @@ export default function LandingPagePublic() {
   const { slug } = useParams();
   const [page, setPage] = useState(null);
   const [brand, setBrand] = useState(null);
+  const [template, setTemplate] = useState(null);
+  const [quizTheme, setQuizTheme] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
@@ -43,6 +45,19 @@ export default function LandingPagePublic() {
           view_count: (p.view_count || 0) + 1,
           unique_visitors: (p.unique_visitors || 0) + 1,
         }).catch(() => {});
+      }
+
+      // Load template if template_key exists
+      if (p.template_key) {
+        const ts = await base44.entities.LandingPageTemplate.filter({ template_key: p.template_key });
+        if (ts.length) setTemplate(ts[0]);
+      }
+
+      // Load quiz theme (from page override or template default)
+      const themeId = p.embedded_quiz_theme_id || (template?.embedded_quiz_theme_id || null);
+      if (themeId) {
+        const ths = await base44.entities.QuizTheme.filter({ id: themeId });
+        if (ths.length) setQuizTheme(ths[0]);
       }
 
       // Load brand
@@ -151,17 +166,17 @@ export default function LandingPagePublic() {
 
           {/* Embedded quiz card */}
           <div style={{
-            background: "#ffffff",
-            borderRadius: 16,
-            padding: "32px",
-            border: "2px solid #ffd700",
-            boxShadow: "0 0 40px rgba(255,215,0,0.3), 0 0 80px rgba(30,144,255,0.2), 0 30px 60px rgba(0,0,0,0.6)",
+            background: quizTheme?.card_background_color || "#ffffff",
+            borderRadius: quizTheme?.card_border_radius || 16,
+            padding: quizTheme?.card_padding_desktop || "32px",
+            border: quizTheme?.border_color ? `2px solid ${quizTheme.border_color}` : "2px solid #ffd700",
+            boxShadow: quizTheme?.border_glow_shadow || "0 0 40px rgba(255,215,0,0.3), 0 0 80px rgba(30,144,255,0.2), 0 30px 60px rgba(0,0,0,0.6)",
             maxWidth: 720,
             margin: "0 auto 32px",
             textAlign: "left",
           }}>
             {page.quiz_id ? (
-              <QuizRuntimeEmbedded quizId={page.quiz_id} onFirstInteraction={onQuizStart} />
+              <QuizRuntimeEmbedded quizId={page.quiz_id} onFirstInteraction={onQuizStart} quizThemeId={page.embedded_quiz_theme_id || template?.embedded_quiz_theme_id} />
             ) : (
               <div style={{ textAlign: "center", padding: "40px 20px", background: "#fff8f0", borderRadius: 12, border: "1px solid #fed7aa" }}>
                 <p style={{ fontWeight: 700, color: "#92400e", marginBottom: 8 }}>This page is temporarily unavailable.</p>
