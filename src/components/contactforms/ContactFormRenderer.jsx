@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { shouldSkipTrustedForm } from "@/utils/geoGate";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,6 +36,7 @@ export default function ContactFormRenderer({ formId, quizTheme, onSuccess, onEr
 
   useEffect(() => {
     if (!form?.trustedform_enabled) return;
+    if (shouldSkipTrustedForm()) return;
     const fieldId = form.trustedform_field_id || "xxTrustedFormCertUrl";
     const script = document.createElement("script");
     script.src = "https://api.trustedform.com/t.js";

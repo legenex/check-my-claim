@@ -37,7 +37,7 @@ export default function BoldModernRenderer({ landingPage, template, brand, quizT
   const renderSection = (sectionKey) => {
     switch (sectionKey) {
       case "sticky_header": return <Header landingPage={landingPage} brand={brand} />;
-      case "hero": return <Hero landingPage={landingPage} quizTheme={quizTheme} quiz={quiz} isPreview={isPreview} />;
+      case "hero": return <Hero key="hero" landingPage={landingPage} quizTheme={quizTheme} quiz={quiz} isPreview={isPreview} onQuizStart={onQuizStart} />;
       case "phone_cta_banner": return <PhoneCTABanner landingPage={landingPage} />;
       case "trust_pillars": return <TrustPillars landingPage={landingPage} />;
       case "benefits": return <Benefits landingPage={landingPage} />;
@@ -109,7 +109,7 @@ function Header({ landingPage, brand }) {
   );
 }
 
-function Hero({ landingPage, quizTheme, quiz, isPreview }) {
+function Hero({ landingPage, quizTheme, quiz, isPreview, onQuizStart }) {
   return (
     <section className="px-6 py-12 md:py-16 max-w-[1400px] mx-auto">
       <div className="grid lg:grid-cols-12 gap-8 md:gap-12">

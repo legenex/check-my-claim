@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { shouldSkipTrustedForm } from "@/utils/geoGate";
 import { useParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { captureIncomingParams } from "@/lib/surveyUrl";
@@ -80,6 +81,7 @@ export default function LandingPagePublic() {
       if (pixels.meta_pixel_id) injectMetaPixel(pixels.meta_pixel_id);
       if (pixels.taboola_pixel_id) injectTaboolaPixel(pixels.taboola_pixel_id);
       if (pixels.google_analytics_id) injectGA(pixels.google_analytics_id);
+      if (pixels.trustedform_field_id && !shouldSkipTrustedForm()) injectTrustedForm();
     } catch (e) {
       setNotFound(true);
     }
@@ -454,6 +456,14 @@ function ClassicRenderer({ page, brand, quizTheme, template, phone, telNum, quiz
 
 
 
+function injectTrustedForm() {
+  if (document.getElementById("tf-lp")) return;
+  const s = document.createElement("script");
+  s.id = "tf-lp";
+  s.src = "https://api.trustedform.com/t.js";
+  s.async = true;
+  document.body.appendChild(s);
+}
 function injectMetaPixel(pixelId) {
   if (!pixelId || document.getElementById("meta-pixel-lp")) return;
   const s = document.createElement("script");
