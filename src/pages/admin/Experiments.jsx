@@ -6,6 +6,7 @@ import {
   Plus, Eye, Edit, Trash2, Copy, ExternalLink, Search,
   ToggleLeft, ToggleRight, Sparkles, ChevronDown
 } from "lucide-react";
+import ToolsTab from "@/components/admin/tools/ToolsTab";
 
 const STATUS_COLORS = {
   published: "bg-green-500/20 text-green-400",
@@ -36,6 +37,7 @@ const EXPERIMENT_TEMPLATES = [
 const CATEGORIES = ["All", "Estimator", "Simulator", "Analyzer", "Calculator", "Countdown", "Predictor", "Generator", "Map", "Community", "Ticker", "Other"];
 
 export default function Experiments() {
+  const [mainTab, setMainTab] = useState("Experiments");
   const [experiments, setExperiments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -153,6 +155,19 @@ export default function Experiments() {
 
   return (
     <AdminLayout title="Experiments" breadcrumbs={[{ label: "Admin", href: "/admin" }, { label: "Experiments" }]}>
+      {/* Main tab switcher */}
+      <div className="flex gap-1 border-b border-white/10 mb-6">
+        {["Experiments", "Tools"].map(t => (
+          <button key={t} onClick={() => setMainTab(t)}
+            className={`px-5 py-2.5 text-sm font-semibold transition-colors ${mainTab === t ? "text-white border-b-2 border-[#1e90ff]" : "text-slate-400 hover:text-white"}`}>
+            {t}
+          </button>
+        ))}
+      </div>
+
+      {mainTab === "Tools" && <ToolsTab />}
+      {mainTab === "Experiments" && <>
+
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -320,6 +335,7 @@ export default function Experiments() {
           </div>
         </div>
       )}
+      </>}
     </AdminLayout>
   );
 }

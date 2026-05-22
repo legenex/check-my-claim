@@ -39,6 +39,9 @@ import ThemesList from './pages/admin/ThemesList';
 import ThemeEditor from './pages/admin/ThemeEditor';
 import ContactForms from './pages/admin/ContactForms';
 import ContactFormEditor from './pages/admin/ContactFormEditor';
+import AttorneyMatchPage from './pages/tools/AttorneyMatchPage';
+import ToolsIndex from './pages/tools/ToolsIndex';
+import ToolEditor from './pages/admin/ToolEditor';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -127,6 +130,10 @@ const AuthenticatedApp = () => {
       <Route path="/admin/ContactForms" element={<AdminRouteGuard><ContactForms /></AdminRouteGuard>} />
       <Route path="/admin/ContactForms/:id/edit" element={<ContactFormEditor />} />
       <Route path="/lp/:slug" element={<LandingPagePublic />} />
+      <Route path="/tools/attorney-match" element={<AttorneyMatchPage />} />
+      <Route path="/tools" element={<ToolsIndex />} />
+      <Route path="/admin/tools/new" element={<AdminRouteGuard><ToolEditor /></AdminRouteGuard>} />
+      <Route path="/admin/tools/:id/edit" element={<AdminRouteGuard><ToolEditor /></AdminRouteGuard>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
