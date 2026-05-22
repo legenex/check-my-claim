@@ -1,0 +1,67 @@
+{
+  "name": "SurveySession",
+  "type": "object",
+  "description": "One user's run-through of a survey.",
+  "properties": {
+    "survey_id": {
+      "type": "string",
+      "description": "FK to Survey"
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Unique per-session identifier"
+    },
+    "tier_assigned": {
+      "type": "string"
+    },
+    "field_values": {
+      "type": "object",
+      "description": "{ key: value } map of all collected field values"
+    },
+    "current_step_id": {
+      "type": "string"
+    },
+    "completed": {
+      "type": "boolean",
+      "default": false
+    },
+    "dq_routed": {
+      "type": "boolean",
+      "default": false
+    },
+    "attribution": {
+      "type": "object",
+      "description": "{ utm_source, utm_medium, utm_campaign, utm_content, utm_term, fbclid, gclid, ttclid }"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "abandoned_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "survey_id",
+    "session_id"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

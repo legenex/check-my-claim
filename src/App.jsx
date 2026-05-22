@@ -39,6 +39,8 @@ import ThemesList from './pages/admin/ThemesList';
 import ThemeEditor from './pages/admin/ThemeEditor';
 import ContactForms from './pages/admin/ContactForms';
 import ContactFormEditor from './pages/admin/ContactFormEditor';
+import Surveys from './pages/admin/Surveys';
+import SurveyEdit from './pages/admin/SurveyEdit';
 import AttorneyMatchPage from './pages/tools/AttorneyMatchPage';
 import ToolsIndex from './pages/tools/ToolsIndex';
 import ToolEditor from './pages/admin/ToolEditor';
@@ -117,6 +119,8 @@ const AuthenticatedApp = () => {
       <Route path="/advertorial/:slug" element={<AdvertorialPage />} />
       <Route path="/tools/*" element={<ExperimentPage />} />
       <Route path="/community/*" element={<ExperimentPage />} />
+      <Route path="/admin/Surveys" element={<AdminRouteGuard><Surveys /></AdminRouteGuard>} />
+      <Route path="/admin/Surveys/Edit" element={<AdminRouteGuard><SurveyEdit /></AdminRouteGuard>} />
       <Route path="/admin/QuizBuilder" element={<AdminRouteGuard><QuizBuilderList /></AdminRouteGuard>} />
       <Route path="/admin/QuizBuilder/:id" element={<AdminRouteGuard><QuizBuilderEditor /></AdminRouteGuard>} />
       <Route path="/admin/DecisionTrees" element={<AdminRouteGuard><QuizBuilderList /></AdminRouteGuard>} />

@@ -1,0 +1,50 @@
+{
+  "name": "SurveyEvent",
+  "type": "object",
+  "description": "Analytics events fired during a survey session.",
+  "properties": {
+    "survey_id": {
+      "type": "string"
+    },
+    "session_id": {
+      "type": "string"
+    },
+    "event_name": {
+      "type": "string",
+      "description": "survey_start, step_view, step_submit, field_value_set, tier_assigned, survey_complete, survey_dq, etc."
+    },
+    "payload": {
+      "type": "object"
+    },
+    "step_id": {
+      "type": "string"
+    },
+    "fired_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "survey_id",
+    "session_id",
+    "event_name"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

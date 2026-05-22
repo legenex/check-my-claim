@@ -1,0 +1,111 @@
+{
+  "name": "Survey",
+  "type": "object",
+  "description": "Top-level container for a tiered survey funnel.",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL-safe unique identifier"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "published",
+        "archived"
+      ],
+      "default": "draft"
+    },
+    "description": {
+      "type": "string"
+    },
+    "vertical": {
+      "type": "string",
+      "default": "mva"
+    },
+    "start_step_id": {
+      "type": "string"
+    },
+    "step_order": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Ordered array of SurveyStep IDs defining flow"
+    },
+    "tiers_active": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "shared",
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "dq"
+      ]
+    },
+    "theme_id": {
+      "type": "string",
+      "description": "FK to SurveyTheme"
+    },
+    "lookup_config": {
+      "type": "object",
+      "description": "JSON: url, method, headers, field_mappings, tier_selector_map"
+    },
+    "dq_config": {
+      "type": "object",
+      "description": "JSON: form_fields, submit_url"
+    },
+    "scripts": {
+      "type": "object",
+      "description": "JSON: onStart, onStepChange, onComplete, onAbandon, listeners array"
+    },
+    "tracking_config": {
+      "type": "object",
+      "description": "JSON: per-tier pixel config \u2014 t1, t2, t3, t4, default \u2014 each with meta_pixel_id, meta_capi_token, gtm_id, tiktok_pixel, custom_snippet"
+    },
+    "integrations_config": {
+      "type": "object",
+      "description": "JSON: leadbyte_endpoint, ringba_forward, webhooks array"
+    },
+    "slug_redirects": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "name",
+    "slug",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

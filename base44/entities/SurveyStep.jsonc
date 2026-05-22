@@ -1,0 +1,180 @@
+{
+  "name": "SurveyStep",
+  "type": "object",
+  "description": "Individual node in a survey flow.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Stable client-generated ID, e.g. s_state"
+    },
+    "survey_id": {
+      "type": "string",
+      "description": "FK to Survey"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "shared",
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "dq"
+      ],
+      "default": "shared"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "welcome",
+        "single_select",
+        "multi_select",
+        "text_input",
+        "number_input",
+        "email_input",
+        "phone_input",
+        "date_input",
+        "smart_date",
+        "address_input",
+        "yes_no",
+        "lookup",
+        "decision",
+        "script",
+        "results",
+        "end_dq",
+        "custom_page",
+        "transition",
+        "webhook_send"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "helper_text": {
+      "type": "string"
+    },
+    "content_html": {
+      "type": "string",
+      "description": "Sanitized rich HTML, optional"
+    },
+    "hide_title": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, content_html is the only header"
+    },
+    "save_to_field": {
+      "type": "string",
+      "description": "SurveyField.key \u2014 primary field this step writes"
+    },
+    "required": {
+      "type": "boolean",
+      "default": false
+    },
+    "auto_advance": {
+      "type": "boolean",
+      "default": false
+    },
+    "display_mode": {
+      "type": "string",
+      "enum": [
+        "buttons",
+        "cards",
+        "dropdown",
+        "searchable"
+      ],
+      "default": "buttons"
+    },
+    "inherit_options_from_field": {
+      "type": "boolean",
+      "default": true
+    },
+    "custom_options": {
+      "type": "array",
+      "description": "Array of { value, label, icon, writes: [{field, value}] }",
+      "items": {
+        "type": "object"
+      }
+    },
+    "hidden_options": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Values to hide from inherited options"
+    },
+    "option_field_writes": {
+      "type": "object",
+      "description": "Map optionValue -> [{field, value}] for per-answer multi-field writes"
+    },
+    "validation": {
+      "type": "object",
+      "description": "JSON: regex, minLength, maxLength, min, max"
+    },
+    "branching_mode": {
+      "type": "string",
+      "enum": [
+        "none",
+        "by_answer",
+        "by_variable",
+        "by_lookup_field",
+        "by_script"
+      ],
+      "default": "none"
+    },
+    "branching_rules": {
+      "type": "array",
+      "description": "Array of { condition, target_step_id, set_tier, set_field }",
+      "items": {
+        "type": "object"
+      }
+    },
+    "else_target_step_id": {
+      "type": "string"
+    },
+    "else_set_tier": {
+      "type": "string"
+    },
+    "variants": {
+      "type": "object",
+      "description": "Per-tier overrides: { t1: { title_override, helper_override, content_override, hidden_options, branching_override, skip_for_tier }, ... }"
+    },
+    "scripts": {
+      "type": "object",
+      "description": "{ onEnter, onSubmit, onExit }"
+    },
+    "tracking_overrides": {
+      "type": "object",
+      "description": "{ events_to_fire, custom_payload }"
+    },
+    "lookup_config": {
+      "type": "object",
+      "description": "Only for type=lookup steps"
+    }
+  },
+  "required": [
+    "survey_id",
+    "type"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
