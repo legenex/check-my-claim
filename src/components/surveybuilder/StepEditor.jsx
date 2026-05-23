@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Copy, Star, Trash2, ChevronDown, ChevronUp, AlertTriangle, Check } from "lucide-react";
-import { TIER_META, SMART_DATE_BANDS, LOOKUP_MOCK_RESPONSE, CTX_API_DOCS } from "./constants";
+import { Copy, Star, Trash2, ChevronDown, ChevronUp, AlertTriangle, Check, Loader2 } from "lucide-react";
+import { TIER_META, SMART_DATE_BANDS, CTX_API_DOCS } from "./constants";
 import RichTextEditor from "./RichTextEditor";
 import OptionsConfig from "./OptionsConfig";
 import VariantsSection from "./VariantsSection";
@@ -34,6 +34,8 @@ export default function StepEditor({ step, steps, fields, surveyId, onChange, on
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [copyIdDone, setCopyIdDone] = useState(false);
   const [lookupTestResult, setLookupTestResult] = useState(null);
+  const [lookupTesting, setLookupTesting] = useState(false);
+  const [lookupTestState, setLookupTestState] = useState("Arizona");
 
   if (!step) return (
     <div className="flex-1 flex items-center justify-center p-8">
@@ -49,8 +51,19 @@ export default function StepEditor({ step, steps, fields, surveyId, onChange, on
     navigator.clipboard.writeText(step.id || "").then(() => { setCopyIdDone(true); setTimeout(() => setCopyIdDone(false), 1500); });
   };
 
-  const testLookup = () => {
-    setLookupTestResult({ status: 200, data: LOOKUP_MOCK_RESPONSE, note: "Mock response. Real HTTP call comes in Phase 3." });
+  const testLookup = async () => {
+    setLookupTesting(true);
+    setLookupTestResult(null);
+    try {
+      const url = (step.lookup_config?.url || "").replace("{fields.accident_state}", encodeURIComponent(lookupTestState));
+      const res = await fetch(url);
+      const data = await res.json();
+      setLookupTestResult({ status: res.status, data });
+    } catch (e) {
+      setLookupTestResult({ status: "error", data: null, error: e.message });
+    } finally {
+      setLookupTesting(false);
+    }
   };
 
   const isSingleOrMulti = ["single_select","multi_select"].includes(step.type);
@@ -231,22 +244,51 @@ export default function StepEditor({ step, steps, fields, surveyId, onChange, on
                 <input value={(step.lookup_config?.url) || ""} onChange={e => onChange({ lookup_config: { ...(step.lookup_config || {}), url: e.target.value } })} className={inp} style={{ ...inpStyle, fontFamily: "'JetBrains Mono', monospace", fontSize: 11 }} />
               </div>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 flex-wrap">
+              <select value={lookupTestState} onChange={e => setLookupTestState(e.target.value)} className="px-2 py-1.5 rounded text-xs text-white outline-none cursor-pointer" style={{ background: "#050b14", border: "1px solid rgba(255,255,255,0.1)", fontFamily: "'Manrope', sans-serif" }}>
+                {["Alabama","Alaska","Arizona","California","Colorado","Florida","Georgia","Illinois","New York","Texas"].map(s => <option key={s} value={s}>{s}</option>)}
+              </select>
               <button
                 onClick={testLookup}
-                className="px-3 py-1.5 rounded text-xs font-semibold transition-colors"
-                style={{ background: "rgba(34,130,252,0.15)", color: "#2282fc", border: "1px solid rgba(34,130,252,0.3)" }}
+                disabled={lookupTesting}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-semibold transition-colors"
+                style={{ background: "rgba(34,130,252,0.15)", color: "#2282fc", border: "1px solid rgba(34,130,252,0.3)", opacity: lookupTesting ? 0.6 : 1 }}
               >
-                Test Request (mock)
+                {lookupTesting && <Loader2 className="w-3 h-3 animate-spin" />}
+                {lookupTesting ? "Fetching..." : "Test Request"}
               </button>
-              {lookupTestResult && (
-                <span className="text-xs text-[#3ab54b] font-mono">HTTP {lookupTestResult.status} — {lookupTestResult.note}</span>
+              {lookupTestResult && !lookupTestResult.error && (
+                <span className="text-xs text-[#3ab54b] font-mono">HTTP {lookupTestResult.status}</span>
+              )}
+              {lookupTestResult?.error && (
+                <span className="text-xs text-red-400 font-mono">{lookupTestResult.error}</span>
               )}
             </div>
-            {lookupTestResult && (
-              <pre className="text-xs font-mono text-slate-300 rounded p-3 overflow-auto max-h-40" style={{ background: "#050b14", border: "1px solid rgba(255,255,255,0.08)" }}>
-                {JSON.stringify(lookupTestResult.data, null, 2)}
-              </pre>
+            {lookupTestResult?.data && (
+              <>
+                <pre className="text-xs font-mono text-slate-300 rounded p-3 overflow-auto max-h-40" style={{ background: "#050b14", border: "1px solid rgba(255,255,255,0.08)" }}>
+                  {JSON.stringify(lookupTestResult.data, null, 2)}
+                </pre>
+                {(step.lookup_config?.field_mappings || []).length > 0 && (
+                  <div className="mt-2 space-y-1">
+                    <div className="text-xs text-slate-500 font-mono">Mappings:</div>
+                    {(step.lookup_config.field_mappings).map((m, i) => {
+                      const val = lookupTestResult.data[m.property];
+                      return (
+                        <div key={i} className="flex items-center gap-2 text-xs font-mono">
+                          <span style={{ color: "#64748b" }}>{m.property}</span>
+                          <span style={{ color: "#475569" }}>→</span>
+                          <span style={{ color: "#2282fc" }}>{m.field}</span>
+                          <span style={{ color: "#475569" }}>:</span>
+                          <span style={{ color: val !== undefined ? "#3ab54b" : "#ef4444" }}>
+                            {val !== undefined ? JSON.stringify(val) : "not found"}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}

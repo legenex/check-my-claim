@@ -5,7 +5,7 @@ import { TIER_META } from "./constants";
 
 const TABS = ["Editor", "Flow", "Settings", "Templates"];
 
-export default function SurveyTopBar({ survey, steps, fields, theme, activeTab, onTabChange, onTitleChange, onPublish, saveState, savedLabel }) {
+export default function SurveyTopBar({ survey, steps, fields, theme, activeTab, onTabChange, onTitleChange, onPublish, saveState, savedLabel, onPreview }) {
   const [editingTitle, setEditingTitle] = useState(false);
   const [localTitle, setLocalTitle] = useState(survey?.name || "");
   const inputRef = useRef(null);
@@ -103,7 +103,7 @@ export default function SurveyTopBar({ survey, steps, fields, theme, activeTab, 
 
       {/* Preview */}
       <button
-        onClick={() => alert("Preview coming in Phase 3.")}
+        onClick={onPreview}
         className="mr-2 flex-shrink-0 flex items-center gap-1.5 text-sm font-semibold px-3 py-1.5 rounded border border-[#2282fc]/40 hover:border-[#2282fc] transition-colors"
         style={{ color: "#2282fc", fontFamily: "'Manrope', sans-serif" }}
       >

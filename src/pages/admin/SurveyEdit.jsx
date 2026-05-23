@@ -6,18 +6,13 @@ import StepRail from "@/components/surveybuilder/StepRail";
 import StepEditor from "@/components/surveybuilder/StepEditor";
 import StepInspector from "@/components/surveybuilder/StepInspector";
 import AddStepModal from "@/components/surveybuilder/AddStepModal";
+import FlowCanvas from "@/components/surveybuilder/FlowCanvas";
+import FlowOverviewPanel from "@/components/surveybuilder/FlowOverviewPanel";
+import SettingsPanel from "@/components/surveybuilder/SettingsPanel";
+import TemplatesPanel from "@/components/surveybuilder/TemplatesPanel";
+import PreviewOverlay from "@/components/surveybuilder/PreviewOverlay";
 import { useAutosave } from "@/components/surveybuilder/useAutosave";
 import { useValidation } from "@/components/surveybuilder/useValidation";
-
-const PHASE3_PLACEHOLDER = (
-  <div className="flex-1 flex items-center justify-center" style={{ background: "#050b14" }}>
-    <div className="text-center">
-      <div className="text-3xl mb-3">🚧</div>
-      <div className="font-semibold text-white mb-2" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>Phase 3 coming next</div>
-      <div className="text-slate-500 text-sm">This section will be built in Phase 3.</div>
-    </div>
-  </div>
-);
 
 export default function SurveyEdit() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -31,6 +26,7 @@ export default function SurveyEdit() {
   const [activeTab, setActiveTab] = useState("Editor");
   const [activeStepId, setActiveStepId] = useState(null);
   const [showAddModal, setShowAddModal] = useState(null);
+  const [showPreview, setShowPreview] = useState(false);
 
   const { save, saveStep, saveState, savedLabel } = useAutosave();
   const errors = useValidation(survey, steps, fields);
@@ -143,9 +139,15 @@ export default function SurveyEdit() {
     updateSurvey({ name });
   }, [updateSurvey]);
 
-  // Field created inline
+  // Field CRUD
   const handleFieldCreated = useCallback((field) => {
     setFields(prev => [...prev, field]);
+  }, []);
+  const handleFieldUpdated = useCallback((field) => {
+    setFields(prev => prev.map(f => f.id === field.id ? field : f));
+  }, []);
+  const handleFieldDeleted = useCallback((fieldId) => {
+    setFields(prev => prev.filter(f => f.id !== fieldId));
   }, []);
 
   if (loading) {
@@ -187,11 +189,12 @@ export default function SurveyEdit() {
         onPublish={handlePublish}
         saveState={saveState}
         savedLabel={savedLabel}
+        onPreview={() => setShowPreview(true)}
       />
 
-      {/* Main 3-column area */}
+      {/* Main area */}
       <div className="flex flex-1 overflow-hidden">
-        {activeTab === "Editor" ? (
+        {activeTab === "Editor" && (
           <>
             {/* Left rail */}
             <div style={{ width: 280, flexShrink: 0 }}>
@@ -206,7 +209,7 @@ export default function SurveyEdit() {
             </div>
 
             {/* Center: step editor */}
-            <div className="flex-1 overflow-hidden border-l border-r border-white/7" style={{ borderColor: "rgba(255,255,255,0.07)" }}>
+            <div className="flex-1 overflow-hidden" style={{ borderLeft: "1px solid rgba(255,255,255,0.07)", borderRight: "1px solid rgba(255,255,255,0.07)" }}>
               <StepEditor
                 step={activeStep}
                 steps={steps}
@@ -235,7 +238,47 @@ export default function SurveyEdit() {
               />
             </div>
           </>
-        ) : PHASE3_PLACEHOLDER}
+        )}
+
+        {activeTab === "Flow" && (
+          <>
+            <div className="flex-1 overflow-hidden">
+              <FlowCanvas
+                survey={survey}
+                steps={steps}
+                activeStepId={activeStepId}
+                onSelectStep={(stepId) => {
+                  setActiveStepId(stepId);
+                  setActiveTab("Editor");
+                }}
+              />
+            </div>
+            <div style={{ width: 300, flexShrink: 0, background: "#0a1320", borderLeft: "1px solid rgba(255,255,255,0.07)", overflow: "hidden", display: "flex", flexDirection: "column" }}>
+              <FlowOverviewPanel survey={survey} steps={steps} fields={fields} errors={errors} />
+            </div>
+          </>
+        )}
+
+        {activeTab === "Settings" && (
+          <div className="flex-1 overflow-hidden">
+            <SettingsPanel
+              survey={survey}
+              steps={steps}
+              fields={fields}
+              theme={theme}
+              onSurveyChange={updateSurvey}
+              onFieldCreated={handleFieldCreated}
+              onFieldUpdated={handleFieldUpdated}
+              onFieldDeleted={handleFieldDeleted}
+            />
+          </div>
+        )}
+
+        {activeTab === "Templates" && (
+          <div className="flex-1 overflow-hidden flex flex-col" style={{ background: "#050b14" }}>
+            <TemplatesPanel surveyId={id} />
+          </div>
+        )}
       </div>
 
       {/* Status bar */}
@@ -255,6 +298,17 @@ export default function SurveyEdit() {
         <AddStepModal
           onAdd={handleAddStep}
           onClose={() => setShowAddModal(false)}
+        />
+      )}
+
+      {/* Preview overlay */}
+      {showPreview && (
+        <PreviewOverlay
+          survey={survey}
+          steps={steps}
+          fields={fields}
+          theme={theme}
+          onClose={() => setShowPreview(false)}
         />
       )}
     </div>

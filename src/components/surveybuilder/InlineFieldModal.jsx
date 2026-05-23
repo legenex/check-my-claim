@@ -12,8 +12,13 @@ function slugify(str) {
 const inp = "w-full px-3 py-2 rounded text-sm text-white outline-none";
 const inpStyle = { background: "#050b14", border: "1px solid rgba(255,255,255,0.1)", fontFamily: "'Manrope', sans-serif" };
 
-export default function InlineFieldModal({ onCreated, onClose, existingKeys }) {
-  const [form, setForm] = useState({
+export default function InlineFieldModal({ onCreated, onClose, existingKeys, field, onUpdated }) {
+  const isEdit = !!field;
+  const [form, setForm] = useState(isEdit ? {
+    key: field.key || "", label: field.label || "", type: field.type || "text", category: field.category || "qualify",
+    description: field.description || "", default_value: field.default_value || "", computed: !!field.computed,
+    allowed_values: field.allowed_values || [],
+  } : {
     key: "", label: "", type: "text", category: "qualify",
     description: "", default_value: "", computed: false,
     allowed_values: [],
@@ -39,20 +44,21 @@ export default function InlineFieldModal({ onCreated, onClose, existingKeys }) {
   const save = async () => {
     if (!form.key) { setError("Key is required."); return; }
     if (!form.label) { setError("Label is required."); return; }
-    if ((existingKeys || []).includes(form.key)) { setError(`Key "${form.key}" already exists.`); return; }
+    if (!isEdit && (existingKeys || []).includes(form.key)) { setError(`Key "${form.key}" already exists.`); return; }
     setSaving(true);
     try {
-      const created = await base44.entities.SurveyField.create({
-        key: form.key,
-        label: form.label,
-        type: form.type,
-        category: form.category,
-        description: form.description,
-        default_value: form.default_value,
-        computed: form.computed,
+      const payload = {
+        key: form.key, label: form.label, type: form.type, category: form.category,
+        description: form.description, default_value: form.default_value, computed: form.computed,
         allowed_values: form.type === "enum" ? form.allowed_values : [],
-      });
-      onCreated(created);
+      };
+      if (isEdit) {
+        const updated = await base44.entities.SurveyField.update(field.id, payload);
+        if (onUpdated) onUpdated({ ...field, ...payload });
+      } else {
+        const created = await base44.entities.SurveyField.create(payload);
+        if (onCreated) onCreated(created);
+      }
       onClose();
     } catch (e) {
       setError(e.message || "Save failed.");
@@ -68,7 +74,7 @@ export default function InlineFieldModal({ onCreated, onClose, existingKeys }) {
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
-          <span style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 700, fontSize: 15, color: "#fff" }}>Create New Field</span>
+          <span style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 700, fontSize: 15, color: "#fff" }}>{isEdit ? "Edit Field" : "Create New Field"}</span>
           <button onClick={onClose}><X className="w-4 h-4 text-slate-500 hover:text-white" /></button>
         </div>
         <div className="overflow-y-auto p-5 space-y-3">
@@ -131,7 +137,7 @@ export default function InlineFieldModal({ onCreated, onClose, existingKeys }) {
         <div className="px-5 py-3 border-t border-white/10 flex justify-end gap-3">
           <button onClick={onClose} className="px-4 py-2 rounded text-sm text-slate-400 hover:text-white" style={{ fontFamily: "'Manrope', sans-serif" }}>Cancel</button>
           <button onClick={save} disabled={saving} className="px-4 py-2 rounded text-sm font-bold text-white transition-colors" style={{ background: "#2282fc", fontFamily: "'Manrope', sans-serif" }}>
-            {saving ? "Creating..." : "Create Field"}
+            {saving ? (isEdit ? "Saving..." : "Creating...") : (isEdit ? "Save Changes" : "Create Field")}
           </button>
         </div>
       </div>
