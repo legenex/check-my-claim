@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { base44 } from "@/api/base44Client";
-import { Plus, Edit, Globe, Copy, Trash2, Eye, Sparkles } from "lucide-react";
+import { Plus, Edit, Globe, Copy, Trash2, Eye, Sparkles, Wrench } from "lucide-react";
 import SurveySeeder from "@/components/surveybuilder/SurveySeeder";
+import Phase6Patcher from "@/components/surveybuilder/Phase6Patcher";
 
 const STATUS_COLORS = {
   published: "bg-green-500/20 text-green-400",
@@ -16,6 +17,7 @@ export default function SurveyBuilder() {
   const [loading, setLoading] = useState(true);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [showSeeder, setShowSeeder] = useState(false);
+  const [showPatcher, setShowPatcher] = useState(false);
 
   useEffect(() => { load(); }, []);
 
@@ -79,6 +81,9 @@ export default function SurveyBuilder() {
           <p className="text-slate-400 text-sm mt-1">MVA funnel surveys with tier routing, DQ-at-end, and webhook fan-out.</p>
         </div>
         <div className="flex gap-2">
+          <button onClick={() => setShowPatcher(v => !v)} className="flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white font-semibold px-4 py-2.5 rounded-lg text-sm transition-all">
+            <Wrench className="w-4 h-4" /> Patch Phase 6
+          </button>
           <button onClick={() => setShowSeeder(v => !v)} className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold px-4 py-2.5 rounded-lg text-sm transition-all">
             <Sparkles className="w-4 h-4" /> Seed Phase 6
           </button>
@@ -87,6 +92,12 @@ export default function SurveyBuilder() {
           </button>
         </div>
       </div>
+
+      {showPatcher && (
+        <div className="mb-6">
+          <Phase6Patcher onComplete={() => { setShowPatcher(false); setTimeout(load, 500); }} />
+        </div>
+      )}
 
       {showSeeder && (
         <div className="mb-6">

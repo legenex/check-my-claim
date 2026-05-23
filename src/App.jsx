@@ -3,7 +3,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import NavigationTracker from '@/lib/NavigationTracker'
 import { pagesConfig } from './pages.config'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import AdminDashboard from './pages/admin/Dashboard';
@@ -116,10 +116,18 @@ const AuthenticatedApp = () => {
       <Route path="/advertorial/:slug" element={<AdvertorialPage />} />
       <Route path="/tools/*" element={<ExperimentPage />} />
       <Route path="/community/*" element={<ExperimentPage />} />
-      <Route path="/admin/QuizBuilder" element={<AdminRouteGuard><QuizBuilderList /></AdminRouteGuard>} />
-      <Route path="/admin/QuizBuilder/:id" element={<AdminRouteGuard><QuizBuilderEditor /></AdminRouteGuard>} />
-      <Route path="/admin/DecisionTrees" element={<AdminRouteGuard><QuizBuilderList /></AdminRouteGuard>} />
-      <Route path="/admin/DecisionTrees/:id/builder" element={<AdminRouteGuard><QuizBuilderList /></AdminRouteGuard>} />
+      {/* Survey Builder - main admin route */}
+      <Route path="/admin/QuizBuilder" element={<AdminRouteGuard><SurveyBuilder /></AdminRouteGuard>} />
+      <Route path="/admin/QuizBuilder/:id" element={<AdminRouteGuard><SurveyBuilderEditor /></AdminRouteGuard>} />
+      {/* Legacy quiz builder routes - preserved for old quiz data */}
+      <Route path="/admin/QuizBuilderLegacy" element={<AdminRouteGuard><QuizBuilderList /></AdminRouteGuard>} />
+      <Route path="/admin/QuizBuilderLegacy/:id" element={<AdminRouteGuard><QuizBuilderEditor /></AdminRouteGuard>} />
+      {/* Redirects */}
+      <Route path="/admin/SurveyBuilder" element={<Navigate to="/admin/QuizBuilder" replace />} />
+      <Route path="/admin/SurveyBuilder/:id" element={<AdminRouteGuard><SurveyBuilderEditor /></AdminRouteGuard>} />
+      <Route path="/admin/Surveys" element={<Navigate to="/admin/QuizBuilder" replace />} />
+      <Route path="/admin/DecisionTrees" element={<Navigate to="/admin/QuizBuilder" replace />} />
+      <Route path="/admin/DecisionTrees/:id/builder" element={<Navigate to="/admin/QuizBuilder" replace />} />
       <Route path="/q/:slug" element={<QuizRuntime />} />
       <Route path="/admin/Themes" element={<AdminRouteGuard><ThemesList /></AdminRouteGuard>} />
       <Route path="/admin/Themes/:id" element={<AdminRouteGuard><ThemeEditor /></AdminRouteGuard>} />
