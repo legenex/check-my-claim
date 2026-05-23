@@ -64,6 +64,28 @@ export default function SettingsGeneral({ survey, steps, onChange }) {
         <input type="number" value={d.session_timeout_min || 60} onChange={e => onChange({ session_timeout_min: Number(e.target.value) })} className={inp} style={inpStyle} min={5} max={480} />
       </div>
 
+      {/* Tier descriptions */}
+      <div>
+        <div className="text-xs font-mono font-bold uppercase tracking-wider mb-3" style={{ color: "#2282fc" }}>Tier Reference</div>
+        <div className="space-y-2">
+          {[
+            { key: "t1", color: "#ef4d4d", label: "T1 — Highest Priority", desc: "Highest quality control. Older or risky leads. Most qualification." },
+            { key: "t2", color: "#f59e0b", label: "T2 — Balanced",         desc: "Balanced quality and volume. Default paid social traffic." },
+            { key: "t3", color: "#2282fc", label: "T3 — Volume",           desc: "Low friction volume. Cheaper sources where CPL stays low." },
+            { key: "t4", color: "#3ab54b", label: "T4 — Fresh Light",      desc: "Fresh Light Qualified. Accident under 30 days, minimal friction." },
+            { key: "dq", color: "#94a3b8", label: "DQ — Disqualified",     desc: "Disqualified. Routed to Tell Me More for capture." },
+          ].map(t => (
+            <div key={t.key} style={{ background: "#050b14", border: `1px solid ${t.color}30`, borderRadius: 6, padding: "8px 12px", display: "flex", gap: 10 }}>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, padding: "2px 6px", borderRadius: 3, background: `${t.color}20`, color: t.color, border: `1px solid ${t.color}40`, flexShrink: 0, alignSelf: "flex-start", marginTop: 1 }}>{t.key.toUpperCase()}</span>
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 600, color: "#e2e8f0", marginBottom: 2 }}>{t.label}</div>
+                <div style={{ fontSize: 11, color: "#64748b" }}>{t.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div>
         <label className={labelCls}>Slug Redirects</label>
         <p className="text-xs text-slate-500 mb-2">One per line: old-slug</p>

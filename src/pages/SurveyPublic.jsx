@@ -84,9 +84,15 @@ function ProgressBar({ current, total }) {
 function SingleSelectStep({ step, fields, onSubmit }) {
   const [selected, setSelected] = useState(null);
   const stepField = fields.find(f => f.key === step.save_to_field);
-  const options = (step.inherit_options_from_field && stepField?.allowed_values?.length)
+  const rawOptions = (step.inherit_options_from_field && stepField?.allowed_values?.length)
     ? stepField.allowed_values
     : (step.custom_options || []);
+  // Filter hidden options
+  const hiddenSet = new Set(step.hidden_options || []);
+  const options = rawOptions.filter(o => {
+    const val = typeof o === "object" ? o.value : o;
+    return !hiddenSet.has(val);
+  });
   const isCards = step.display_mode === "cards";
 
   const handleSelect = (val) => {
@@ -169,11 +175,38 @@ function SearchableSelectStep({ step, fields, onSubmit }) {
 
 function TextStep({ step, onSubmit, inputType = "text" }) {
   const [val, setVal] = useState("");
+  const cfg = step.config || {};
+  const isMultiline = cfg.multiline || inputType === "textarea";
+  const placeholder = cfg.placeholder || step.placeholder || step.helper_text || "";
+  const minLen = step.validation?.minLength || 0;
+  const isValid = val.trim().length >= Math.max(1, minLen);
+
+  if (isMultiline) {
+    return (
+      <div>
+        <textarea
+          value={val}
+          onChange={e => setVal(e.target.value)}
+          placeholder={placeholder}
+          rows={cfg.rows || 5}
+          style={{ ...inputStyle, marginBottom: 8, resize: "vertical", minHeight: 100 }}
+          autoFocus
+        />
+        {minLen > 0 && (
+          <p style={{ fontSize: 11, color: val.length >= minLen ? "#3ab54b" : "#64748b", marginBottom: 10 }}>
+            {val.length} / {minLen} min characters
+          </p>
+        )}
+        <button onClick={() => isValid && onSubmit(val.trim())} style={{ ...ctaBtn, opacity: isValid ? 1 : 0.5 }}>Continue</button>
+      </div>
+    );
+  }
+
   return (
     <div>
       <input type={inputType} value={val} onChange={e => setVal(e.target.value)}
         onKeyDown={e => e.key === "Enter" && val.trim() && onSubmit(val.trim())}
-        placeholder={step.placeholder || ""}
+        placeholder={placeholder}
         style={{ ...inputStyle, marginBottom: 16 }} autoFocus />
       <button onClick={() => val.trim() && onSubmit(val.trim())} style={ctaBtn}>Continue</button>
     </div>
@@ -270,12 +303,26 @@ function ResultsStep({ step, fieldValues }) {
 
 function CustomPageStep({ step, fieldValues, onSubmit }) {
   const [formData, setFormData] = useState({});
+  const [submitting, setSubmitting] = useState(false);
   const inlineFields = step.config?.inline_form_fields || [];
+  const webhookUrl = step.config?.submit_webhook_url;
   const html = (step.content_html || "").replace(/\{fields\.([^}]+)\}/g, (_, k) => fieldValues[k] || "");
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const required = inlineFields.filter(f => f.required);
     if (required.some(f => !formData[f.field]?.trim())) return;
+    setSubmitting(true);
+    // Fire webhook if configured
+    if (webhookUrl) {
+      try {
+        await fetch(webhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...fieldValues, ...formData }),
+        });
+      } catch (_) {}
+    }
+    setSubmitting(false);
     onSubmit(null, formData);
   };
 
@@ -285,13 +332,26 @@ function CustomPageStep({ step, fieldValues, onSubmit }) {
       {inlineFields.map(f => (
         <div key={f.field} style={{ marginBottom: 14 }}>
           <label style={{ display: "block", fontSize: 12, color: "#94a3b8", marginBottom: 4, fontFamily: "var(--survey-font-body)" }}>{f.label}{f.required && " *"}</label>
-          <input type={f.type === "phone" ? "tel" : f.type === "email" ? "email" : "text"}
-            value={formData[f.field] || ""}
-            onChange={e => setFormData(prev => ({ ...prev, [f.field]: e.target.value }))}
-            style={inputStyle} />
+          {f.type === "textarea" ? (
+            <textarea
+              value={formData[f.field] || ""}
+              onChange={e => setFormData(prev => ({ ...prev, [f.field]: e.target.value }))}
+              rows={4}
+              style={{ ...inputStyle, resize: "vertical" }}
+            />
+          ) : (
+            <input
+              type={f.type === "phone" ? "tel" : f.type === "email" ? "email" : "text"}
+              value={formData[f.field] || ""}
+              onChange={e => setFormData(prev => ({ ...prev, [f.field]: e.target.value }))}
+              style={inputStyle}
+            />
+          )}
         </div>
       ))}
-      <button onClick={handleSubmit} style={{ ...ctaBtn, marginTop: 8 }}>Continue</button>
+      <button onClick={handleSubmit} disabled={submitting} style={{ ...ctaBtn, marginTop: 8, opacity: submitting ? 0.6 : 1 }}>
+        {submitting ? "Submitting..." : "Continue"}
+      </button>
     </div>
   );
 }
@@ -427,26 +487,85 @@ export default function SurveyPublic() {
   const currentStep = steps.find(s => s.id === currentStepId);
   const stepIndex = (survey?.step_order || []).indexOf(currentStepId);
 
-  // Resolve next step: check branching_rules then else_target
+  // Get effective variant overrides for current tier
+  const getVariant = useCallback((step, currentTier) => {
+    if (!step?.variants) return null;
+    return step.variants[currentTier] || null;
+  }, []);
+
+  // Merge step with its tier variant (non-destructive)
+  const resolveStep = useCallback((step, currentTier) => {
+    if (!step) return step;
+    const variant = getVariant(step, currentTier);
+    if (!variant) return step;
+    return {
+      ...step,
+      title: variant.title_override || step.title,
+      helper_text: variant.helper_text || step.helper_text,
+      content_html: variant.content_override || step.content_html,
+      custom_options: variant.custom_options !== undefined ? variant.custom_options : step.custom_options,
+      inherit_options_from_field: variant.inherit_options_from_field !== undefined ? variant.inherit_options_from_field : step.inherit_options_from_field,
+      hidden_options: variant.hidden_options !== undefined ? variant.hidden_options : step.hidden_options,
+      // branching_override replaces branching_rules + else_target
+      branching_rules: variant.branching_override?.branching_rules || step.branching_rules,
+      else_target_step_id: variant.branching_override?.else_target_step_id || (variant.else_target_step_id !== undefined ? variant.else_target_step_id : step.else_target_step_id),
+      required: variant.required !== undefined ? variant.required : step.required,
+      validation: variant.validation !== undefined ? variant.validation : step.validation,
+    };
+  }, [getVariant]);
+
+  // Check if a step should be skipped for the current tier
+  const shouldSkipStep = useCallback((step, currentTier) => {
+    if (!step?.variants) return false;
+    const variant = step.variants[currentTier];
+    return variant?.skip_for_tier === true;
+  }, []);
+
+  // Navigate to next non-skipped step
+  const advanceToNextNonSkipped = useCallback((targetId, targetTier) => {
+    let id = targetId;
+    let t = targetTier || tier;
+    const maxHops = 20;
+    let hops = 0;
+    while (id && hops < maxHops) {
+      const s = steps.find(st => st.id === id);
+      if (!s) break;
+      if (shouldSkipStep(s, t)) {
+        // Skip: go to its else_target
+        const variant = s.variants?.[t];
+        id = variant?.else_target_step_id || s.else_target_step_id;
+        hops++;
+      } else {
+        break;
+      }
+    }
+    return id;
+  }, [steps, tier, shouldSkipStep]);
+
+  // Resolve next step: check branching_rules then else_target (using resolved step)
   const resolveNext = useCallback((step, newFieldValues, overrideTier) => {
-    const rules = step.branching_rules || [];
+    const effectiveTier = overrideTier || tier;
+    const resolved = resolveStep(step, effectiveTier);
+    const rules = resolved.branching_rules || [];
     for (const rule of rules) {
       if (rule.condition) {
         try {
-          // Simple field == value evaluation
           const match = rule.condition.match(/^(\w+)\s*==\s*"([^"]*)"$/);
           if (match) {
             const [, fieldKey, fieldVal] = match;
             if (newFieldValues[fieldKey] === fieldVal) {
-              if (rule.set_tier) return { nextId: rule.target_step_id, nextTier: rule.set_tier };
-              return { nextId: rule.target_step_id, nextTier: overrideTier || tier };
+              const nextTier = rule.set_tier || effectiveTier;
+              const nextId = advanceToNextNonSkipped(rule.target_step_id, nextTier);
+              return { nextId, nextTier };
             }
           }
         } catch (_) {}
       }
     }
-    return { nextId: step.else_target_step_id || null, nextTier: overrideTier || tier };
-  }, [tier]);
+    const nextTier = effectiveTier;
+    const nextId = advanceToNextNonSkipped(resolved.else_target_step_id || null, nextTier);
+    return { nextId, nextTier };
+  }, [tier, resolveStep, advanceToNextNonSkipped]);
 
   const goToStep = useCallback((stepId, newTier) => {
     setCurrentStepId(stepId);
@@ -462,6 +581,16 @@ export default function SurveyPublic() {
     if (value !== null && value !== undefined && currentStep.save_to_field) {
       updates[currentStep.save_to_field] = value;
     }
+
+    // Apply option_field_writes for single_select steps
+    if (currentStep.type === "single_select" && value !== null && value !== undefined) {
+      const ofw = currentStep.option_field_writes || {};
+      const writes = ofw[value];
+      if (Array.isArray(writes)) {
+        writes.forEach(w => { updates[w.field] = w.value; });
+      }
+    }
+
     const newFieldValues = { ...fieldValues, ...updates };
     setFieldValues(newFieldValues);
 
@@ -497,7 +626,7 @@ export default function SurveyPublic() {
     if (nextId) {
       goToStep(nextId, nextTier);
     }
-  }, [currentStep, fieldValues, tier, survey, fireEvent, resolveNext, goToStep, updateSession]);
+  }, [currentStep, fieldValues, tier, survey, fireEvent, resolveNext, goToStep, updateSession, advanceToNextNonSkipped]);
 
   const handleLookupDone = useCallback((mappedFields) => {
     const newFieldValues = { ...fieldValues, ...mappedFields };
@@ -533,9 +662,9 @@ export default function SurveyPublic() {
       setTier(newTier);
       fireEvent("tier_assigned", { tier: newTier, state: newFieldValues.accident_state });
     }
-    if (gotoTarget) goToStep(gotoTarget, newTier);
-    else if (currentStep?.else_target_step_id) goToStep(currentStep.else_target_step_id, newTier);
-  }, [currentStep, fieldValues, tier, goToStep, fireEvent]);
+    const resolvedGoto = gotoTarget || currentStep?.else_target_step_id;
+    if (resolvedGoto) goToStep(advanceToNextNonSkipped(resolvedGoto, newTier), newTier);
+  }, [currentStep, fieldValues, tier, goToStep, fireEvent, advanceToNextNonSkipped]);
 
   // ─── Render ────────────────────────────────────────────────────────────────
   if (loading) {
@@ -578,26 +707,34 @@ export default function SurveyPublic() {
         {/* Progress */}
         <ProgressBar current={stepIndex} total={totalSharedSteps} />
 
-        {/* Content HTML */}
-        {currentStep?.content_html && (
-          <div dangerouslySetInnerHTML={{ __html: currentStep.content_html.replace(/\{fields\.([^}]+)\}/g, (_, k) => fieldValues[k] || "") }}
-            style={{ marginBottom: 24, color: "#e2e8f0" }} />
-        )}
+        {/* Render using the tier-resolved step for all display */}
+        {(() => {
+          const displayStep = resolveStep(currentStep, tier);
+          return (
+            <>
+              {/* Content HTML */}
+              {displayStep?.content_html && (
+                <div dangerouslySetInnerHTML={{ __html: displayStep.content_html.replace(/\{fields\.([^}]+)\}/g, (_, k) => fieldValues[k] || "") }}
+                  style={{ marginBottom: 24, color: "#e2e8f0" }} />
+              )}
 
-        {/* Title (if no content_html or hide_title is false) */}
-        {!currentStep?.hide_title && !currentStep?.content_html && currentStep?.title && (
-          <h2 style={{ fontFamily: "var(--survey-font-display, 'Bricolage Grotesque', sans-serif)", fontWeight: 700, fontSize: 26, color: "#fff", marginBottom: 8, lineHeight: 1.2 }}>
-            {currentStep.title}
-          </h2>
-        )}
+              {/* Title */}
+              {!displayStep?.hide_title && !displayStep?.content_html && displayStep?.title && (
+                <h2 style={{ fontFamily: "var(--survey-font-display, 'Bricolage Grotesque', sans-serif)", fontWeight: 700, fontSize: 26, color: "#fff", marginBottom: 8, lineHeight: 1.2 }}>
+                  {displayStep.title}
+                </h2>
+              )}
 
-        {/* Helper text */}
-        {currentStep?.helper_text && (
-          <p style={{ color: "#94a3b8", fontSize: 14, marginBottom: 20 }}>{currentStep.helper_text}</p>
-        )}
+              {/* Helper text */}
+              {displayStep?.helper_text && (
+                <p style={{ color: "#94a3b8", fontSize: 14, marginBottom: 20 }}>{displayStep.helper_text}</p>
+              )}
+            </>
+          );
+        })()}
 
         {/* Step body */}
-        {currentStep && renderStep(currentStep, fields, fieldValues, handleStepSubmit, handleLookupDone)}
+        {currentStep && renderStep(resolveStep(currentStep, tier), fields, fieldValues, handleStepSubmit, handleLookupDone)}
       </div>
 
       {/* Footer */}
