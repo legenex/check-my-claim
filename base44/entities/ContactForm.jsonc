@@ -56,22 +56,6 @@
           },
           "help_text": {
             "type": "string"
-          },
-          "width": {
-            "type": "string",
-            "enum": [
-              "full",
-              "half",
-              "third"
-            ],
-            "default": "full"
-          },
-          "options": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "For select/checkbox field types"
           }
         }
       }
@@ -87,57 +71,12 @@
       "type": "boolean",
       "default": false
     },
-    "trustedform_field_id": {
-      "type": "string",
-      "default": "xxTrustedFormCertUrl"
-    },
     "submit_button_label": {
       "type": "string",
       "default": "Submit"
     },
     "success_redirect_url": {
       "type": "string"
-    },
-    "disclaimer_html": {
-      "type": "string"
-    },
-    "show_personal_info_guarantee": {
-      "type": "boolean",
-      "default": false
-    },
-    "submit_webhook_url": {
-      "type": "string"
-    },
-    "submit_webhook_headers": {
-      "type": "object",
-      "description": "Key/value map of headers to send with webhook POST"
-    },
-    "submit_webhook_body_template": {
-      "type": "string",
-      "description": "JSON template with {{field_key}} placeholders"
-    },
-    "scripts": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "trigger": {
-            "type": "string",
-            "enum": [
-              "on_render",
-              "on_submit_success",
-              "on_submit_error"
-            ]
-          },
-          "code": {
-            "type": "string"
-          },
-          "is_enabled": {
-            "type": "boolean",
-            "default": true
-          }
-        }
-      }
     }
   },
   "required": [

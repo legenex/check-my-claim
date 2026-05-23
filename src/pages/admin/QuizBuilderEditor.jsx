@@ -6,10 +6,9 @@ import QuizEditorTopBar from "@/components/quizbuilder/QuizEditorTopBar";
 import QuizStepsTab from "@/components/quizbuilder/QuizStepsTab";
 import QuizCanvasTab from "@/components/quizbuilder/QuizCanvasTab";
 import QuizSettingsTab from "@/components/quizbuilder/QuizSettingsTab";
-import QuizTiersTab from "@/components/quizbuilder/QuizTiersTab";
 import { applyThemeVars, MIDNIGHT_GLASS_FALLBACK, themeFromBrand } from "@/lib/themeTokens";
 
-const TABS = ["Steps", "Canvas", "Tiers", "Settings"];
+const TABS = ["Steps", "Canvas", "Settings"];
 
 export default function QuizBuilderEditor() {
   const { id } = useParams();
@@ -21,7 +20,6 @@ export default function QuizBuilderEditor() {
   const [brands, setBrands] = useState([]);
   const [themes, setThemes] = useState([]);
   const [allQuizzes, setAllQuizzes] = useState([]);
-  const [contactForms, setContactForms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState(null);
@@ -34,13 +32,12 @@ export default function QuizBuilderEditor() {
 
   const loadData = async () => {
     setLoading(true);
-    const [quizList, stepList, brandList, allQs, themeList, contactFormList] = await Promise.all([
+    const [quizList, stepList, brandList, allQs, themeList] = await Promise.all([
       base44.entities.Quiz.filter({ id }),
       base44.entities.QuizStep.filter({ quiz_id: id }),
       base44.entities.Brand.list(),
       base44.entities.Quiz.list("-updated_date", 200),
       base44.entities.Theme.list("-updated_date", 100),
-      base44.entities.ContactForm.list(),
     ]);
     const q = quizList[0] || null;
     setQuiz(q);
@@ -48,7 +45,6 @@ export default function QuizBuilderEditor() {
     setBrands(brandList);
     setAllQuizzes(allQs);
     setThemes(themeList);
-    setContactForms(contactFormList);
     setLoading(false);
   };
 
@@ -288,9 +284,6 @@ export default function QuizBuilderEditor() {
           )}
           {activeTab === "Canvas" && (
             <QuizCanvasTab quiz={quiz} steps={steps} onNodeClick={handleCanvasNodeClick} />
-          )}
-          {activeTab === "Tiers" && (
-            <QuizTiersTab quiz={quiz} onUpdate={updateQuiz} contactForms={contactForms} quizSteps={steps} />
           )}
           {activeTab === "Settings" && (
             <QuizSettingsTab quiz={quiz} brands={brands} onUpdate={updateQuiz} />

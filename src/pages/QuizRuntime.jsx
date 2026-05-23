@@ -11,11 +11,11 @@ export default function QuizRuntime() {
   return <QuizRuntimeCore slug={slug} embedded={false} />;
 }
 
-export function QuizRuntimeEmbedded({ quizId, onFirstInteraction, quizThemeId }) {
-  return <QuizRuntimeCore quizId={quizId} embedded={true} onFirstInteraction={onFirstInteraction} quizThemeId={quizThemeId} />;
+export function QuizRuntimeEmbedded({ quizId, onFirstInteraction }) {
+  return <QuizRuntimeCore quizId={quizId} embedded={true} onFirstInteraction={onFirstInteraction} />;
 }
 
-function QuizRuntimeCore({ slug, quizId, embedded, onFirstInteraction, quizThemeId }) {
+function QuizRuntimeCore({ slug, quizId, embedded, onFirstInteraction }) {
   const rootRef = useRef(null);
   const [quiz, setQuiz] = useState(null);
   const [brand, setBrand] = useState(null);
@@ -69,35 +69,15 @@ function QuizRuntimeCore({ slug, quizId, embedded, onFirstInteraction, quizTheme
       if (!q) { setNotFound(true); setLoading(false); return; }
       setQuiz(q);
 
-      const [stepList, brandList, themeList, quizThemeList] = await Promise.all([
+      const [stepList, brandList, themeList] = await Promise.all([
         base44.entities.QuizStep.filter({ quiz_id: q.id }),
         q.brand_id ? base44.entities.Brand.filter({ id: q.brand_id }) : Promise.resolve([]),
         q.theme_id ? base44.entities.Theme.filter({ id: q.theme_id }) : Promise.resolve([]),
-        quizThemeId ? base44.entities.QuizTheme.filter({ id: quizThemeId }) : Promise.resolve([]),
       ]);
       const sorted = stepList.slice().sort((a, b) => a.step_order - b.step_order);
       setSteps(sorted);
       if (brandList.length) setBrand(brandList[0]);
-      // Use QuizTheme if provided (embedded context), otherwise fall back to Quiz.theme_id
-      if (quizThemeList.length) {
-        const qt = quizThemeList[0];
-        // Convert QuizTheme to Theme format for applyThemeVars
-        setTheme({
-          tokens: {
-            primary: qt.primary_color,
-            accent: qt.accent_color,
-            background: qt.background_color,
-            text_primary: qt.text_color,
-            text_muted: qt.text_color_muted,
-            font_heading: qt.font_headline,
-            font_body: qt.font_body,
-            radius_card: qt.card_border_radius,
-            radius_button: qt.answer_card_radius,
-          },
-        });
-      } else if (themeList.length) {
-        setTheme(themeList[0]);
-      }
+      if (themeList.length) setTheme(themeList[0]);
 
       const initFields = {};
       if (utmSource) initFields.utm_source = utmSource;

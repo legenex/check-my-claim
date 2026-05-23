@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, FileText, BookOpen, Search, BarChart2,
   Puzzle, Users, Settings, ChevronDown, ChevronRight,
-  Menu, X, Bell, LogOut, Globe, Radar, Newspaper, Bot, Beaker, ClipboardList, Layout, Palette, ListChecks
+  Menu, X, Bell, LogOut, Globe, Radar, Newspaper, Bot, Beaker, ClipboardList, Layout, Palette
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
@@ -19,8 +19,7 @@ const navItems = [
   { label: "Advertorials", icon: Newspaper, path: "/admin/advertorials" },
   { label: "ClaimBot", icon: Bot, path: "/admin/claimbot" },
   { label: "Experiments", icon: Beaker, path: "/admin/experiments" },
-  { label: "Surveys", icon: ListChecks, path: "/admin/QuizBuilder" },
-  { label: "Contact Forms", icon: ClipboardList, path: "/admin/ContactForms" },
+  { label: "Quiz Builder", icon: ClipboardList, path: "/admin/QuizBuilder" },
   { label: "Themes", icon: Palette, path: "/admin/Themes" },
   { label: "Landing Pages", icon: Layout, path: "/admin/LandingPages" },
   { label: "Integrations", icon: Puzzle, path: "/admin/integrations" },
