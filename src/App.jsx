@@ -43,6 +43,7 @@ import Surveys from './pages/admin/Surveys';
 import SurveyEdit from './pages/admin/SurveyEdit';
 import { Navigate } from 'react-router-dom';
 import AttorneyMatchPage from './pages/tools/AttorneyMatchPage';
+import SurveyPublic from './pages/SurveyPublic';
 import ToolsIndex from './pages/tools/ToolsIndex';
 import ToolEditor from './pages/admin/ToolEditor';
 
@@ -158,6 +159,7 @@ const AuthenticatedApp = () => {
       <Route path="/admin/ContactForms" element={<AdminRouteGuard><ContactForms /></AdminRouteGuard>} />
       <Route path="/admin/ContactForms/:id/edit" element={<ContactFormEditor />} />
       <Route path="/lp/:slug" element={<LandingPagePublic />} />
+      <Route path="/s/:slug" element={<SurveyPublic />} />
       <Route path="/tools/attorney-match" element={<AttorneyMatchPage />} />
       <Route path="/tools" element={<ToolsIndex />} />
       <Route path="/admin/tools/new" element={<AdminRouteGuard><ToolEditor /></AdminRouteGuard>} />

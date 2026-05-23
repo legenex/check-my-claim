@@ -11,6 +11,7 @@ import FlowOverviewPanel from "@/components/surveybuilder/FlowOverviewPanel";
 import SettingsPanel from "@/components/surveybuilder/SettingsPanel";
 import TemplatesPanel from "@/components/surveybuilder/TemplatesPanel";
 import PreviewOverlay from "@/components/surveybuilder/PreviewOverlay";
+import FlowStepModal from "@/components/surveybuilder/FlowStepModal";
 import { useAutosave } from "@/components/surveybuilder/useAutosave";
 import { useValidation } from "@/components/surveybuilder/useValidation";
 
@@ -27,6 +28,8 @@ export default function SurveyEdit() {
   const [activeStepId, setActiveStepId] = useState(null);
   const [showAddModal, setShowAddModal] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
+  const [flowModalStepId, setFlowModalStepId] = useState(null);
+  const [seeding, setSeeding] = useState(false);
 
   const { save, saveStep, saveState, savedLabel } = useAutosave();
   const errors = useValidation(survey, steps, fields);
@@ -130,8 +133,46 @@ export default function SurveyEdit() {
   // Publish
   const handlePublish = useCallback(async () => {
     if (!survey) return;
-    await base44.entities.Survey.update(id, { status: "published" });
-    setSurvey(prev => ({ ...prev, status: "published" }));
+    if (errors.length > 0) {
+      alert(`Cannot publish: ${errors.length} validation error${errors.length !== 1 ? "s" : ""}.\n\n${errors.map(e => e.message).join("\n")}\n\nFix these errors and try again.`);
+      return;
+    }
+    const now = new Date().toISOString();
+    await base44.entities.Survey.update(id, { status: "published", published_at: now });
+    setSurvey(prev => ({ ...prev, status: "published", published_at: now }));
+  }, [survey, id, errors]);
+
+  // Seed steps (calls backend function)
+  const handleSeedSteps = useCallback(async () => {
+    if (!survey) return;
+    const confirm = window.confirm(`This will wipe and re-seed all 15 steps for "${survey.name}" with semantic IDs. Continue?`);
+    if (!confirm) return;
+    setSeeding(true);
+    try {
+      const res = await base44.functions.invoke("seedSurveySteps", { survey_id: id });
+      // Reload steps and survey from DB
+      const [stepsRes, surveyRes] = await Promise.all([
+        base44.entities.SurveyStep.filter({ survey_id: id }),
+        base44.entities.Survey.filter({ id }),
+      ]);
+      setSteps(stepsRes);
+      if (surveyRes[0]) {
+        setSurvey(surveyRes[0]);
+        const firstId = (surveyRes[0].step_order || [])[0] || stepsRes[0]?.id;
+        if (firstId) setActiveStepId(firstId);
+      }
+      alert(`Seeded ${res.data?.steps_created || "?"} steps successfully.`);
+    } catch (e) {
+      alert(`Seed failed: ${e.message}`);
+    }
+    setSeeding(false);
+  }, [survey, id]);
+
+  // Unpublish
+  const handleUnpublish = useCallback(async () => {
+    if (!survey) return;
+    await base44.entities.Survey.update(id, { status: "draft" });
+    setSurvey(prev => ({ ...prev, status: "draft" }));
   }, [survey, id]);
 
   // Title change
@@ -187,9 +228,12 @@ export default function SurveyEdit() {
         onTabChange={setActiveTab}
         onTitleChange={handleTitleChange}
         onPublish={handlePublish}
+        onUnpublish={handleUnpublish}
         saveState={saveState}
         savedLabel={savedLabel}
         onPreview={() => setShowPreview(true)}
+        onSeedSteps={handleSeedSteps}
+        seeding={seeding}
       />
 
       {/* Main area */}
@@ -249,7 +293,7 @@ export default function SurveyEdit() {
                 activeStepId={activeStepId}
                 onSelectStep={(stepId) => {
                   setActiveStepId(stepId);
-                  setActiveTab("Editor");
+                  setFlowModalStepId(stepId);
                 }}
               />
             </div>
@@ -292,6 +336,23 @@ export default function SurveyEdit() {
           if (errors[0]?.stepId) setActiveStepId(errors[0].stepId);
         }}
       />
+
+      {/* Flow step modal */}
+      {flowModalStepId && activeTab === "Flow" && (
+        <FlowStepModal
+          step={steps.find(s => s.id === flowModalStepId)}
+          steps={steps}
+          fields={fields}
+          surveyId={id}
+          isStart={survey?.start_step_id === flowModalStepId}
+          onSave={(updatedStep) => {
+            const { id: stepDbId, ...patch } = updatedStep;
+            updateStep(stepDbId, patch);
+          }}
+          onClose={() => setFlowModalStepId(null)}
+          onFieldCreated={handleFieldCreated}
+        />
+      )}
 
       {/* Add step modal */}
       {showAddModal && (

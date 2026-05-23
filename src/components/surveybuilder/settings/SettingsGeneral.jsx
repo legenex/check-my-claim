@@ -49,10 +49,14 @@ export default function SettingsGeneral({ survey, steps, onChange }) {
 
       <div>
         <label className={labelCls}>Start Step</label>
-        <select value={d.start_step_id || ""} onChange={e => onChange({ start_step_id: e.target.value })} className={inp + " cursor-pointer"} style={inpStyle}>
-          <option value="">-- Select start step --</option>
-          {steps.map(s => <option key={s.id} value={s.id}>{s.title || s.id}</option>)}
-        </select>
+        <div style={{ background: "#050b14", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 4, padding: "8px 12px", fontSize: 13, color: "#94a3b8", fontFamily: "'JetBrains Mono', monospace" }}>
+          {(() => {
+            const firstId = (d.step_order || [])[0] || d.start_step_id;
+            const firstStep = steps.find(s => s.id === firstId);
+            return firstStep ? `${firstStep.title || firstStep.id} (${firstStep.id})` : firstId || "— not set —";
+          })()}
+        </div>
+        <p className="text-xs text-slate-500 mt-1">Drag steps in the Editor rail to change order.</p>
       </div>
 
       <div>
