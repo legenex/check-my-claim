@@ -41,9 +41,26 @@ import ContactForms from './pages/admin/ContactForms';
 import ContactFormEditor from './pages/admin/ContactFormEditor';
 import Surveys from './pages/admin/Surveys';
 import SurveyEdit from './pages/admin/SurveyEdit';
+import { Navigate } from 'react-router-dom';
 import AttorneyMatchPage from './pages/tools/AttorneyMatchPage';
 import ToolsIndex from './pages/tools/ToolsIndex';
 import ToolEditor from './pages/admin/ToolEditor';
+
+// Redirect helpers that preserve query params
+const SurveysRedirect = () => {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+  return id
+    ? <Navigate to={`/admin/QuizBuilder/Edit?id=${id}`} replace />
+    : <Navigate to="/admin/QuizBuilder" replace />;
+};
+const SurveysEditRedirect = () => {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+  return id
+    ? <Navigate to={`/admin/QuizBuilder/Edit?id=${id}`} replace />
+    : <Navigate to="/admin/QuizBuilder/Edit" replace />;
+};
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -119,12 +136,19 @@ const AuthenticatedApp = () => {
       <Route path="/advertorial/:slug" element={<AdvertorialPage />} />
       <Route path="/tools/*" element={<ExperimentPage />} />
       <Route path="/community/*" element={<ExperimentPage />} />
-      <Route path="/admin/Surveys" element={<AdminRouteGuard><Surveys /></AdminRouteGuard>} />
-      <Route path="/admin/Surveys/Edit" element={<AdminRouteGuard><SurveyEdit /></AdminRouteGuard>} />
-      <Route path="/admin/QuizBuilder" element={<AdminRouteGuard><QuizBuilderList /></AdminRouteGuard>} />
+      {/* Surveys — canonical routes under /admin/QuizBuilder */}
+      <Route path="/admin/QuizBuilder" element={<AdminRouteGuard><Surveys /></AdminRouteGuard>} />
+      <Route path="/admin/QuizBuilder/Edit" element={<AdminRouteGuard><SurveyEdit /></AdminRouteGuard>} />
+      <Route path="/admin/QuizBuilder/New" element={<AdminRouteGuard><SurveyEdit /></AdminRouteGuard>} />
+      {/* Redirects from old /admin/Surveys paths */}
+      <Route path="/admin/Surveys" element={<SurveysRedirect />} />
+      <Route path="/admin/Surveys/Edit" element={<SurveysEditRedirect />} />
+      <Route path="/admin/Surveys/New" element={<Navigate to="/admin/QuizBuilder/New" replace />} />
+      <Route path="/admin/Quizzes" element={<Navigate to="/admin/QuizBuilder" replace />} />
+      {/* Legacy QuizBuilder routes (kept for back-compat, now redirect to Survey builder) */}
       <Route path="/admin/QuizBuilder/:id" element={<AdminRouteGuard><QuizBuilderEditor /></AdminRouteGuard>} />
-      <Route path="/admin/DecisionTrees" element={<AdminRouteGuard><QuizBuilderList /></AdminRouteGuard>} />
-      <Route path="/admin/DecisionTrees/:id/builder" element={<AdminRouteGuard><QuizBuilderList /></AdminRouteGuard>} />
+      <Route path="/admin/DecisionTrees" element={<Navigate to="/admin/QuizBuilder" replace />} />
+      <Route path="/admin/DecisionTrees/:id/builder" element={<Navigate to="/admin/QuizBuilder" replace />} />
       <Route path="/q/:slug" element={<QuizRuntime />} />
       <Route path="/admin/Themes" element={<AdminRouteGuard><ThemesList /></AdminRouteGuard>} />
       <Route path="/admin/Themes/:id" element={<AdminRouteGuard><ThemeEditor /></AdminRouteGuard>} />

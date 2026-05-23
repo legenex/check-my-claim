@@ -21,7 +21,7 @@ export default function SurveyTopBar({ survey, steps, fields, theme, activeTab, 
   return (
     <div className="flex items-center gap-0 flex-shrink-0 border-b border-white/10" style={{ height: 56, background: "#0a1320", padding: "0 12px" }}>
       {/* Brand */}
-      <Link to="/admin/Surveys" className="flex items-center gap-2 mr-4 flex-shrink-0">
+      <Link to="/admin/QuizBuilder" className="flex items-center gap-2 mr-4 flex-shrink-0">
         <ArrowLeft className="w-4 h-4 text-slate-500" />
         <span style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: 14, fontWeight: 700, color: "#2282fc", letterSpacing: "-0.01em" }}>
           CMC Builder

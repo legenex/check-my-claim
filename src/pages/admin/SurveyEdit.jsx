@@ -162,7 +162,7 @@ export default function SurveyEdit() {
     return (
       <div className="fixed inset-0 flex items-center justify-center flex-col gap-3" style={{ background: "#050b14" }}>
         <p className="text-white font-semibold">Survey not found.</p>
-        <a href="/admin/Surveys" className="text-[#2282fc] text-sm hover:underline">Back to Surveys</a>
+        <a href="/admin/QuizBuilder" className="text-[#2282fc] text-sm hover:underline">Back to Surveys</a>
       </div>
     );
   }

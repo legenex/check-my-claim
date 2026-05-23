@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { base44 } from "@/api/base44Client";
-import { Plus, Edit, Copy, Eye, Archive, ChevronDown, Layers } from "lucide-react";
+import { Plus, Edit, Copy, Eye, Archive, ChevronDown, Layers, Download } from "lucide-react";
+import ImportFromQuizModal from "@/components/surveybuilder/ImportFromQuizModal";
 
 const STATUS_COLORS = {
   published: "bg-green-500/20 text-green-400",
@@ -44,6 +45,7 @@ export default function Surveys() {
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [showTemplateMenu, setShowTemplateMenu] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -93,6 +95,10 @@ export default function Surveys() {
     setCreating(false);
   };
 
+  const refreshSurveys = () => {
+    base44.entities.Survey.list("-updated_date", 100).then(setSurveys);
+  };
+
   return (
     <AdminLayout title="Surveys" breadcrumbs={[{ label: "Admin", href: "/admin" }, { label: "Surveys" }]}>
       <div className="flex items-center justify-between mb-6">
@@ -103,6 +109,12 @@ export default function Surveys() {
           </p>
         </div>
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => setShowImportModal(true)}
+            className="flex items-center gap-2 bg-[#0f1c30] border border-white/10 hover:border-[#3ab54b] text-white font-semibold px-4 py-2.5 rounded-md text-sm transition-all"
+          >
+            <Download className="w-3.5 h-3.5 text-[#3ab54b]" /> Import from Quiz
+          </button>
           <div className="relative">
             <button
               onClick={() => setShowTemplateMenu(v => !v)}
@@ -124,7 +136,7 @@ export default function Surveys() {
             )}
           </div>
           <Link
-            to="/admin/Surveys/Edit"
+            to="/admin/QuizBuilder/Edit"
             className="flex items-center gap-2 bg-[#2282fc] hover:bg-blue-500 text-white font-bold px-5 py-2.5 rounded-md text-sm transition-all"
           >
             <Plus className="w-4 h-4" /> New Survey
@@ -149,7 +161,7 @@ export default function Surveys() {
               >
                 {creating ? "Creating..." : "Load MVA Tiered Template"}
               </button>
-              <Link to="/admin/Surveys/Edit" className="bg-[#2282fc] hover:bg-blue-500 text-white text-sm font-bold px-4 py-2 rounded-md">
+              <Link to="/admin/QuizBuilder/Edit" className="bg-[#2282fc] hover:bg-blue-500 text-white text-sm font-bold px-4 py-2 rounded-md">
                 + New Survey
               </Link>
             </div>
@@ -196,13 +208,13 @@ export default function Surveys() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1 justify-end">
-                        <Link to={`/admin/Surveys/Edit?id=${survey.id}`} className="p-1.5 text-slate-400 hover:text-white transition-colors" title="Edit">
+                        <Link to={`/admin/QuizBuilder/Edit?id=${survey.id}`} className="p-1.5 text-slate-400 hover:text-white transition-colors" title="Edit">
                           <Edit className="w-3.5 h-3.5" />
                         </Link>
                         <button onClick={() => cloneSurvey(survey)} className="p-1.5 text-slate-400 hover:text-white transition-colors" title="Clone">
                           <Copy className="w-3.5 h-3.5" />
                         </button>
-                        <Link to={`/admin/Surveys/Edit?id=${survey.id}&preview=1`} className="p-1.5 text-slate-400 hover:text-white transition-colors" title="Preview">
+                        <Link to={`/admin/QuizBuilder/Edit?id=${survey.id}&preview=1`} className="p-1.5 text-slate-400 hover:text-white transition-colors" title="Preview">
                           <Eye className="w-3.5 h-3.5" />
                         </Link>
                         <button onClick={() => archiveSurvey(survey)} className="p-1.5 text-slate-400 hover:text-amber-400 transition-colors" title="Archive">
@@ -232,6 +244,12 @@ export default function Surveys() {
           </div>
         ))}
       </div>
+      {showImportModal && (
+        <ImportFromQuizModal
+          onClose={() => setShowImportModal(false)}
+          onImported={refreshSurveys}
+        />
+      )}
     </AdminLayout>
   );
 }
