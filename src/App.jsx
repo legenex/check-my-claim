@@ -37,6 +37,9 @@ import LandingPageEditor from './pages/admin/LandingPageEditor';
 import LandingPagePublic from './pages/LandingPagePublic';
 import ThemesList from './pages/admin/ThemesList';
 import ThemeEditor from './pages/admin/ThemeEditor';
+import SurveyBuilder from './pages/admin/SurveyBuilder.jsx';
+import SurveyBuilderEditor from './pages/admin/SurveyBuilderEditor.jsx';
+import SurveyPage from './pages/SurveyPage.jsx';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -89,6 +92,7 @@ const AuthenticatedApp = () => {
         />
       ))}
       <Route path="/Blog" element={<BlogPage />} />
+      <Route path="/Survey" element={<SurveyPage />} />
       <Route path="/blog/:slug" element={<BlogPostPage />} />
       <Route path="/admin" element={<AdminRouteGuard><AdminDashboard /></AdminRouteGuard>} />
       <Route path="/admin/pages" element={<AdminRouteGuard><AdminPages /></AdminRouteGuard>} />
@@ -122,6 +126,9 @@ const AuthenticatedApp = () => {
       <Route path="/admin/LandingPages" element={<AdminRouteGuard><LandingPages /></AdminRouteGuard>} />
       <Route path="/admin/LandingPages/:id/edit" element={<LandingPageEditor />} />
       <Route path="/lp/:slug" element={<LandingPagePublic />} />
+      <Route path="/admin/SurveyBuilder" element={<AdminRouteGuard><SurveyBuilder /></AdminRouteGuard>} />
+      <Route path="/admin/SurveyBuilder/:id" element={<AdminRouteGuard><SurveyBuilderEditor /></AdminRouteGuard>} />
+      <Route path="/s/:slug" element={<SurveyPage />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
