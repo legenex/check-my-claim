@@ -40,8 +40,28 @@
     "subheadline": {
       "type": "string"
     },
+    "eyebrow": {
+      "type": "string",
+      "description": "Uppercase eyebrow line above the headline. Shown in royal blue."
+    },
     "slug": {
       "type": "string"
+    },
+    "ad_label": {
+      "type": "string",
+      "description": "Short ad_label param threaded into CTA URLs."
+    },
+    "pull_quote": {
+      "type": "string",
+      "description": "Pull quote rendered as a styled blockquote in the article."
+    },
+    "length_classification": {
+      "type": "string",
+      "enum": [
+        "short_form",
+        "long_form"
+      ],
+      "default": "short_form"
     },
     "category": {
       "type": "string",
@@ -74,9 +94,11 @@
     "featured_image_alt": {
       "type": "string"
     },
+    "featured_image_caption": {
+      "type": "string"
+    },
     "secondary_image_url": {
-      "type": "string",
-      "description": "Optional half-width inline image rendered mid-article (right side, with text wrapping on left)"
+      "type": "string"
     },
     "secondary_image_alt": {
       "type": "string"
@@ -86,7 +108,7 @@
     },
     "body_content": {
       "type": "string",
-      "description": "Full article body HTML"
+      "description": "Full article body in markdown. Use [CTA_INLINE_1], [CTA_INLINE_2], [CTA_INLINE_3], [MID_IMAGE] markers."
     },
     "inline_images": {
       "type": "array",
@@ -124,10 +146,12 @@
     },
     "phone_number": {
       "type": "string",
-      "default": "(844) 840-6905",
-      "description": "Phone shown in top-right 'Prefer to call?' button"
+      "default": "(844) 840-6905"
     },
     "estimated_reading_time": {
+      "type": "number"
+    },
+    "word_count": {
       "type": "number"
     },
     "status": {
@@ -152,12 +176,10 @@
       "type": "string"
     },
     "payout": {
-      "type": "number",
-      "description": "Affiliate/network payout per conversion. Hidden from main admin list, editable in detail view."
+      "type": "number"
     },
     "utm_medium_label": {
-      "type": "string",
-      "description": "Short identifier used as utm_medium when CTA links forward to the survey."
+      "type": "string"
     },
     "traffic_source_label": {
       "type": "string"
@@ -168,8 +190,7 @@
     },
     "clicks": {
       "type": "number",
-      "default": 0,
-      "description": "Total outbound clicks on any CTA."
+      "default": 0
     }
   },
   "required": [

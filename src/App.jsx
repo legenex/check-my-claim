@@ -114,6 +114,7 @@ const AuthenticatedApp = () => {
       <Route path="/admin/experiments/new" element={<AdminRouteGuard><ExperimentEditor /></AdminRouteGuard>} />
       <Route path="/admin/experiments/:id/edit" element={<AdminRouteGuard><ExperimentEditor /></AdminRouteGuard>} />
       <Route path="/advertorial/:slug" element={<AdvertorialPage />} />
+      <Route path="/a/:slug" element={<AdvertorialPage />} />
       <Route path="/tools/*" element={<ExperimentPage />} />
       <Route path="/community/*" element={<ExperimentPage />} />
       {/* Survey Builder - main admin route */}

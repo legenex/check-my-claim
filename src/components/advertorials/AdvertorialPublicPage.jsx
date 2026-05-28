@@ -1,120 +1,227 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
-import { buildSurveyUrl, captureIncomingParams, incrementAdvClicks, incrementAdvViews } from "@/lib/surveyUrl";
-import AdvertorialCTASection from "./AdvertorialCTASection";
+import { buildAdvUrl, captureAdvParams, incrementAdvClicks, incrementAdvViews } from "@/lib/advUrl";
+import ReactMarkdown from "react-markdown";
+import { Shield, User, Clock, CheckCircle } from "lucide-react";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/a32c079ff_DarkMode-PrimaryLogo_CheckMyClaim.png";
+const QUIZ_BASE = "https://qualify.checkmyclaim.co/s/mva";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/440596289_PrimaryLogo_CheckMyClaim.png";
+const PHONE = "(844) 738-1035";
+const PHONE_TEL = "+18447381035";
+const DISCLAIMER = `checkmyclaim.co is not a law firm or an attorney referral service. This advertisement is not legal advice and is not a guarantee or prediction of the outcome of your legal matter. Every case is different, and the outcome depends on the laws, facts, and circumstances unique to each case. Hiring an attorney is an important decision that should not be based solely on advertising. Request free information about your attorney's background and experience. CA RESIDENTS: Paid attorney advertising on behalf of jointly advertising independent attorneys, including: The Law Offices of Larry H. Parker, San Antonio, CA. A full listing of attorney sponsors can be found at checkmyclaim.co/PartnerList. Check My Claim is a matching service, not a law firm, and does not provide legal services. You can request an attorney by name. This advertising does not imply a higher quality of legal services than that provided by other attorneys, nor does it imply that the attorneys are certified specialists or experts in any area of law. Past results shown in advertisements do not dictate future results.`;
 
 // ---------------------------------------------------------------------------
-// Soft inline CTA (link_1, link_2, link_3)
+// Sticky navbar
 // ---------------------------------------------------------------------------
-function SoftCTA({ text, advertorial, linkId }) {
+function AdvNavbar({ phone, onPhoneClick }) {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", fn);
+    return () => window.removeEventListener("scroll", fn);
+  }, []);
+
+  return (
+    <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/90 backdrop-blur-md shadow-sm" : "bg-white"} border-b border-slate-100`}>
+      <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+        <Link to="/"><img src={LOGO_URL} alt="Check My Claim" className="h-9 w-auto" /></Link>
+        <div className="flex items-center gap-3">
+          <span className="hidden sm:block text-sm text-slate-500">Prefer to speak with someone?</span>
+          <a
+            href={`tel:${phone?.replace(/\D/g, "") || PHONE_TEL}`}
+            onClick={onPhoneClick}
+            className="flex items-center gap-2 bg-[#1E5BFF] hover:bg-blue-700 text-white text-sm font-bold px-4 py-2 rounded-full transition-all"
+          >
+            Check My Claim
+          </a>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Inline CTA bar
+// ---------------------------------------------------------------------------
+const INLINE_COPY = [
+  { headline: "See If You Qualify in 60 Seconds", sub: "Free case review, no obligation, no upfront fees." },
+  { headline: "Free Case Review, No Obligation", sub: "Find out what your accident claim could be worth." },
+  { headline: "Do Not Wait. Your Window Could Be Closing.", sub: "Every state has a filing deadline. Check yours now." },
+];
+
+function InlineMiniCta({ index, url, onClick }) {
+  const copy = INLINE_COPY[(index - 1) % 3];
+  return (
+    <div
+      className="my-8 rounded-xl flex flex-col sm:flex-row items-center gap-4 p-5"
+      style={{ background: "linear-gradient(135deg, #1E5BFF 0%, #1244D4 100%)" }}
+    >
+      <div className="flex-shrink-0 w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+        <Shield className="w-6 h-6 text-white" />
+      </div>
+      <div className="flex-1 text-center sm:text-left">
+        <p className="text-white font-bold text-base leading-snug">{copy.headline}</p>
+        <p className="text-blue-100 text-sm mt-0.5">{copy.sub}</p>
+      </div>
+      <a
+        href={url}
+        onClick={onClick}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex-shrink-0 bg-white text-[#1E5BFF] font-bold text-sm px-5 py-2.5 rounded-full hover:bg-blue-50 transition-all whitespace-nowrap"
+      >
+        Check My Claim
+      </a>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Mid-image card
+// ---------------------------------------------------------------------------
+function MidImageCard({ url }) {
+  return (
+    <div className="my-8 block md:float-right md:ml-8 md:mb-6 md:w-72 lg:w-80 w-full">
+      <div className="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
+        {url && (
+          <img src={url} alt="Claim check" className="w-full aspect-video object-cover" />
+        )}
+        <div className="p-5">
+          <p className="text-[#1E5BFF] text-xs font-bold uppercase tracking-widest mb-2">BEFORE YOU SIGN</p>
+          <h3 className="text-slate-900 font-bold text-base leading-snug mb-2">
+            Get a Claim Estimate in About 60 Seconds
+          </h3>
+          <p className="text-slate-500 text-sm leading-relaxed mb-4">
+            Our claim checker looks at how cases like yours have settled to give you a realistic sense of what your situation could be worth.
+          </p>
+          <ul className="space-y-1.5 mb-4">
+            {["100% Free, No Credit Card", "No Obligation, Ever", "Private and Secure"].map(item => (
+              <li key={item} className="flex items-center gap-2 text-sm text-slate-700">
+                <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                {item}
+              </li>
+            ))}
+          </ul>
+          <a
+            href={QUIZ_BASE}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full text-center bg-[#1E5BFF] hover:bg-blue-700 text-white font-bold text-sm py-2.5 rounded-xl transition-all"
+          >
+            Check My Claim Value Now
+          </a>
+          <p className="text-center text-xs text-slate-400 mt-2">Used by accident victims nationwide</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Pull quote
+// ---------------------------------------------------------------------------
+function PullQuote({ text }) {
   if (!text) return null;
-  const handleClick = async (e) => {
-    e.preventDefault();
-    await incrementAdvClicks(advertorial, base44);
-    const url = buildSurveyUrl({
-      linkId,
-      utmMedium: advertorial?.utm_medium_label || "advertorial",
-      baseUrl: advertorial?.primary_cta_url,
-    });
-    window.open(url, "_blank");
-  };
   return (
-    <div className="my-8 px-6 py-5 bg-blue-50 border-l-4 border-[#2BB6F6] rounded-r-lg">
-      <p className="text-base italic text-slate-700 leading-relaxed">
-        {text}{" "}
-        <a href="#" onClick={handleClick} className="text-[#1a6fc4] font-semibold not-italic underline hover:text-blue-800">
-          Run the free 30-second check here →
-        </a>
-      </p>
-    </div>
+    <blockquote className="my-8 border-l-4 border-[#1E5BFF] pl-5 py-2">
+      <p className="text-slate-700 text-lg font-medium italic leading-relaxed">{text}</p>
+    </blockquote>
   );
 }
 
 // ---------------------------------------------------------------------------
-// Mid-article secondary image (half-width right float)
+// Body renderer -- parses markers from markdown body
 // ---------------------------------------------------------------------------
-function SecondaryImage({ advertorial }) {
-  if (!advertorial?.secondary_image_url) return null;
-  return (
-    <div className="my-8 block md:float-right md:ml-8 md:mb-4 md:w-64 lg:w-80 w-full">
-      <img
-        src={advertorial.secondary_image_url}
-        alt={advertorial.secondary_image_alt || ""}
-        className="w-full rounded-xl shadow-md object-cover"
-        style={{ maxHeight: "280px" }}
-      />
-      {advertorial.secondary_image_caption && (
-        <p className="text-xs text-slate-400 mt-2 italic text-center">{advertorial.secondary_image_caption}</p>
-      )}
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Body renderer — inserts soft CTAs at 1/3, 2/3, 7/8 marks + secondary image at midpoint
-// ---------------------------------------------------------------------------
-function BodyWithCTAs({ advertorial }) {
+function BodyRenderer({ advertorial, buildUrl, onCtaClick }) {
   const body = advertorial.body_content || "";
-  const paragraphs = body.split(/\n\n+/);
-  const total = paragraphs.length;
-  const cta1At = Math.floor(total * 0.33);
-  const cta2At = Math.floor(total * 0.66);
-  const cta3At = Math.floor(total * 0.88);
-  const imgAt = Math.floor(total * 0.45);
+
+  // Split on our markers, keeping them as tokens
+  const parts = body.split(/(\[CTA_INLINE_[123]\]|\[MID_IMAGE\])/g);
 
   return (
-    <div className="prose prose-lg prose-slate max-w-none prose-headings:font-extrabold prose-headings:text-slate-900 prose-p:text-slate-800 prose-p:leading-[1.85] prose-p:text-[1.05rem] prose-a:text-[#1a6fc4] overflow-hidden">
-      {paragraphs.map((para, i) => (
-        <React.Fragment key={i}>
-          {i === imgAt && <SecondaryImage advertorial={advertorial} />}
-          <div dangerouslySetInnerHTML={{ __html: para }} />
-          {i === cta1At && <SoftCTA text={advertorial.soft_cta_text_1} advertorial={advertorial} linkId="link_1" />}
-          {i === cta2At && <SoftCTA text={advertorial.soft_cta_text_2} advertorial={advertorial} linkId="link_2" />}
-          {i === cta3At && <SoftCTA text={advertorial.soft_cta_text_3} advertorial={advertorial} linkId="link_3" />}
-        </React.Fragment>
-      ))}
+    <div className="prose prose-lg prose-slate max-w-none prose-headings:font-extrabold prose-headings:text-slate-900 prose-headings:leading-tight prose-p:text-slate-700 prose-p:leading-[1.85] prose-p:text-[1.05rem] prose-a:text-[#1E5BFF] prose-strong:text-slate-900 overflow-hidden">
+      {parts.map((part, i) => {
+        if (part === "[CTA_INLINE_1]") return <InlineMiniCta key={i} index={1} url={buildUrl("link_1")} onClick={onCtaClick} />;
+        if (part === "[CTA_INLINE_2]") return <InlineMiniCta key={i} index={2} url={buildUrl("link_2")} onClick={onCtaClick} />;
+        if (part === "[CTA_INLINE_3]") return <InlineMiniCta key={i} index={3} url={buildUrl("link_3")} onClick={onCtaClick} />;
+        if (part === "[MID_IMAGE]") return <MidImageCard key={i} url={advertorial.secondary_image_url} />;
+        if (!part.trim()) return null;
+        return (
+          <ReactMarkdown key={i}>{part}</ReactMarkdown>
+        );
+      })}
       <div style={{ clear: "both" }} />
     </div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// Sticky bar (mobile + desktop)
+// Final CTA panel
 // ---------------------------------------------------------------------------
-function StickyBar({ advertorial }) {
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 400);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  if (!visible) return null;
-
-  const handleClick = async () => {
-    await incrementAdvClicks(advertorial, base44);
-    const url = buildSurveyUrl({
-      linkId: "link_footer",
-      utmMedium: advertorial?.utm_medium_label || "advertorial",
-      baseUrl: advertorial?.primary_cta_url,
-    });
-    window.open(url, "_blank");
-  };
-
+function AdvFinalCta({ finalUrl, onCtaClick }) {
   return (
-    <>
-      <button onClick={handleClick}
-        className="hidden md:block fixed bottom-6 right-6 bg-[#2BB6F6] hover:bg-[#1a9fd8] text-white font-bold px-6 py-3 rounded-full shadow-xl transition-all z-40 text-sm">
-        Free Claim Check ›
-      </button>
-      <button onClick={handleClick}
-        className="md:hidden fixed bottom-0 left-0 right-0 bg-[#2BB6F6] hover:bg-[#1a9fd8] text-white font-bold py-4 text-center z-40 text-base shadow-2xl">
-        Start Your Free Claim Check →
-      </button>
-    </>
+    <div className="mx-4 my-12 rounded-3xl px-8 py-14 text-center" style={{ background: "radial-gradient(ellipse at 60% 40%, #1B2F6E 0%, #0a1120 100%)" }}>
+      <div className="inline-flex items-center gap-2 bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6">
+        <span className="w-1.5 h-1.5 bg-amber-400 rounded-full" />
+        FREE EVALUATION
+      </div>
+      <h2 className="text-white text-2xl md:text-3xl font-extrabold leading-tight mb-4 max-w-lg mx-auto">
+        Find Out What Your Accident Claim Could Be Worth
+      </h2>
+      <p className="text-slate-300 text-base mb-8">Takes about 60 seconds. No obligation. Confidential.</p>
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a
+          href={finalUrl}
+          onClick={onCtaClick}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-[#1E5BFF] hover:bg-blue-600 text-white font-bold text-base px-8 py-3.5 rounded-full transition-all"
+        >
+          Start My Free Check
+        </a>
+        <a
+          href={finalUrl}
+          onClick={onCtaClick}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="border border-white/30 text-white hover:bg-white/10 font-semibold text-base px-8 py-3.5 rounded-full transition-all"
+        >
+          Estimate My Claim Value
+        </a>
+      </div>
+      <p className="text-slate-400 text-sm mt-5">Free Case Review &middot; No Obligation</p>
+      <p className="text-slate-500 text-xs mt-2">2026 &copy;checkmyclaim.co | All Rights Reserved</p>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Minimal legal footer
+// ---------------------------------------------------------------------------
+function MinimalLegalFooter({ phone, onPhoneClick }) {
+  return (
+    <footer className="bg-slate-950 text-slate-400 px-6 pt-10 pb-8">
+      <div className="max-w-5xl mx-auto">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 pb-6 border-b border-slate-800">
+          <img src={LOGO_URL} alt="Check My Claim" className="h-8 w-auto opacity-70" />
+          <div className="flex items-center gap-2 text-sm">
+            <span>Prefer to call us?</span>
+            <a href={`tel:${(phone || PHONE).replace(/\D/g, "")}`} onClick={onPhoneClick} className="text-[#1E5BFF] font-semibold hover:underline">{phone || PHONE}</a>
+          </div>
+          <div className="flex items-center gap-4 text-xs">
+            <span>&copy; 2026 checkmyclaim.co</span>
+            <Link to="/TermsOfService" className="hover:text-white">Terms</Link>
+            <Link to="/PrivacyPolicy" className="hover:text-white">Privacy</Link>
+          </div>
+        </div>
+        <div className="pt-6 space-y-4 text-xs leading-relaxed text-slate-500">
+          <p><strong className="text-slate-400">ADVERTORIAL</strong> — This is a paid advertisement. Check My Claim is a matching service, not a law firm.</p>
+          <p><strong className="text-slate-400">DISCLAIMER:</strong> {DISCLAIMER}</p>
+          <p>We use cookies to personalize content and to analyze our traffic. We also share information about your use of our site with our analytics partners who may combine it with other information you have provided to them or that they have collected from your use of their services.</p>
+        </div>
+      </div>
+    </footer>
   );
 }
 
@@ -127,8 +234,8 @@ export default function AdvertorialPublicPage({ slug }) {
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    captureIncomingParams();
-    const urlSlug = slug || window.location.pathname.split("/advertorial/")[1]?.split("?")[0];
+    captureAdvParams();
+    const urlSlug = slug || window.location.pathname.split("/a/")[1]?.split("?")[0];
     if (!urlSlug) { setNotFound(true); setLoading(false); return; }
 
     base44.entities.Advertorial.filter({ slug: urlSlug, status: "published" })
@@ -137,12 +244,9 @@ export default function AdvertorialPublicPage({ slug }) {
         const adv = results[0];
         setAdvertorial(adv);
         setLoading(false);
-        // Debounced view count (once per session per slug)
         incrementAdvViews(adv, base44);
-        // Inject pixels
         if (adv.tracking_pixel_meta) injectMetaPixel(adv.tracking_pixel_meta);
         if (adv.tracking_pixel_taboola) injectTaboolaPixel(adv.tracking_pixel_taboola);
-        // SEO
         document.title = adv.meta_title || `${adv.headline} | Check My Claim`;
       })
       .catch(() => { setNotFound(true); setLoading(false); });
@@ -150,7 +254,7 @@ export default function AdvertorialPublicPage({ slug }) {
 
   if (loading) return (
     <div className="min-h-screen bg-white flex items-center justify-center">
-      <div className="w-8 h-8 border-4 border-slate-200 border-t-[#2BB6F6] rounded-full animate-spin" />
+      <div className="w-8 h-8 border-4 border-slate-200 border-t-[#1E5BFF] rounded-full animate-spin" />
     </div>
   );
 
@@ -158,48 +262,41 @@ export default function AdvertorialPublicPage({ slug }) {
     <div className="min-h-screen bg-white flex items-center justify-center">
       <div className="text-center">
         <h1 className="text-2xl font-bold text-slate-800 mb-2">Article Not Found</h1>
-        <Link to="/" className="text-[#2BB6F6] hover:underline">← Back to Check My Claim</Link>
+        <Link to="/" className="text-[#1E5BFF] hover:underline">Back to Check My Claim</Link>
       </div>
     </div>
   );
 
-  const phone = advertorial.phone_number || "(844) 840-6905";
-  const telNum = phone.replace(/\D/g, "");
+  const phone = advertorial.phone_number || PHONE;
 
-  const handlePhoneClick = async () => {
+  const buildUrl = (linkId) => buildAdvUrl({
+    slug: advertorial.slug,
+    adLabel: advertorial.ad_label,
+    linkId,
+  });
+
+  const handleCtaClick = async () => {
     await incrementAdvClicks(advertorial, base44);
   };
 
+  const finalUrl = buildUrl("link_final");
+
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="bg-[#0a1628] border-b border-white/10 px-4 py-3">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <Link to="/"><img src={LOGO_URL} alt="Check My Claim" className="h-8 w-auto" /></Link>
-          <a
-            href={`tel:${telNum}`}
-            onClick={handlePhoneClick}
-            className="bg-[#2BB6F6] hover:bg-[#1a9fd8] text-white text-sm font-bold px-4 py-2 rounded-lg transition-all flex items-center gap-2"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.76a16 16 0 0 0 6.29 6.29l1.94-1.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-            </svg>
-            Prefer to call? {phone}
-          </a>
-        </div>
-      </header>
+      <AdvNavbar phone={phone} onPhoneClick={handleCtaClick} />
 
       {/* Article */}
-      <article className="max-w-3xl mx-auto px-4 py-10">
-        {/* Category tag */}
-        <div className="mb-4">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#2BB6F6] bg-blue-50 px-3 py-1 rounded-full">
-            {advertorial.category}
-          </span>
-        </div>
+      <main className="max-w-5xl mx-auto px-4 py-10 lg:px-16">
+
+        {/* Eyebrow */}
+        {advertorial.eyebrow && (
+          <p className="text-[#1E5BFF] text-xs font-bold uppercase tracking-widest mb-4">
+            {advertorial.eyebrow}
+          </p>
+        )}
 
         {/* Headline */}
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 leading-tight mb-4">
+        <h1 className="text-3xl md:text-4xl lg:text-[2.6rem] font-extrabold text-slate-900 leading-tight mb-4">
           {advertorial.headline}
         </h1>
 
@@ -212,57 +309,45 @@ export default function AdvertorialPublicPage({ slug }) {
 
         {/* Byline */}
         <div className="flex items-center gap-3 py-4 border-t border-b border-slate-200 mb-8">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#0a1628] to-[#1e3a5f] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-            {(advertorial.author_name || "C")[0]}
+          <div className="flex items-center gap-2 text-slate-500 text-sm">
+            <User className="w-4 h-4" />
+            <span className="font-semibold text-slate-700">{advertorial.author_name || "Sarah Mitchell, Staff Writer"}</span>
           </div>
-          <div>
-            <div className="text-sm font-semibold text-slate-800">{advertorial.author_name || "Check My Claim Editorial Team"}</div>
-            <div className="text-xs text-slate-500">
-              {advertorial.author_role || "Consumer Advocacy Desk"}
-              {advertorial.published_date && <> · {new Date(advertorial.published_date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</>}
-              {advertorial.estimated_reading_time && <> · {advertorial.estimated_reading_time} min read</>}
+          {advertorial.estimated_reading_time && (
+            <div className="flex items-center gap-1.5 text-slate-400 text-sm">
+              <span className="text-slate-300">|</span>
+              <Clock className="w-4 h-4" />
+              <span>{advertorial.estimated_reading_time} min read</span>
             </div>
-          </div>
+          )}
         </div>
 
-        {/* Featured Image */}
+        {/* Hero image */}
         {advertorial.featured_image_url && (
-          <div className="mb-8 -mx-4 md:mx-0">
+          <div className="mb-8">
             <img
               src={advertorial.featured_image_url}
               alt={advertorial.featured_image_alt || advertorial.headline}
-              className="w-full max-h-[480px] object-cover rounded-lg"
+              className="w-full aspect-video object-cover rounded-xl"
             />
+            {advertorial.featured_image_caption && (
+              <p className="text-xs text-slate-400 mt-2 text-center italic">{advertorial.featured_image_caption}</p>
+            )}
           </div>
         )}
 
-        {/* Body with soft CTAs + secondary image */}
-        <BodyWithCTAs advertorial={advertorial} />
-      </article>
+        {/* Body */}
+        <BodyRenderer advertorial={advertorial} buildUrl={buildUrl} onCtaClick={handleCtaClick} />
 
-      {/* Light-blue CTA section */}
-      <AdvertorialCTASection advertorial={advertorial} />
+        {/* Pull quote */}
+        <PullQuote text={advertorial.pull_quote} />
+      </main>
+
+      {/* Final CTA */}
+      <AdvFinalCta finalUrl={finalUrl} onCtaClick={handleCtaClick} />
 
       {/* Footer */}
-      <footer className="bg-[#0a1628] text-slate-400 px-6 py-10 text-xs leading-relaxed">
-        <div className="max-w-4xl mx-auto space-y-4">
-          {/* Moved advertorial disclosure */}
-          <p className="text-slate-600 text-xs">
-            <strong className="text-slate-500">ADVERTORIAL</strong> — This is a paid advertisement. checkmyclaim.co is not a law firm or an attorney referral service. Past results do not guarantee future outcomes.
-          </p>
-
-          <p>
-            <strong className="text-slate-300">DISCLAIMER:</strong> checkmyclaim.co is not a law firm or an attorney referral service. This advertisement is not legal advice and is not a guarantee or prediction of the outcome of your legal matter. Every case is different, and the outcome depends on the laws, facts, and circumstances unique to each case. Hiring an attorney is an important decision that should not be based solely on advertising. Request free information about your attorney's background and experience. <strong>CA RESIDENTS:</strong> Paid attorney advertising on behalf of jointly advertising independent attorneys, including: The Law Offices of Larry H. Parker, San Antonio, CA. A full listing of attorney sponsors can be found <a href="https://checkmyclaim.co/PartnerList" className="text-[#2BB6F6] underline">here</a>. Check My Claim is not a law firm and does not provide legal services. You can request an attorney by name. This advertising does not imply a higher quality of legal services than that provided by other attorneys, nor does it imply that the attorneys are certified specialists or experts in any area of law. Please note that past results showcased in advertisements do not dictate future results. If you live in AL, FL, MO, NY, or WY, <a href="https://checkmyclaim.co/disclosures/" className="text-[#2BB6F6] underline">Click here</a> to see additional information about attorney advertising in your state.
-          </p>
-          <p>
-            We use cookies to personalize content and to analyze our traffic. We also share information about your use of our site with our analytics partners who may combine it with other information that you've provided to them or that they've collected from your use of their services. You consent to our cookies if you continue to use our website. <a href="https://dsar.cptn.co/dsar/0ca83d86-1ffc-4e4e-afad-2edb0fd5440b" className="text-[#2BB6F6] underline">Request access to your data</a>.
-          </p>
-          <p className="text-slate-500">© 2026 Check My Claim. All rights reserved. | checkmyclaim.co</p>
-        </div>
-      </footer>
-
-      {/* Sticky CTA */}
-      <StickyBar advertorial={advertorial} />
+      <MinimalLegalFooter phone={phone} onPhoneClick={handleCtaClick} />
     </div>
   );
 }
