@@ -1,0 +1,76 @@
+{
+  "name": "Lead",
+  "type": "object",
+  "properties": {
+    "quizId": {
+      "type": "string"
+    },
+    "sessionId": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Partial",
+        "Complete",
+        "Qualified",
+        "Disqualified"
+      ],
+      "default": "Partial"
+    },
+    "utmSource": {
+      "type": "string"
+    },
+    "utmMedium": {
+      "type": "string"
+    },
+    "utmCampaign": {
+      "type": "string"
+    },
+    "utmTerm": {
+      "type": "string"
+    },
+    "referrer": {
+      "type": "string"
+    },
+    "ipAddress": {
+      "type": "string"
+    },
+    "device": {
+      "type": "string",
+      "enum": [
+        "Mobile",
+        "Desktop",
+        "Tablet",
+        "Unknown"
+      ],
+      "default": "Unknown"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "notes": {
+      "type": "string"
+    },
+    "assignedTo": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "quizId",
+    "sessionId"
+  ]
+}

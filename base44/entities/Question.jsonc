@@ -1,0 +1,328 @@
+{
+  "description": "A node in a decision tree. Replaces the legacy 'Question' concept. One row per node on the React Flow canvas. Each node has a type (Start, Custom Page, Q&A variants, Decision, Form, Transition, Notification, Phone Verification, Webhook/API, Results) and a typed config object. Edges are stored separately in the Edge entity.",
+  "name": "Question",
+  "properties": {
+    "answer_options": {
+      "description": "For multi-choice/dropdown/checkbox/image-select. Each option supports label, value, score, image_url, custom_field_overrides for branching custom-field assignment per answer (LeadsHook 'Add Answer Custom Fields' pattern), plus per-answer visibility conditions and A/B variant assignment.",
+      "items": {
+        "properties": {
+          "custom_field_overrides": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Map of custom_field_id -> answer-specific value. Mirrors LeadsHook 'Answer 1 / Answer 2 / Answer 3' overrides per custom field.",
+            "type": "object"
+          },
+          "id": {
+            "type": "string"
+          },
+          "image_url": {
+            "type": "string"
+          },
+          "is_default": {
+            "default": false,
+            "type": "boolean"
+          },
+          "label": {
+            "type": "string"
+          },
+          "score": {
+            "default": 0,
+            "type": "number"
+          },
+          "tags_to_add": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "tags_to_remove": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "value": {
+            "type": "string"
+          },
+          "visible_if": {
+            "description": "Optional condition_expression. If set, this answer only renders when the expression evaluates true against current fields/tags. Lets you hide an answer based on a prior question's value.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "background_color_override": {
+      "description": "Optional hex color override for this node's background in the runtime. Falls back to brand/quiz default.",
+      "type": "string"
+    },
+    "config": {
+      "description": "Type-specific configuration. Schema depends on node_type. For Decision nodes: {rules: [{condition_expression, label, target_node_id, tags_to_add, tier}], else_target_node_id, else_tags_to_add}. For Webhook: {method, url, headers, body_template, timeout_ms, response_field_mapping, success_target_node_id, failure_target_node_id}. For Notification: {channel, recipient_template, subject_template, body_template, delay_seconds}. For Phone Verification: {provider, phone_field, success_target_node_id, failure_target_node_id, max_attempts, code_length}. For Slider: {min, max, step, default, prefix, suffix, format}. For Address: {fields_enabled, country_default, autocomplete}. For Date: {min_date, max_date, format, default, bucket_into_field, buckets}. For Form: {contact_form_id, submit_label, redirect_after, on_success_target_node_id, on_error_target_node_id}. For Results: {result_template, dynamic_fields, redirect_url, qualification_tier}. For Custom Page: {html, embedded_components}. For Start: {url_param_handlers, brand_match_rules, read_url_apply_brand_css}.",
+      "type": "object"
+    },
+    "custom_field_assignments": {
+      "description": "Custom field bindings for THIS node. Multiple custom fields can be set from the same node (LeadsHook pattern). Each assignment maps a custom_field_id to a value-source.",
+      "items": {
+        "properties": {
+          "custom_field_id": {
+            "type": "string"
+          },
+          "default_value": {
+            "type": "string"
+          },
+          "transform": {
+            "description": "Lowercase / uppercase / trim / phone_format / state_2letter / etc.",
+            "enum": [
+              "none",
+              "lowercase",
+              "uppercase",
+              "trim",
+              "phone_format",
+              "state_2letter",
+              "date_iso"
+            ],
+            "type": "string"
+          },
+          "value_source": {
+            "description": "where_value: 'static' / 'answer_value' / 'answer_label' / 'url_param:{name}' / 'session:{key}' / 'derived:{js_expression}'",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "do_not_display_title": {
+      "default": false,
+      "description": "LeadsHook parity. When true, the runtime hides the title/label but still uses it for analytics and admin canvas.",
+      "type": "boolean"
+    },
+    "enable_confetti": {
+      "default": false,
+      "description": "LeadsHook parity. When true, runtime fires a confetti animation when this node is entered. Use sparingly on celebratory results pages.",
+      "type": "boolean"
+    },
+    "form_html": {
+      "description": "For Custom Page or Text Block nodes: the HTML/markdown body.",
+      "type": "string"
+    },
+    "help_text": {
+      "type": "string"
+    },
+    "identifier": {
+      "description": "LeadsHook-style internal identifier shown in the inspector top bar. Separate from node_id (which is the React Flow id) and from title_display (which is the canvas card title). Default: same as node_id.",
+      "type": "string"
+    },
+    "label": {
+      "description": "Display label shown to the user. Empty for backend-only nodes (Webhook, Decision, Transition).",
+      "type": "string"
+    },
+    "media_image_url": {
+      "type": "string"
+    },
+    "media_video_embed": {
+      "description": "YouTube/Vimeo embed URL",
+      "type": "string"
+    },
+    "node_animation": {
+      "default": "none",
+      "description": "LeadsHook parity. Animation played when the node enters view in the runtime.",
+      "enum": [
+        "none",
+        "fade",
+        "slide_left",
+        "slide_right",
+        "slide_up",
+        "slide_down",
+        "zoom_in",
+        "zoom_out",
+        "bounce"
+      ],
+      "type": "string"
+    },
+    "node_css_class": {
+      "description": "Optional CSS class name applied to the rendered node wrapper. Lets you target a node with custom CSS in the quiz-level branding section.",
+      "type": "string"
+    },
+    "node_id": {
+      "description": "Stable client-generated UUID used in React Flow as the node id. Edges reference this.",
+      "type": "string"
+    },
+    "node_type": {
+      "description": "The node type. Mirrors LeadsHook taxonomy.",
+      "enum": [
+        "start_page",
+        "custom_page",
+        "multiple_choice",
+        "single_select",
+        "checkbox_multi_select",
+        "dropdown",
+        "text_field",
+        "text_block",
+        "information",
+        "slider",
+        "address",
+        "date_picker",
+        "datetime_picker",
+        "decision_node",
+        "form",
+        "transition",
+        "notification_sms",
+        "notification_email",
+        "notification_whatsapp",
+        "notification_messenger",
+        "notification_telegram",
+        "phone_verification",
+        "webhook_api",
+        "results_page"
+      ],
+      "type": "string"
+    },
+    "placeholder": {
+      "type": "string"
+    },
+    "position_x": {
+      "description": "React Flow canvas X coordinate",
+      "type": "number"
+    },
+    "position_y": {
+      "description": "React Flow canvas Y coordinate",
+      "type": "number"
+    },
+    "quiz_id": {
+      "description": "Foreign key to Quiz",
+      "type": "string"
+    },
+    "redirect_upon_clicking_url": {
+      "description": "LeadsHook parity. Optional URL. When set, clicking the node's primary CTA in runtime redirects here instead of advancing the tree.",
+      "type": "string"
+    },
+    "required": {
+      "default": false,
+      "type": "boolean"
+    },
+    "scripts": {
+      "description": "Per-node scripts that run on enter or exit. LeadsHook pattern.",
+      "items": {
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "is_enabled": {
+            "default": true,
+            "type": "boolean"
+          },
+          "language": {
+            "default": "javascript",
+            "enum": [
+              "javascript"
+            ],
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "trigger": {
+            "enum": [
+              "on_enter",
+              "on_exit"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "section_id": {
+      "description": "Optional grouping. Nodes with the same section_id can be collapsed into a labeled group on the canvas.",
+      "type": "string"
+    },
+    "tags_to_add": {
+      "description": "Tags applied to the lead session when this node is reached/exited.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "tags_to_remove": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "text_color_override": {
+      "description": "Optional hex color override for this node's text in the runtime. Falls back to brand/quiz default.",
+      "type": "string"
+    },
+    "title_display": {
+      "description": "Internal title for canvas readability. Independent of the user-facing label.",
+      "type": "string"
+    },
+    "validation_rules": {
+      "description": "Field-level validators (regex, min/max, allowed values, blocklists).",
+      "items": {
+        "properties": {
+          "error_message": {
+            "type": "string"
+          },
+          "params": {
+            "type": "object"
+          },
+          "rule_type": {
+            "enum": [
+              "required",
+              "regex",
+              "min_length",
+              "max_length",
+              "min_value",
+              "max_value",
+              "allowed_values",
+              "blocklist",
+              "spam_filter",
+              "valid_email",
+              "valid_phone",
+              "valid_zip"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "variant_group": {
+      "description": "Optional A/B test group key. Multiple Question records can share the same node_id with different variant_group values to A/B test wording/options. The runtime picks one per session at random and tracks variant assignment in DecisionTreeRun.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "quiz_id",
+    "node_id",
+    "node_type"
+  ],
+  "type": "object",
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -23,7 +23,7 @@ export default function PrivacyPolicy() {
         <div className="flex-1 overflow-y-auto px-6 md:px-8 py-6 pb-4">
           <div className="prose prose-slate max-w-none">
           <p className="text-[#595E64] mb-6 leading-relaxed">
-            This privacy policy ("Policy") applies to the personal information collected by NJA-Online LLC ("we" or "us") through the checkmyclaim.co website ("Website"). We are committed to protecting your privacy and handling your personal information in accordance with applicable data protection laws.
+            This privacy policy ("Policy") applies to the personal information collected by Next Consulting LLC ("we" or "us") through the checkmyclaim.co website ("Website"). We are committed to protecting your privacy and handling your personal information in accordance with applicable data protection laws.
           </p>
 
           <section className="mb-8">

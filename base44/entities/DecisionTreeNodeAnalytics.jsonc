@@ -1,0 +1,60 @@
+{
+  "description": "Per-node analytics aggregated daily for fast dashboard rendering. Recomputed by a scheduled job from DecisionTreeRun.path_taken.",
+  "name": "DecisionTreeNodeAnalytics",
+  "properties": {
+    "avg_dwell_seconds": {
+      "type": "number"
+    },
+    "completes": {
+      "default": 0,
+      "description": "Users who passed through and finished the tree.",
+      "type": "number"
+    },
+    "date": {
+      "format": "date",
+      "type": "string"
+    },
+    "drop_off_rate": {
+      "description": "Percent of entries that did not advance to the next node.",
+      "type": "number"
+    },
+    "exits": {
+      "default": 0,
+      "type": "number"
+    },
+    "node_id": {
+      "type": "string"
+    },
+    "quiz_id": {
+      "type": "string"
+    },
+    "starts": {
+      "default": 0,
+      "description": "Users who entered this node.",
+      "type": "number"
+    },
+    "version": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "quiz_id",
+    "node_id",
+    "date"
+  ],
+  "rls": {
+    "create": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {}
+  },
+  "type": "object"
+}

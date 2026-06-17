@@ -1,0 +1,86 @@
+{
+  "description": "Brand profile that lets a single decision tree render with brand-specific CSS, copy, logo, and phone number based on URL match. Mirrors the LeadsHook pattern of using one master decision tree across multiple brands.",
+  "name": "DecisionTreeBrand",
+  "properties": {
+    "accent_color": {
+      "default": "#22c55e",
+      "type": "string"
+    },
+    "background_color": {
+      "default": "#0b1220",
+      "type": "string"
+    },
+    "brand_key": {
+      "description": "Stable lowercase key, e.g. 'cmc', 'cac', 'cs'.",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "type": "string"
+    },
+    "brand_name": {
+      "type": "string"
+    },
+    "custom_css": {
+      "type": "string"
+    },
+    "favicon_url": {
+      "type": "string"
+    },
+    "footer_html": {
+      "type": "string"
+    },
+    "header_html": {
+      "type": "string"
+    },
+    "is_active": {
+      "default": true,
+      "type": "boolean"
+    },
+    "logo_url": {
+      "type": "string"
+    },
+    "phone_number": {
+      "type": "string"
+    },
+    "primary_color": {
+      "default": "#1e90ff",
+      "type": "string"
+    },
+    "primary_domain": {
+      "description": "Public site domain, e.g. checkmyclaim.co",
+      "type": "string"
+    },
+    "text_color": {
+      "default": "#ffffff",
+      "type": "string"
+    },
+    "url_match_patterns": {
+      "description": "URL patterns (referrer, host, or query param values) that select this brand on the start node. Examples: 'host:checkmyclaim.co', 'param:brand=cmc', 'host:checkacase.com'.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "brand_key",
+    "brand_name"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "type": "object"
+}

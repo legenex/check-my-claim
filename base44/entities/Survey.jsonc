@@ -1,0 +1,165 @@
+{
+  "name": "Survey",
+  "type": "object",
+  "description": "Top-level MVA survey funnel config. One active record drives the live /Survey route.",
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL slug, e.g. mva"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "published",
+        "archived"
+      ],
+      "default": "draft"
+    },
+    "version": {
+      "type": "number",
+      "default": 1
+    },
+    "start_step_id": {
+      "type": "string"
+    },
+    "step_order": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Ordered array of step_id values defining canonical flow order."
+    },
+    "settings": {
+      "type": "object",
+      "properties": {
+        "auto_advance_ms": {
+          "type": "number",
+          "default": 300
+        },
+        "progress_bar": {
+          "type": "boolean",
+          "default": true
+        },
+        "show_back_button": {
+          "type": "boolean",
+          "default": true
+        },
+        "tcpa_text": {
+          "type": "string"
+        },
+        "display_phone": {
+          "type": "string"
+        }
+      }
+    },
+    "integrations_config": {
+      "type": "object",
+      "description": "Webhook fan-out config, HLR endpoint, WC redirect, and other integration settings.",
+      "properties": {
+        "hlr_endpoint": {
+          "type": "string",
+          "description": "Twilio HLR Cloud Run endpoint URL"
+        },
+        "wc_quiz_redirect": {
+          "type": "string",
+          "description": "External URL for Workers Comp redirect"
+        },
+        "webhooks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              },
+              "method": {
+                "type": "string",
+                "enum": [
+                  "GET",
+                  "POST",
+                  "PUT"
+                ],
+                "default": "POST"
+              },
+              "fire_on": {
+                "type": "string",
+                "enum": [
+                  "always",
+                  "qualified_only",
+                  "dq_only"
+                ],
+                "default": "always"
+              },
+              "active": {
+                "type": "boolean",
+                "default": false
+              },
+              "headers": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "payload_template": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "dq_config": {
+      "type": "object",
+      "properties": {
+        "qualified_redirect_url": {
+          "type": "string",
+          "default": "/Submitted"
+        },
+        "dq_redirect_url": {
+          "type": "string",
+          "default": "/Thanks"
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "slug"
+  ]
+}

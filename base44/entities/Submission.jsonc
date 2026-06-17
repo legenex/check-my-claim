@@ -1,0 +1,58 @@
+{
+  "name": "Submission",
+  "type": "object",
+  "properties": {
+    "leadId": {
+      "type": "string"
+    },
+    "quizId": {
+      "type": "string"
+    },
+    "answers": {
+      "type": "object",
+      "description": "Key-value map of questionId to answer value"
+    },
+    "score": {
+      "type": "number",
+      "default": 0
+    },
+    "maxScore": {
+      "type": "number",
+      "default": 0
+    },
+    "scorePercent": {
+      "type": "number",
+      "default": 0
+    },
+    "outcomeId": {
+      "type": "string"
+    },
+    "outcomeTitle": {
+      "type": "string"
+    },
+    "completedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "timeSpentSeconds": {
+      "type": "number"
+    },
+    "stepsCompleted": {
+      "type": "number"
+    },
+    "totalSteps": {
+      "type": "number"
+    },
+    "webhookSent": {
+      "type": "boolean",
+      "default": false
+    },
+    "webhookResponse": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "leadId",
+    "quizId"
+  ]
+}

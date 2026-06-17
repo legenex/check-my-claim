@@ -1,0 +1,161 @@
+{
+  "description": "One row per user session running through a decision tree. Tracks attribution, brand selection, current node, accumulated tags and field values, partial save state, and ultimate outcome.",
+  "name": "DecisionTreeRun",
+  "properties": {
+    "abandoned_at_node_id": {
+      "type": "string"
+    },
+    "brand_id": {
+      "type": "string"
+    },
+    "completed_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "current_node_id": {
+      "description": "The node the user is currently on, or last visited.",
+      "type": "string"
+    },
+    "device": {
+      "enum": [
+        "Mobile",
+        "Desktop",
+        "Tablet",
+        "Unknown"
+      ],
+      "type": "string"
+    },
+    "fbclid": {
+      "type": "string"
+    },
+    "field_values": {
+      "additionalProperties": true,
+      "description": "Map of field_key -> value as the user progresses.",
+      "type": "object"
+    },
+    "fingerprint": {
+      "description": "Device/browser fingerprint for fraud detection.",
+      "type": "string"
+    },
+    "gclid": {
+      "type": "string"
+    },
+    "ip_address": {
+      "type": "string"
+    },
+    "is_complete": {
+      "default": false,
+      "type": "boolean"
+    },
+    "is_disqualified": {
+      "default": false,
+      "type": "boolean"
+    },
+    "is_qualified": {
+      "default": false,
+      "type": "boolean"
+    },
+    "outcome_id": {
+      "type": "string"
+    },
+    "path_taken": {
+      "description": "Ordered array of {node_id, entered_at, exited_at} traversed during this run.",
+      "items": {
+        "properties": {
+          "entered_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "exited_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "node_id": {
+            "type": "string"
+          },
+          "node_label": {
+            "type": "string"
+          },
+          "node_type": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "qualification_tier": {
+      "description": "T1 / T2 / T3 / DQ. Mirrors LeadsHook tiering for buyer routing.",
+      "type": "string"
+    },
+    "quiz_id": {
+      "type": "string"
+    },
+    "referrer": {
+      "type": "string"
+    },
+    "session_id": {
+      "description": "Stable session id (cookie or localStorage). Used for partial-save resume.",
+      "type": "string"
+    },
+    "sid": {
+      "description": "Affiliate / source id passed in URL.",
+      "type": "string"
+    },
+    "started_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "tags": {
+      "description": "Tags accumulated during this run (added/removed by node visits and answers).",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "ttclid": {
+      "type": "string"
+    },
+    "user_agent": {
+      "type": "string"
+    },
+    "utm_campaign": {
+      "type": "string"
+    },
+    "utm_content": {
+      "type": "string"
+    },
+    "utm_medium": {
+      "type": "string"
+    },
+    "utm_source": {
+      "type": "string"
+    },
+    "utm_term": {
+      "type": "string"
+    },
+    "version_at_run": {
+      "description": "The Quiz.version value at the moment the run started. Used for analytics segmentation across publishes.",
+      "type": "number"
+    }
+  },
+  "required": [
+    "quiz_id",
+    "session_id"
+  ],
+  "rls": {
+    "create": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {}
+  },
+  "type": "object"
+}

@@ -1,0 +1,228 @@
+{
+  "name": "SurveyStep",
+  "type": "object",
+  "description": "One step/node in a Survey funnel. Branching, variants, and lookup config all live here.",
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "survey_id": {
+      "type": "string"
+    },
+    "step_id": {
+      "type": "string",
+      "description": "Stable semantic ID, e.g. s_accident_type"
+    },
+    "step_order": {
+      "type": "number"
+    },
+    "step_type": {
+      "type": "string",
+      "enum": [
+        "start",
+        "single_select",
+        "yes_no",
+        "text_input",
+        "smart_date",
+        "lookup",
+        "script",
+        "results",
+        "redirect",
+        "legal_funding"
+      ]
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "shared",
+        "t1",
+        "t2",
+        "t3",
+        "t4"
+      ],
+      "default": "shared"
+    },
+    "title_display": {
+      "type": "string",
+      "description": "Admin canvas label."
+    },
+    "label": {
+      "type": "string",
+      "description": "User-facing question text (default variant)."
+    },
+    "helper_text": {
+      "type": "string"
+    },
+    "placeholder": {
+      "type": "string"
+    },
+    "save_to_field": {
+      "type": "string",
+      "description": "SurveyField.field_key to write user answer into."
+    },
+    "required": {
+      "type": "boolean",
+      "default": true
+    },
+    "auto_advance": {
+      "type": "boolean",
+      "default": false
+    },
+    "display_mode": {
+      "type": "string",
+      "enum": [
+        "cards",
+        "buttons",
+        "dropdown",
+        "text",
+        "textarea"
+      ],
+      "default": "buttons"
+    },
+    "custom_options": {
+      "type": "array",
+      "description": "Answer options for single_select / yes_no steps.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "sub": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "branching_rules": {
+      "type": "array",
+      "description": "Ordered list of conditional routing rules. First match wins.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "condition": {
+            "type": "string",
+            "description": "JS-style expression, e.g. fault == 'at_fault'"
+          },
+          "target_step_id": {
+            "type": "string"
+          },
+          "redirect_url": {
+            "type": "string",
+            "description": "External URL. Use instead of target_step_id for off-site redirects."
+          },
+          "set_fields": {
+            "type": "array",
+            "description": "Field writes to execute when this rule fires.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "set_tier": {
+            "type": "string",
+            "description": "Overrides ctx.tier when this rule fires."
+          },
+          "label": {
+            "type": "string",
+            "description": "Admin description of this rule."
+          }
+        }
+      }
+    },
+    "else_target_step_id": {
+      "type": "string",
+      "description": "Default next step when no branching_rule matches."
+    },
+    "variants": {
+      "type": "object",
+      "description": "Per-tier overrides. Keys are t1/t2/t3/t4. Each can override label, custom_options, else_target_step_id, or set skip_for_tier.",
+      "properties": {
+        "t1": {
+          "type": "object"
+        },
+        "t2": {
+          "type": "object"
+        },
+        "t3": {
+          "type": "object"
+        },
+        "t4": {
+          "type": "object"
+        }
+      }
+    },
+    "config": {
+      "type": "object",
+      "description": "Type-specific config. For smart_date: {picker_mode}. For lookup: {url, method, headers, body_template, field_mappings}."
+    },
+    "onSubmit_script": {
+      "type": "string",
+      "description": "JS code executed after user submits this step."
+    },
+    "onEnter_script": {
+      "type": "string",
+      "description": "JS code executed when this step is entered."
+    },
+    "hide_title": {
+      "type": "boolean",
+      "default": false
+    },
+    "multiline": {
+      "type": "boolean",
+      "default": false
+    },
+    "validation": {
+      "type": "object",
+      "properties": {
+        "minLength": {
+          "type": "number"
+        },
+        "maxLength": {
+          "type": "number"
+        },
+        "pattern": {
+          "type": "string"
+        }
+      }
+    },
+    "content_html": {
+      "type": "string",
+      "description": "For results / legal_funding steps: rendered HTML with {fields.x} interpolation."
+    }
+  },
+  "required": [
+    "survey_id",
+    "step_id",
+    "step_order",
+    "step_type"
+  ]
+}

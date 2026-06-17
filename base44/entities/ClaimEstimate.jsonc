@@ -1,5 +1,121 @@
 {
   "name": "ClaimEstimate",
+  "properties": {
+    "accident_type": {
+      "type": "string"
+    },
+    "completed_at": {
+      "description": "When the quiz hit the gate (calculation complete, awaiting opt-in or already opted in).",
+      "format": "date-time",
+      "type": "string"
+    },
+    "economic_damages": {
+      "type": "number"
+    },
+    "email": {
+      "type": "string"
+    },
+    "fbclid": {
+      "type": "string"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "gclid": {
+      "type": "string"
+    },
+    "injury_tier": {
+      "type": "string"
+    },
+    "is_opted_in": {
+      "default": false,
+      "description": "True once the user submits the opt-in form. Estimate is only revealed in the UI when this flips true.",
+      "type": "boolean"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "liability": {
+      "type": "string"
+    },
+    "lost_wages_type": {
+      "type": "string"
+    },
+    "medical_bills": {
+      "type": "number"
+    },
+    "non_econ_high": {
+      "type": "number"
+    },
+    "non_econ_low": {
+      "type": "number"
+    },
+    "opted_in_at": {
+      "description": "When the opt-in form was submitted.",
+      "format": "date-time",
+      "type": "string"
+    },
+    "phone": {
+      "description": "US mobile only (digits stored, format E.164 +1XXXXXXXXXX preferred).",
+      "type": "string"
+    },
+    "range_high": {
+      "type": "number"
+    },
+    "range_low": {
+      "type": "number"
+    },
+    "represented_high": {
+      "type": "number"
+    },
+    "represented_low": {
+      "type": "number"
+    },
+    "session_id": {
+      "description": "Client-generated session id for resuming, dedup, and FB CAPI event_id.",
+      "type": "string"
+    },
+    "sid": {
+      "description": "Affiliate / source ID from URL.",
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "submit_webhook_status": {
+      "description": "Status of the buyer-router webhook fire (success / failed / pending).",
+      "type": "string"
+    },
+    "treatment_status": {
+      "type": "string"
+    },
+    "trustedform_cert_url": {
+      "type": "string"
+    },
+    "ttclid": {
+      "type": "string"
+    },
+    "utm_campaign": {
+      "type": "string"
+    },
+    "utm_content": {
+      "type": "string"
+    },
+    "utm_medium": {
+      "type": "string"
+    },
+    "utm_source": {
+      "type": "string"
+    },
+    "utm_term": {
+      "type": "string"
+    },
+    "zip_code": {
+      "description": "5-digit US ZIP code.",
+      "type": "string"
+    }
+  },
+  "required": [],
   "type": "object",
   "rls": {
     "read": {
@@ -18,68 +134,5 @@
         "role": "admin"
       }
     }
-  },
-  "properties": {
-    "state": {
-      "type": "string"
-    },
-    "accident_type": {
-      "type": "string"
-    },
-    "injury_tier": {
-      "type": "string"
-    },
-    "liability": {
-      "type": "string"
-    },
-    "treatment_status": {
-      "type": "string"
-    },
-    "lost_wages_type": {
-      "type": "string"
-    },
-    "medical_bills": {
-      "type": "number"
-    },
-    "range_low": {
-      "type": "number"
-    },
-    "range_high": {
-      "type": "number"
-    },
-    "represented_low": {
-      "type": "number"
-    },
-    "represented_high": {
-      "type": "number"
-    },
-    "economic_damages": {
-      "type": "number"
-    },
-    "non_econ_low": {
-      "type": "number"
-    },
-    "non_econ_high": {
-      "type": "number"
-    },
-    "first_name": {
-      "type": "string"
-    },
-    "email": {
-      "type": "string"
-    },
-    "phone": {
-      "type": "string"
-    },
-    "utm_source": {
-      "type": "string"
-    },
-    "utm_medium": {
-      "type": "string"
-    },
-    "utm_campaign": {
-      "type": "string"
-    }
-  },
-  "required": []
+  }
 }

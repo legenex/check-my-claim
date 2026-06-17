@@ -1,0 +1,70 @@
+{
+  "description": "An edge in the React Flow decision-tree canvas. Connects a source node to a target node. Edges can be conditional (label = 'if state in (TX,FL)') or unconditional (always).",
+  "name": "Edge",
+  "properties": {
+    "animated": {
+      "default": false,
+      "type": "boolean"
+    },
+    "condition_expression": {
+      "description": "Optional condition. If set, only traversed when expression evaluates true. Format: 'answer.fault == \"yes\"' or 'tags includes \"high_value\"' or 'fields.state in [\"TX\",\"FL\"]'.",
+      "type": "string"
+    },
+    "edge_id": {
+      "description": "Stable UUID. React Flow edge.id.",
+      "type": "string"
+    },
+    "label": {
+      "description": "User-facing label shown on the edge in the canvas.",
+      "type": "string"
+    },
+    "quiz_id": {
+      "description": "Foreign key to Quiz",
+      "type": "string"
+    },
+    "source_handle": {
+      "description": "Optional source handle id for multi-output nodes (decision nodes have one handle per branch).",
+      "type": "string"
+    },
+    "source_node_id": {
+      "description": "References Question.node_id",
+      "type": "string"
+    },
+    "style_color": {
+      "default": "#94a3b8",
+      "type": "string"
+    },
+    "target_handle": {
+      "type": "string"
+    },
+    "target_node_id": {
+      "description": "References Question.node_id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "quiz_id",
+    "edge_id",
+    "source_node_id",
+    "target_node_id"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "type": "object"
+}

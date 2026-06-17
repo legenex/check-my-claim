@@ -1,0 +1,97 @@
+{
+  "name": "Outcome",
+  "type": "object",
+  "properties": {
+    "quizId": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "conditions": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "score_range",
+            "answer_match",
+            "always"
+          ],
+          "default": "always"
+        },
+        "scoreMin": {
+          "type": "number"
+        },
+        "scoreMax": {
+          "type": "number"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "questionId": {
+                "type": "string"
+              },
+              "operator": {
+                "type": "string",
+                "enum": [
+                  "equals",
+                  "not_equals",
+                  "contains",
+                  "includes"
+                ]
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ctaType": {
+      "type": "string",
+      "enum": [
+        "Booking",
+        "External URL",
+        "Internal Page",
+        "Message Only"
+      ],
+      "default": "Message Only"
+    },
+    "ctaUrl": {
+      "type": "string"
+    },
+    "ctaLabel": {
+      "type": "string",
+      "default": "Get Started"
+    },
+    "message": {
+      "type": "string"
+    },
+    "badgeText": {
+      "type": "string"
+    },
+    "imageUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "priority": {
+      "type": "number",
+      "default": 0
+    },
+    "isDefault": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "quizId",
+    "title"
+  ]
+}

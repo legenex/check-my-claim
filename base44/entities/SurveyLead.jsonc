@@ -1,0 +1,131 @@
+{
+  "name": "SurveyLead",
+  "type": "object",
+  "description": "One survey session. Stores all captured fields, tier, DQ flags, and webhook status.",
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "survey_id": {
+      "type": "string"
+    },
+    "session_id": {
+      "type": "string"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "dq",
+        "unknown"
+      ],
+      "default": "unknown"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "in_progress",
+        "pii_captured",
+        "submitted",
+        "dq"
+      ],
+      "default": "in_progress"
+    },
+    "dq_lead": {
+      "type": "boolean",
+      "default": false
+    },
+    "dq_reason": {
+      "type": "string"
+    },
+    "dq_tags": {
+      "type": "string",
+      "description": "Comma-separated list of all accumulated DQ reasons."
+    },
+    "current_step_id": {
+      "type": "string"
+    },
+    "fields": {
+      "type": "object",
+      "description": "All captured field values as a flat key-value map."
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "zip": {
+      "type": "string"
+    },
+    "phone_verified": {
+      "type": "boolean"
+    },
+    "phone_carrier": {
+      "type": "string"
+    },
+    "phone_line_type": {
+      "type": "string"
+    },
+    "webhook_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "sent",
+        "failed",
+        "skipped"
+      ],
+      "default": "pending"
+    },
+    "utm_source": {
+      "type": "string"
+    },
+    "utm_medium": {
+      "type": "string"
+    },
+    "utm_campaign": {
+      "type": "string"
+    },
+    "utm_term": {
+      "type": "string"
+    },
+    "utm_content": {
+      "type": "string"
+    },
+    "referrer": {
+      "type": "string"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "survey_id",
+    "session_id"
+  ]
+}

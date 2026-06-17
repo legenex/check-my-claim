@@ -2,35 +2,6 @@
   "description": "Lead-generation experiments / interactive tools hosted on the site.",
   "name": "Experiment",
   "type": "object",
-  "rls": {
-    "read": {
-      "$or": [
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        },
-        {
-          "status": "published"
-        }
-      ]
-    },
-    "create": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
-    "update": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
-    "delete": {
-      "user_condition": {
-        "role": "admin"
-      }
-    }
-  },
   "properties": {
     "author_name": {
       "default": "Check My Claim",
@@ -38,7 +9,6 @@
     },
     "build_status": {
       "default": "planned",
-      "description": "Engineering state, separate from publication status.",
       "enum": [
         "planned",
         "in_progress",
@@ -48,7 +18,6 @@
       "type": "string"
     },
     "category": {
-      "description": "High-level functional category",
       "enum": [
         "Estimator",
         "Simulator",
@@ -69,7 +38,7 @@
       "type": "number"
     },
     "config": {
-      "description": "Free-form JSON for tool-specific settings.",
+      "description": "Free-form JSON for tool-specific settings. For claim_estimator: auto_advance_ms, show_next_back_buttons, results_gating_mode (always_show | require_opt_in | never_show), opt_in_gate_headline, opt_in_gate_subheadline, opt_in_gate_bullets[], opt_in_submit_label, opt_in_tcpa_html, opt_in_partners_url, post_optin_reveal_animation, post_optin_uplift_min_pct, post_optin_uplift_max_pct, footer_show_full_disclaimer.",
       "type": "object"
     },
     "disclaimer_short": {
@@ -77,7 +46,6 @@
       "type": "string"
     },
     "experiment_type": {
-      "description": "Internal type key. Drives which React component renders the experiment page.",
       "enum": [
         "claim_estimator",
         "adjuster_simulator",
@@ -163,6 +131,125 @@
     "view_count": {
       "default": 0,
       "type": "number"
+    },
+    "footer_disclaimer_html": {
+      "description": "Full legal footer block (Larry H. Parker / DSAR / cookies / state-specific). Per-experiment override. If empty, the runtime falls back to the shared advertorial footer.",
+      "type": "string"
+    },
+    "social_proof_section": {
+      "description": "Optional social proof / wins / testimonials / FAQ block rendered below the tool body. Mirrors the LandingPage structure.",
+      "type": "object",
+      "properties": {
+        "show": {
+          "default": true,
+          "type": "boolean"
+        },
+        "trust_stat_1_value": {
+          "default": "$50M+",
+          "type": "string"
+        },
+        "trust_stat_1_label": {
+          "default": "Recovered",
+          "type": "string"
+        },
+        "trust_stat_2_value": {
+          "default": "50,000+",
+          "type": "string"
+        },
+        "trust_stat_2_label": {
+          "default": "Total Client Wins",
+          "type": "string"
+        },
+        "trust_stat_3_value": {
+          "default": "100%",
+          "type": "string"
+        },
+        "trust_stat_3_label": {
+          "default": "Free",
+          "type": "string"
+        },
+        "benefits_items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "icon": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "recent_wins_items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "string"
+              },
+              "name_initials": {
+                "type": "string"
+              },
+              "age": {
+                "type": "number"
+              },
+              "location": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "guarantee_title": {
+          "default": "Our Attorneys Don't Get Paid Unless You Do",
+          "type": "string"
+        },
+        "guarantee_bullets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "testimonials": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "quote": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "time_ago": {
+                "type": "string"
+              },
+              "rating": {
+                "type": "number"
+              },
+              "initials": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "faq_items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "question": {
+                "type": "string"
+              },
+              "answer": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "required": [
@@ -171,5 +258,34 @@
     "path",
     "experiment_type",
     "status"
-  ]
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "status": "published"
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
 }

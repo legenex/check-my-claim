@@ -1,0 +1,92 @@
+{
+  "name": "SurveyField",
+  "type": "object",
+  "description": "Reusable field definitions for survey data capture and routing.",
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  },
+  "properties": {
+    "survey_id": {
+      "type": "string",
+      "description": "FK to Survey. null = global field."
+    },
+    "field_key": {
+      "type": "string",
+      "description": "snake_case identifier used in step save_to_field and branching conditions."
+    },
+    "display_label": {
+      "type": "string"
+    },
+    "field_type": {
+      "type": "string",
+      "enum": [
+        "string",
+        "text",
+        "number",
+        "boolean",
+        "enum",
+        "email",
+        "phone",
+        "date",
+        "url"
+      ],
+      "default": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "contact",
+        "event",
+        "routing",
+        "computed",
+        "other"
+      ],
+      "default": "other"
+    },
+    "allowed_values": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "default_value": {
+      "type": "string"
+    },
+    "computed": {
+      "type": "boolean",
+      "default": false,
+      "description": "True for fields computed via scripts or lookup, not direct user input."
+    },
+    "is_pii": {
+      "type": "boolean",
+      "default": false
+    },
+    "description": {
+      "type": "string"
+    },
+    "validation_pattern": {
+      "type": "string",
+      "description": "Regex pattern string for client-side validation."
+    }
+  },
+  "required": [
+    "field_key",
+    "display_label",
+    "field_type"
+  ]
+}

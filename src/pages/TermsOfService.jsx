@@ -23,7 +23,7 @@ export default function TermsOfService() {
         <div className="flex-1 overflow-y-auto px-6 md:px-8 py-6 pb-4">
           <div className="prose prose-slate max-w-none">
           <p className="text-[#595E64] mb-6 leading-relaxed">
-            These Terms and Conditions ("Terms") govern your use of the Check my Claim website (the "Website"), owned and operated by NJA-Online LLC ("we," "us," or "our"). By accessing or using the Website, you agree to be bound by these Terms. If you do not agree with any of the provisions of these Terms, you must not access or use the Website.
+            These Terms and Conditions ("Terms") govern your use of the Check my Claim website (the "Website"), owned and operated by Next Consulting LLC ("we," "us," or "our"). By accessing or using the Website, you agree to be bound by these Terms. If you do not agree with any of the provisions of these Terms, you must not access or use the Website.
           </p>
 
           <section className="mb-8">
@@ -57,7 +57,7 @@ export default function TermsOfService() {
             <div className="mb-4">
               <h3 className="text-lg font-semibold text-[#111E30] mb-2">2.1. Ownership</h3>
               <p className="text-[#595E64] leading-relaxed">
-                The Website and all content, materials, and features available on the Website, including but not limited to text, graphics, logos, images, audio clips, video clips, and software, are the property of NJA-Online LLC or its licensors and are protected by applicable intellectual property laws.
+                The Website and all content, materials, and features available on the Website, including but not limited to text, graphics, logos, images, audio clips, video clips, and software, are the property of Next Consulting LLC or its licensors and are protected by applicable intellectual property laws.
               </p>
             </div>
 
