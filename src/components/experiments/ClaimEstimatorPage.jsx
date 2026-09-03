@@ -924,11 +924,11 @@ export default function ClaimEstimatorPage({ experiment }) {
 
           {/* LIABILITY */}
           {currentStep.id === "liability_clarity" && (
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 gap-2">
               {LIABILITY_OPTIONS.map(opt => (
                 <button key={opt.value}
                   onClick={() => pickAndAutoNext("liability_clarity", opt.value)}
-                  className={`w-full text-left px-5 py-4 rounded-xl border-2 font-medium transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/30"}`}>
+                  className={`w-full text-left px-4 py-3 rounded-lg border font-medium text-sm transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
                   <span className="mr-2">{opt.icon}</span>{opt.label}
                 </button>
               ))}
@@ -937,13 +937,13 @@ export default function ClaimEstimatorPage({ experiment }) {
 
           {/* TREATMENT */}
           {currentStep.id === "treatment_status" && (
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 gap-2">
               {TREATMENT_OPTIONS.map(opt => (
                 <button key={opt.value}
                   onClick={() => pickAndAutoNext("treatment_status", opt.value)}
-                  className={`w-full text-left px-5 py-4 rounded-xl border-2 transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/30"}`}>
-                  <div className={`font-semibold ${currentVal === opt.value ? "text-white" : "text-slate-200"}`}>{opt.label}</div>
-                  <div className="text-xs text-slate-400">{opt.sub}</div>
+                  className={`w-full text-left px-4 py-3 rounded-lg border transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/25"}`}>
+                  <div className={`font-semibold text-sm ${currentVal === opt.value ? "text-white" : "text-slate-200"}`}>{opt.label}</div>
+                  <div className="text-xs text-slate-500 mt-0.5">{opt.sub}</div>
                 </button>
               ))}
             </div>
@@ -951,13 +951,12 @@ export default function ClaimEstimatorPage({ experiment }) {
 
           {/* MISSED WORK */}
           {currentStep.id === "missed_work" && (
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 gap-2">
               {MISSED_WORK_OPTIONS.map(opt => (
                 <button key={opt.value}
                   onClick={() => pickAndAutoNext("missed_work", opt.value)}
-                  className={`w-full text-left px-5 py-4 rounded-xl border-2 font-medium transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/30"}`}>
-                  <span>{opt.label}</span>
-                  {opt.wages > 0 && <span className="ml-2 text-xs text-slate-400">(~{fmt(opt.wages)} assumed)</span>}
+                  className={`w-full text-left px-4 py-3 rounded-lg border font-medium text-sm transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
+                  {opt.label}
                 </button>
               ))}
             </div>
@@ -983,9 +982,9 @@ export default function ClaimEstimatorPage({ experiment }) {
           )}
 
           {/* Nav buttons */}
-          <div className="flex items-center justify-between mt-8">
+          <div className="flex items-center justify-between mt-6">
             <button onClick={() => setStep(s => Math.max(0, s - 1))} disabled={step === 0}
-              className="px-5 py-3 bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white font-semibold rounded-xl text-sm transition-all">
+              className="px-4 py-2.5 bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white font-semibold rounded-lg text-sm transition-all">
               ← Back
             </button>
             {(!isMultiChoice || currentStep.id === "total_medical_bills" || currentStep.id === "notes" || currentStep.id === "state") && (
