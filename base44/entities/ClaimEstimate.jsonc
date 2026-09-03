@@ -1,6 +1,10 @@
 {
   "name": "ClaimEstimate",
   "properties": {
+    "ad_label": {
+      "type": "string",
+      "description": "Ad-level label carried in from the ?ad_label URL param. Also used to pin the estimator A/B arm (reveal | blurred)."
+    },
     "accident_type": {
       "type": "string"
     },
