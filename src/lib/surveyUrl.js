@@ -9,7 +9,7 @@ const SURVEY_BASE = "https://qualify.checkmyclaim.co/s/mva";
 /** Call once on page load (or lazily) to capture incoming params. */
 export function captureIncomingParams() {
   const params = new URLSearchParams(window.location.search);
-  const keys = ["sid", "fbclid", "gclid", "ttclid",
+  const keys = ["sid", "fbclid", "gclid", "ttclid", "ad_label",
     "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
   keys.forEach(k => {
     const v = params.get(k);
