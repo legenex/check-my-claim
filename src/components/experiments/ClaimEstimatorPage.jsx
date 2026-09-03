@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { buildSurveyUrl, captureIncomingParams, incrementExpClicks, incrementExpViews } from "@/lib/surveyUrl";
-import { Clock, TrendingUp, ChevronDown, ChevronUp, CheckCircle, Shield, Star, ArrowRight, Phone } from "lucide-react";
+import { Clock, TrendingUp, ChevronDown, ChevronUp, CheckCircle, Star, ArrowRight, Phone } from "lucide-react";
 import SettlementTickerMini from "./shared/SettlementTickerMini";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/a32c079ff_DarkMode-PrimaryLogo_CheckMyClaim.png";
