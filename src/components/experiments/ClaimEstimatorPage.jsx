@@ -852,6 +852,17 @@ export default function ClaimEstimatorPage({ experiment }) {
     }, 300);
   };
 
+  // Multi-select toggle. "No injury" is exclusive with everything else.
+  const toggleInjury = (value) => {
+    setAnswers(a => {
+      const cur = a.injury_types || [];
+      const selected = cur.includes(value);
+      if (value === "none") return { ...a, injury_types: selected ? [] : ["none"] };
+      const next = selected ? cur.filter(v => v !== value) : [...cur.filter(v => v !== "none"), value];
+      return { ...a, injury_types: next };
+    });
+  };
+
   const computeResultsFromAnswers = (ans = answers) => {
     const est = computeEstimate(ans, injuryTiers, stateData);
     const {
@@ -1007,24 +1018,40 @@ export default function ClaimEstimatorPage({ experiment }) {
             </div>
           )}
 
-          {/* INJURY TYPES — multi-select */}
+          {/* INJURY TYPES — grouped, two per row */}
           {currentStep.id === "injury_types" && (
-            <div className="grid grid-cols-1 gap-2">
-              {INJURY_TYPES.map(opt => {
+            <div className="space-y-3">
+              {INJURY_GROUPS.map(group => (
+                <div key={group}>
+                  <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-500 mb-1.5">{group}</div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {INJURY_TYPES.filter(i => i.group === group).map(opt => {
+                      const selected = (currentVal || []).includes(opt.value);
+                      return (
+                        <button key={opt.value}
+                          onClick={() => toggleInjury(opt.value)}
+                          className={`flex items-center gap-2 text-left px-3 min-h-[48px] py-2 rounded-xl border transition-all active:scale-[0.99] ${selected ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/25"}`}>
+                          <span className={`w-4 h-4 rounded shrink-0 border-2 flex items-center justify-center ${selected ? "border-[#2BB6F6] bg-[#2BB6F6]" : "border-white/25"}`}>
+                            {selected && <CheckCircle className="w-3 h-3 text-white" />}
+                          </span>
+                          <span className={`text-[13px] leading-tight ${selected ? "text-white font-semibold" : "text-slate-200"}`}>{opt.short}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+
+              {INJURY_TYPES.filter(i => !i.group).map(opt => {
                 const selected = (currentVal || []).includes(opt.value);
                 return (
                   <button key={opt.value}
-                    onClick={() => setAnswers(a => {
-                      const cur = a.injury_types || [];
-                      if (opt.value === "none") return { ...a, injury_types: selected ? [] : ["none"] };
-                      const next = selected ? cur.filter(v => v !== opt.value) : [...cur.filter(v => v !== "none"), opt.value];
-                      return { ...a, injury_types: next };
-                    })}
-                    className={`w-full flex items-center gap-3 text-left px-4 min-h-[52px] py-2.5 rounded-xl border transition-all active:scale-[0.99] ${selected ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/25"}`}>
-                    <span className={`w-5 h-5 rounded-md border-2 shrink-0 flex items-center justify-center ${selected ? "border-[#2BB6F6] bg-[#2BB6F6]" : "border-white/25"}`}>
-                      {selected && <CheckCircle className="w-3.5 h-3.5 text-white" />}
+                    onClick={() => toggleInjury(opt.value)}
+                    className={`w-full flex items-center gap-2 text-left px-3 min-h-[48px] py-2 rounded-xl border transition-all active:scale-[0.99] ${selected ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/25"}`}>
+                    <span className={`w-4 h-4 rounded shrink-0 border-2 flex items-center justify-center ${selected ? "border-[#2BB6F6] bg-[#2BB6F6]" : "border-white/25"}`}>
+                      {selected && <CheckCircle className="w-3 h-3 text-white" />}
                     </span>
-                    <span className={`text-[15px] leading-tight ${selected ? "text-white font-semibold" : "text-slate-200"}`}>{opt.label}</span>
+                    <span className={`text-[13px] ${selected ? "text-white font-semibold" : "text-slate-400"}`}>{opt.short}</span>
                   </button>
                 );
               })}
