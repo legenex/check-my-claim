@@ -857,21 +857,22 @@ export default function ClaimEstimatorPage({ experiment }) {
 
       <ProofTicker items={proofItems} index={step} />
 
-      <div className="flex-1 flex items-start justify-center px-4 py-8">
-        <div className="max-w-2xl w-full">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-2">{currentStep.title}</h2>
-          <p className="text-slate-400 mb-6 text-sm">{currentStep.subtitle}</p>
+      <div className="flex-1 flex items-start justify-center px-4 py-6">
+        <div className="max-w-xl w-full">
+          <h2 className="text-xl md:text-2xl font-extrabold text-white mb-1">{currentStep.title}</h2>
+          <p className="text-slate-500 mb-5 text-sm">{currentStep.subtitle}</p>
 
           {/* INJURY TIER */}
           {currentStep.id === "injury_severity_tier" && (
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 gap-2">
               {injuryTiers.map(tier => (
                 <button key={tier.tier_key}
                   onClick={() => pickAndAutoNext("injury_severity_tier", tier.tier_key)}
-                  className={`w-full text-left px-5 py-4 rounded-xl border-2 transition-all ${currentVal === tier.tier_key ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/30"}`}>
-                  <div className={`font-bold text-base mb-1 ${currentVal === tier.tier_key ? "text-white" : "text-slate-200"}`}>{tier.tier_label}</div>
-                  {tier.description && <div className="text-xs text-slate-400 mb-1">{tier.description}</div>}
-                  {tier.example_injuries?.length > 0 && <div className="text-xs text-slate-500">e.g. {tier.example_injuries.slice(0, 3).join(", ")}</div>}
+                  className={`w-full text-left px-4 py-3 rounded-lg border transition-all ${currentVal === tier.tier_key ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/25"}`}>
+                  <div className={`font-semibold text-sm ${currentVal === tier.tier_key ? "text-white" : "text-slate-200"}`}>{tier.tier_label}</div>
+                  {tier.example_injuries?.length > 0 && (
+                    <div className="text-xs text-slate-500 mt-0.5 truncate">{tier.example_injuries.slice(0, 3).join(", ")}</div>
+                  )}
                 </button>
               ))}
             </div>
@@ -879,13 +880,13 @@ export default function ClaimEstimatorPage({ experiment }) {
 
           {/* ACCIDENT TYPE */}
           {currentStep.id === "accident_type" && (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2">
               {ACCIDENT_TYPES.map(opt => (
                 <button key={opt.value}
                   onClick={() => pickAndAutoNext("accident_type", opt.value)}
-                  className={`text-left px-4 py-4 rounded-xl border-2 font-medium transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/30"}`}>
-                  <div className="text-2xl mb-1">{opt.icon}</div>
-                  <div className="text-sm">{opt.label}</div>
+                  className={`flex items-center gap-2 text-left px-3.5 py-3 rounded-lg border font-medium transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
+                  <span className="text-lg">{opt.icon}</span>
+                  <span className="text-sm">{opt.label}</span>
                 </button>
               ))}
             </div>
@@ -893,7 +894,7 @@ export default function ClaimEstimatorPage({ experiment }) {
 
           {/* INCIDENT DATE — fast tap buckets */}
           {currentStep.id === "incident_date" && (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2">
               {DATE_BUCKETS.map(opt => {
                 const active = answers.date_bucket === opt.value;
                 return (
@@ -904,7 +905,7 @@ export default function ClaimEstimatorPage({ experiment }) {
                       if (autoNextTimer.current) clearTimeout(autoNextTimer.current);
                       autoNextTimer.current = setTimeout(() => setStep(s => Math.min(STEPS.length - 1, s + 1)), 300);
                     }}
-                    className={`text-left px-4 py-4 rounded-xl border-2 font-medium transition-all text-sm ${active ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/30"}`}>
+                    className={`text-left px-3.5 py-3 rounded-lg border font-medium transition-all text-sm ${active ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
                     {opt.label}
                   </button>
                 );
