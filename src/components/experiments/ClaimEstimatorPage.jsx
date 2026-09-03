@@ -159,6 +159,29 @@ const FALLBACK_PROOF = [
   { state: "GA", amount: 66500 }, { state: "AZ", amount: 97500 },
 ];
 
+// ─── Gate A/B variant ───────────────────────────────────────────────────
+// "open"    → the running figure is legible the whole way through.
+// "blurred" → the figure is blurred out. Movement is still visible (it grows,
+//             it animates, the digits get wider) but the amount is unreadable
+//             until the form is submitted.
+// Sticky per session. Force with ?gate=open or ?gate=blurred for QA.
+function resolveGateVariant() {
+  try {
+    const forced = new URLSearchParams(window.location.search).get("gate");
+    if (forced === "open" || forced === "blurred") {
+      sessionStorage.setItem("cmc_gate_variant", forced);
+      return forced;
+    }
+    const existing = sessionStorage.getItem("cmc_gate_variant");
+    if (existing === "open" || existing === "blurred") return existing;
+    const assigned = Math.random() < 0.5 ? "open" : "blurred";
+    sessionStorage.setItem("cmc_gate_variant", assigned);
+    return assigned;
+  } catch {
+    return "open";
+  }
+}
+
 // ─── Animated count-up ────────────────────────────────────────────────────
 function useCountUp(target, duration = 750) {
   const [val, setVal] = useState(target);
@@ -182,9 +205,10 @@ function useCountUp(target, duration = 750) {
 }
 
 // ─── Sticky live estimate card ────────────────────────────────────────────
-function EstimateCard({ high, low, started, step, total, sol }) {
+function EstimateCard({ high, low, started, step, total, sol, blurred }) {
   const shown = useCountUp(high);
   const pct = Math.round(((step + 1) / total) * 100);
+  const hide = blurred && started;
 
   return (
     <div className="sticky top-0 z-30 px-4 pt-3 pb-3 bg-[#0a1628]/95 backdrop-blur-sm border-b border-white/5">
@@ -198,7 +222,12 @@ function EstimateCard({ high, low, started, step, total, sol }) {
               {started ? (
                 <div className="flex items-baseline gap-1.5">
                   <span className="text-slate-500 text-xs">up to</span>
-                  <span className="text-2xl font-black text-emerald-400 tabular-nums leading-none">{fmt(shown)}</span>
+                  <span
+                    aria-hidden={hide ? "true" : undefined}
+                    className={`text-2xl font-black text-emerald-400 tabular-nums leading-none transition-all duration-300 ${hide ? "blur-[9px] select-none" : ""}`}
+                  >
+                    {fmt(shown)}
+                  </span>
                 </div>
               ) : (
                 <div className="text-2xl font-black text-emerald-400 tabular-nums leading-none">$0</div>
@@ -218,7 +247,11 @@ function EstimateCard({ high, low, started, step, total, sol }) {
 
           <div className="flex items-center justify-between gap-2 mt-2">
             <span className="text-[10px] text-slate-500">
-              {started ? `Range ${fmt(low)} – ${fmt(high)}` : "Builds with each answer"}
+              {!started
+                ? "Builds with each answer"
+                : hide
+                  ? "🔒 Unlock your figure at the end"
+                  : `Range ${fmt(low)} – ${fmt(high)}`}
             </span>
             {sol?.daysRemaining !== null && sol?.daysRemaining !== undefined && (
               <span className={`text-[10px] font-semibold ${sol.expired ? "text-amber-400" : "text-emerald-400"}`}>
