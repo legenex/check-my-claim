@@ -110,8 +110,23 @@ function placeholderBills(multHigh) {
 // live counter, and again at the end for the final result. Unanswered fields
 // fall back to the most conservative value in their range, so answering a
 // question can only add information and therefore value.
+// Injuries are multi-select. Severity is driven by the worst one chosen, then
+// mapped onto whatever InjuryMultiplier tiers exist by ranking them on
+// multiplier_high. That keeps this correct if tiers are edited in admin.
+function tierForInjuries(injuryTypes, injuryTiers) {
+  if (!injuryTypes?.length || !injuryTiers?.length) return null;
+  const ranks = injuryTypes
+    .map(v => INJURY_TYPES.find(i => i.value === v)?.severity)
+    .filter(r => r !== undefined);
+  if (!ranks.length) return null;
+  const worst = Math.max(...ranks);
+  const sorted = [...injuryTiers].sort((a, b) => (a.multiplier_high || 0) - (b.multiplier_high || 0));
+  const idx = Math.round((worst / 4) * (sorted.length - 1));
+  return sorted[Math.min(sorted.length - 1, Math.max(0, idx))];
+}
+
 function computeEstimate(ans, injuryTiers, stateData) {
-  const tier = injuryTiers.find(t => t.tier_key === ans.injury_severity_tier);
+  const tier = tierForInjuries(ans.injury_types, injuryTiers);
   const multLow = tier?.multiplier_low ?? 1.2;
   const multHigh = tier?.multiplier_high ?? 1.5;
 
@@ -787,13 +802,13 @@ export default function ClaimEstimatorPage({ experiment }) {
   const STEPS = [
     { id: "accident_type", title: "What type of accident were you in?", subtitle: "Tap one to start calculating your estimate." },
     { id: "state", title: "Where did the accident happen?", subtitle: "State law significantly affects value and timeline." },
-    { id: "injury_severity_tier", title: "How serious are your injuries?", subtitle: "This is the single biggest driver of claim value." },
-    { id: "incident_date", title: "When did the accident happen?", subtitle: "Most claims are valid for a limited time, so timing matters." },
-    { id: "liability_clarity", title: "Was the accident your fault?", subtitle: "If someone else caused it, you may be owed more." },
-    { id: "treatment_status", title: "Are you still in treatment?", subtitle: "Documented treatment is critical to your claim." },
-    { id: "missed_work", title: "Have you missed work?", subtitle: "Lost wages are recoverable economic damages." },
+    { id: "incident_date", title: "When did the accident happen?", subtitle: "Most claims are valid for a limited time." },
+    { id: "injury_types", title: "What injuries did you suffer?", subtitle: "Select all that apply." },
+    { id: "treatment_status", title: "Did you receive medical treatment?", subtitle: "Documented treatment is critical to your claim." },
     { id: "total_medical_bills", title: "Total medical bills so far?", subtitle: "Include ER, imaging, specialists, PT, prescriptions." },
-    { id: "notes", title: "Anything else? (optional)", subtitle: "This helps personalize your results. 200 characters max." },
+    { id: "missed_work", title: "Have you missed work?", subtitle: "Lost wages are recoverable economic damages." },
+    { id: "liability_clarity", title: "Were you at fault for the accident?", subtitle: "If someone else caused it, you may be owed more." },
+    { id: "attorney_status", title: "Have you worked with an attorney on this?", subtitle: "Last question." },
   ];
 
   // Live estimate, recomputed on every answer.
@@ -835,7 +850,7 @@ export default function ClaimEstimatorPage({ experiment }) {
   const currentVal = answers[currentStep.id];
 
   const canProceed = () => {
-    if (currentStep.id === "notes") return true;
+    if (currentStep.id === "injury_types") return (currentVal || []).length > 0;
     if (currentStep.id === "total_medical_bills") return currentVal !== undefined && currentVal !== "" && !isNaN(parseFloat(currentVal)) && parseFloat(currentVal) >= 0;
     return !!currentVal;
   };
