@@ -435,7 +435,7 @@ function OptInGate({ results, experiment, onSubmit, submitting, error, variant =
                 Your claim may be worth more than you think
               </h1>
               <div className="flex items-center justify-center gap-3 mb-4">
-                <div className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#2BB6F6] to-emerald-400 blur-sm select-none">
+                <div aria-hidden="true" className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#2BB6F6] to-emerald-400 blur-[26px] opacity-80 select-none pointer-events-none">
                   {fmt(estimateLow)} – {fmt(estimateHigh)}
                 </div>
               </div>
