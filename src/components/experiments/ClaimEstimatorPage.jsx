@@ -488,18 +488,18 @@ function OptInGate({ results, experiment, onSubmit, submitting, error, variant =
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <input value={form.first_name} onChange={e => setForm(f => ({ ...f, first_name: e.target.value }))}
-                  placeholder="First Name" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-sm" />
+                  placeholder="First Name" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-base" />
                 <input value={form.last_name} onChange={e => setForm(f => ({ ...f, last_name: e.target.value }))}
-                  placeholder="Last Name" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-sm" />
+                  placeholder="Last Name" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-base" />
               </div>
               <input type="tel" value={form.phone} onChange={handlePhone}
-                placeholder="Mobile Number (US)" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-sm"
+                placeholder="Mobile Number (US)" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-base"
                 maxLength={14} />
               {form.phone && !isValidPhone && <p className="text-amber-400 text-xs px-1">Please enter a valid 10-digit US number.</p>}
               <input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                placeholder="Email Address" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-sm" />
+                placeholder="Email Address" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-base" />
               <input value={form.zip} onChange={e => setForm(f => ({ ...f, zip: e.target.value.replace(/\D/g,"").slice(0,5) }))}
-                placeholder="Zip Code" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-sm"
+                placeholder="Zip Code" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-base"
                 maxLength={5} />
               {form.zip.length === 5 && !isValidZip && <p className="text-amber-400 text-xs px-1">Please enter a valid 5-digit zip code.</p>}
 
