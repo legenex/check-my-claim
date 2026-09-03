@@ -819,7 +819,7 @@ export default function ClaimEstimatorPage({ experiment }) {
   }
 
   // ─── Quiz steps ───────────────────────────────────────────────────────
-  const MULTI_CHOICE_STEPS = ["injury_severity_tier", "accident_type", "liability_clarity", "treatment_status", "missed_work"];
+  const MULTI_CHOICE_STEPS = ["injury_severity_tier", "accident_type", "incident_date", "liability_clarity", "treatment_status", "missed_work"];
   const isMultiChoice = MULTI_CHOICE_STEPS.includes(currentStep.id);
 
   return (
@@ -846,7 +846,16 @@ export default function ClaimEstimatorPage({ experiment }) {
         </div>
       )}
 
-      <ProgressBar step={step} total={STEPS.length} />
+      <EstimateCard
+        high={displayHigh}
+        low={live.estimateLow}
+        started={started}
+        step={step}
+        total={STEPS.length}
+        sol={sol}
+      />
+
+      <ProofTicker items={proofItems} index={step} />
 
       <div className="flex-1 flex items-start justify-center px-4 py-8">
         <div className="max-w-2xl w-full">
@@ -882,11 +891,25 @@ export default function ClaimEstimatorPage({ experiment }) {
             </div>
           )}
 
-          {/* INCIDENT DATE */}
+          {/* INCIDENT DATE — fast tap buckets */}
           {currentStep.id === "incident_date" && (
-            <input type="date" value={currentVal || ""} onChange={e => setAnswers(a => ({ ...a, incident_date: e.target.value }))}
-              max={new Date().toISOString().split("T")[0]}
-              className="w-full bg-white border border-slate-200 rounded-xl px-4 py-4 text-slate-800 text-lg font-medium focus:outline-none focus:border-[#2BB6F6]" />
+            <div className="grid grid-cols-2 gap-3">
+              {DATE_BUCKETS.map(opt => {
+                const active = answers.date_bucket === opt.value;
+                return (
+                  <button key={opt.value}
+                    onClick={() => {
+                      const derived = bucketToDate(opt.value);
+                      setAnswers(a => ({ ...a, date_bucket: opt.value, incident_date: derived }));
+                      if (autoNextTimer.current) clearTimeout(autoNextTimer.current);
+                      autoNextTimer.current = setTimeout(() => setStep(s => Math.min(STEPS.length - 1, s + 1)), 300);
+                    }}
+                    className={`text-left px-4 py-4 rounded-xl border-2 font-medium transition-all text-sm ${active ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/30"}`}>
+                    {opt.label}
+                  </button>
+                );
+              })}
+            </div>
           )}
 
           {/* STATE */}
@@ -964,7 +987,7 @@ export default function ClaimEstimatorPage({ experiment }) {
               className="px-5 py-3 bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white font-semibold rounded-xl text-sm transition-all">
               ← Back
             </button>
-            {(!isMultiChoice || currentStep.id === "total_medical_bills" || currentStep.id === "notes" || currentStep.id === "incident_date" || currentStep.id === "state") && (
+            {(!isMultiChoice || currentStep.id === "total_medical_bills" || currentStep.id === "notes" || currentStep.id === "state") && (
               <button onClick={next} disabled={!canProceed()}
                 className="px-8 py-3 bg-[#2BB6F6] hover:bg-[#1a9fd8] disabled:opacity-40 text-white font-bold rounded-xl text-sm transition-all">
                 {step === STEPS.length - 1 ? "Calculate My Estimate →" : "Next →"}
