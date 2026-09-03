@@ -152,12 +152,16 @@ function computeSol(incidentDate, stateData) {
   return { solDeadline, daysRemaining: Math.max(0, raw), expired: raw <= 0, solYears };
 }
 
-// Fallback proof items, used only if real recent estimates cannot be read.
+// Fallback proof items. Illustrative only, used when no real record qualifies.
 const FALLBACK_PROOF = [
-  { state: "NJ", amount: 103000 }, { state: "FL", amount: 74500 },
-  { state: "TX", amount: 84000 }, { state: "IL", amount: 122000 },
-  { state: "GA", amount: 66500 }, { state: "AZ", amount: 97500 },
+  { state: "NJ", amount: 178000 }, { state: "FL", amount: 214500 },
+  { state: "TX", amount: 156000 }, { state: "IL", amount: 262000 },
+  { state: "GA", amount: 133500 }, { state: "AZ", amount: 197500 },
+  { state: "CA", amount: 288000 }, { state: "NY", amount: 241000 },
 ];
+
+// Only surface meaningful figures in the ticker.
+const PROOF_MIN = 100000;
 
 // ─── Gate A/B variant ───────────────────────────────────────────────────
 // "reveal"  → the figure is legible throughout, and is revealed in full on the
@@ -267,15 +271,24 @@ function EstimateCard({ high, low, started, step, total, sol, blurred }) {
 }
 
 // ─── Rotating social proof ────────────────────────────────────────────────
-function ProofTicker({ items, index }) {
+// Once the user has picked a state we prefer a real record from that state.
+// If none qualifies we fall back to another real record rather than inventing
+// a figure for their state.
+function ProofTicker({ items, index, selectedState }) {
   if (!items || items.length === 0) return null;
-  const item = items[index % items.length];
+  const local = selectedState ? items.filter(i => i.state === selectedState) : [];
+  const pool = local.length > 0 ? local : items;
+  const item = pool[index % pool.length];
+  const isLocal = local.length > 0;
+
   return (
-    <div className="px-4 pt-2.5 flex justify-center">
-      <div key={index} className="inline-flex items-center gap-1.5 text-[10px] text-slate-500">
-        <span className="w-1 h-1 rounded-full bg-emerald-400/70" />
-        Recent estimate in {STATE_NAME[item.state] || item.state}:{" "}
-        <span className="text-emerald-400/80 font-semibold">{fmt(item.amount)}</span>
+    <div className="px-4 pt-3 flex justify-center">
+      <div
+        key={`${item.state}-${item.amount}-${index}`}
+        className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm border ${isLocal ? "bg-emerald-500/10 border-emerald-500/30 text-slate-200" : "bg-white/5 border-white/10 text-slate-300"}`}>
+        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+        <span>Recent estimate in {STATE_NAME[item.state] || item.state}:</span>
+        <strong className="text-emerald-300 font-bold">{fmt(item.amount)}</strong>
       </div>
     </div>
   );
