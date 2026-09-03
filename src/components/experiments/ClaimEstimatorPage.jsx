@@ -942,21 +942,13 @@ export default function ClaimEstimatorPage({ experiment }) {
 
       {/* Hero — step 0 only */}
       {step === 0 && (
-        <div className="text-center px-4 pt-10 pb-4 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-[#2BB6F6]/15 border border-[#2BB6F6]/30 text-[#2BB6F6] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
-            <Shield className="w-3.5 h-3.5" /> Free — No Obligation
-          </div>
-          <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-3">
+        <div className="text-center px-5 pt-8 pb-2 max-w-md mx-auto">
+          <h1 className="text-2xl sm:text-3xl font-black text-white leading-tight mb-2">
             {experiment?.hero_headline || "What Is Your Injury Claim Actually Worth?"}
           </h1>
-          <p className="text-slate-300 text-lg mb-2">
-            {experiment?.hero_subheadline || "Answer 9 quick questions. Get a transparent, methodology-backed estimate in under 2 minutes."}
+          <p className="text-slate-400 text-sm">
+            9 quick taps. Free, private, no obligation.
           </p>
-          <div className="flex flex-wrap justify-center gap-3 mt-5">
-            {["✓ Based on real case data", "✓ State-adjusted", "✓ Includes pain & suffering", "✓ 100% private"].map(b => (
-              <span key={b} className="bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold px-3 py-1.5 rounded-full">{b}</span>
-            ))}
-          </div>
         </div>
       )}
 
@@ -972,10 +964,10 @@ export default function ClaimEstimatorPage({ experiment }) {
 
       <ProofTicker items={proofItems} index={step} selectedState={answers.state} />
 
-      <div className="flex-1 flex items-start justify-center px-4 py-6">
-        <div className="max-w-xl w-full">
-          <h2 className="text-xl md:text-2xl font-extrabold text-white mb-1">{currentStep.title}</h2>
-          <p className="text-slate-500 mb-5 text-sm">{currentStep.subtitle}</p>
+      <div className="flex-1 flex items-start justify-center px-5 py-6">
+        <div className="max-w-md w-full">
+          <h2 className="text-xl font-extrabold text-white mb-1 leading-snug">{currentStep.title}</h2>
+          <p className="text-slate-500 mb-4 text-[13px]">{currentStep.subtitle}</p>
 
           {/* INJURY TIER */}
           {currentStep.id === "injury_severity_tier" && (
@@ -1004,9 +996,9 @@ export default function ClaimEstimatorPage({ experiment }) {
               {ACCIDENT_TYPES.map(opt => (
                 <button key={opt.value}
                   onClick={() => pickAndAutoNext("accident_type", opt.value)}
-                  className={`flex items-center gap-2 text-left px-3.5 py-3 rounded-lg border font-medium transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
-                  <span className="text-lg">{opt.icon}</span>
-                  <span className="text-sm">{opt.label}</span>
+                  className={`flex items-center gap-2 text-left px-3 min-h-[56px] py-3 rounded-xl border font-medium transition-all active:scale-[0.99] ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
+                  <span className="text-lg shrink-0">{opt.icon}</span>
+                  <span className="text-[13px] leading-tight">{opt.label}</span>
                 </button>
               ))}
             </div>
@@ -1025,7 +1017,7 @@ export default function ClaimEstimatorPage({ experiment }) {
                       if (autoNextTimer.current) clearTimeout(autoNextTimer.current);
                       autoNextTimer.current = setTimeout(() => setStep(s => Math.min(STEPS.length - 1, s + 1)), 300);
                     }}
-                    className={`text-left px-3.5 py-3 rounded-lg border font-medium transition-all text-sm ${active ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
+                    className={`flex items-center text-left px-3 min-h-[56px] py-3 rounded-xl border font-medium transition-all text-[13px] leading-tight active:scale-[0.99] ${active ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
                     {opt.label}
                   </button>
                 );
@@ -1042,7 +1034,7 @@ export default function ClaimEstimatorPage({ experiment }) {
                 if (autoNextTimer.current) clearTimeout(autoNextTimer.current);
                 if (v) autoNextTimer.current = setTimeout(() => setStep(s => Math.min(STEPS.length - 1, s + 1)), 400);
               }}
-              className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3.5 text-slate-800 text-base font-medium focus:outline-none focus:border-[#2BB6F6]">
+              className="w-full bg-white border border-slate-200 rounded-xl px-4 min-h-[56px] py-3.5 text-slate-800 text-base font-medium focus:outline-none focus:border-[#2BB6F6]">
               <option value="">— Select your state —</option>
               {US_STATES.map(([code, name]) => <option key={code} value={code}>{name}</option>)}
             </select>
