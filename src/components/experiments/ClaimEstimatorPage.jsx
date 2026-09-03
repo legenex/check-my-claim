@@ -24,40 +24,59 @@ const US_STATES = [
   ["VT","Vermont"],["VA","Virginia"],["WA","Washington"],["WV","West Virginia"],["WI","Wisconsin"],["WY","Wyoming"]
 ];
 
+// Values below mirror SurveySeeder.jsx so the LeadsHook handoff needs no
+// translation layer.
 const ACCIDENT_TYPES = [
-  { value: "auto", label: "Auto Accident", icon: "🚗" },
-  { value: "motorcycle", label: "Motorcycle", icon: "🏍️" },
-  { value: "rideshare_passenger", label: "Rideshare Passenger", icon: "🚕" },
-  { value: "rideshare_other", label: "Hit by Rideshare Driver", icon: "🚖" },
-  { value: "pedestrian", label: "Pedestrian Struck", icon: "🚶" },
-  { value: "cyclist", label: "Cyclist Struck", icon: "🚴" },
-  { value: "commercial_truck", label: "Commercial Truck", icon: "🚛" },
-  { value: "other", label: "Other / Unsure", icon: "❓" },
+  { value: "auto", label: "Auto / Motorcycle", icon: "🚗" },
+  { value: "commercial", label: "Commercial / Semi", icon: "🚛" },
+  { value: "rideshare_passenger", label: "Passenger / Rideshare / Pedestrian", icon: "🚕" },
+  { value: "work_other_none", label: "At Work / Other", icon: "🦺" },
+];
+
+// Survey injury_type values. severity is a 0-4 rank used to pick the matching
+// InjuryMultiplier tier; with multi-select we take the highest rank chosen.
+const INJURY_TYPES = [
+  { value: "fatality", label: "Fatality / Wrongful Death", severity: 4 },
+  { value: "spinal", label: "Spinal Cord Injury / Paralysis", severity: 4 },
+  { value: "amputation", label: "Loss of Limb / Amputation", severity: 4 },
+  { value: "brain", label: "Brain Injury / Memory Loss", severity: 3 },
+  { value: "fractures", label: "Fractures / Broken Bones", severity: 2 },
+  { value: "headaches", label: "Headaches / Concussion", severity: 2 },
+  { value: "back_neck_shoulder", label: "Back / Neck / Shoulder", severity: 1 },
+  { value: "cuts_bruises", label: "Cuts / Bruises / Burns", severity: 1 },
+  { value: "whiplash", label: "Whiplash", severity: 1 },
+  { value: "other", label: "Other", severity: 1 },
+  { value: "none", label: "No Injury", severity: 0 },
 ];
 
 const LIABILITY_OPTIONS = [
-  { value: "clear_other_fault", label: "Clearly the other party's fault", factor: 1.0, icon: "✅" },
-  { value: "disputed", label: "Disputed — liability is contested", factor: 0.65, icon: "⚖️" },
-  { value: "partial_fault", label: "I was partially at fault", factor: 0.85, icon: "⚠️" },
-  { value: "unclear", label: "Unclear — I'm not sure", factor: 0.75, icon: "❓" },
+  { value: "not_at_fault", label: "No, someone else caused it", factor: 1.0, icon: "✅" },
+  { value: "both_unsure", label: "We were both at fault / not sure", factor: 0.75, icon: "⚖️" },
+  { value: "hit_run_single", label: "Hit & run / single-vehicle / animal", factor: 0.60, icon: "❓" },
+  { value: "at_fault", label: "Yes, I caused the accident", factor: 0.50, icon: "⚠️" },
+];
+
+const ATTORNEY_OPTIONS = [
+  { value: "never", label: "No, never worked with an attorney" },
+  { value: "worked_with", label: "Yes, I have worked with one" },
+  { value: "currently_represented", label: "I have one right now" },
+  { value: "rejected_or_settled", label: "My claim was rejected or settled" },
 ];
 
 const TREATMENT_OPTIONS = [
-  { value: "er_only", label: "ER visit only", sub: "No follow-up treatment yet", futureFactor: 0.10 },
-  { value: "ongoing", label: "Currently in treatment", sub: "PT, chiro, specialist visits ongoing", futureFactor: 0.50 },
-  { value: "completed", label: "Treatment completed", sub: "All care has concluded", futureFactor: 0.20 },
-  { value: "none_yet", label: "Have not been treated yet", sub: "I have not seen a doctor", futureFactor: 0.15 },
+  { value: "yes", label: "Yes, I was treated", futureFactor: 0.35 },
+  { value: "no", label: "No, I was not treated", futureFactor: 0.10 },
 ];
 
-// Fast tap buckets instead of a date picker (competitor pacing).
-// daysAgo is the bucket midpoint, used to derive an approximate incident date.
+// Bands mirror the survey. "over_12_months" is what keeps the statute of
+// limitations check alive; without a long tail every claim looks in-window.
 const DATE_BUCKETS = [
-  { value: "last_week", label: "In the last week", daysAgo: 5 },
-  { value: "1_3_months", label: "1 to 3 months ago", daysAgo: 60 },
-  { value: "4_6_months", label: "4 to 6 months ago", daysAgo: 150 },
-  { value: "7_12_months", label: "Within the last year", daysAgo: 270 },
-  { value: "over_year", label: "More than a year ago", daysAgo: 500 },
-  { value: "over_2_years", label: "More than 2 years ago", daysAgo: 830 },
+  { value: "1_7_days", label: "In the last 7 days", daysAgo: 4 },
+  { value: "7_14_days", label: "7 to 14 days ago", daysAgo: 11 },
+  { value: "1_2_months", label: "1 to 2 months ago", daysAgo: 45 },
+  { value: "3_6_months", label: "3 to 6 months ago", daysAgo: 135 },
+  { value: "6_12_months", label: "6 to 12 months ago", daysAgo: 270 },
+  { value: "over_12_months", label: "More than 12 months ago", daysAgo: 730 },
 ];
 
 const MISSED_WORK_OPTIONS = [
