@@ -187,45 +187,45 @@ function EstimateCard({ high, low, started, step, total, sol }) {
   const pct = Math.round(((step + 1) / total) * 100);
 
   return (
-    <div className="sticky top-0 z-30 px-4 pt-4 pb-3 bg-[#0a1628]/95 backdrop-blur-sm border-b border-white/5">
-      <div className="max-w-2xl mx-auto">
-        <div className="rounded-2xl border border-emerald-500/25 bg-gradient-to-b from-emerald-500/10 to-transparent px-5 py-4 text-center">
-          <div className="flex items-center justify-center gap-2 mb-1">
-            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400">Estimated Case Value</span>
-            <span className="inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 px-1.5 py-0.5 rounded">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> Live
-            </span>
-          </div>
-
-          {started ? (
-            <>
-              <div className="flex items-baseline justify-center gap-2">
-                <span className="text-slate-400 text-sm font-semibold">up to</span>
-                <span className="text-4xl md:text-5xl font-black text-emerald-400 tabular-nums">{fmt(shown)}</span>
+    <div className="sticky top-0 z-30 px-4 pt-3 pb-3 bg-[#0a1628]/95 backdrop-blur-sm border-b border-white/5">
+      <div className="max-w-xl mx-auto">
+        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3">
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-slate-500 mb-0.5">
+                Estimated case value
               </div>
-              <div className="text-xs text-slate-400 mt-1">
-                Potential range: {fmt(low)} – {fmt(high)}
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="text-4xl md:text-5xl font-black text-emerald-400 tabular-nums">$0</div>
-              <div className="text-xs text-slate-400 mt-1">Your estimate builds with each answer 👇</div>
-            </>
-          )}
-
-          <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden mt-3">
-            <div className="h-full bg-gradient-to-r from-emerald-500 to-emerald-300 transition-all duration-500 rounded-full" style={{ width: `${pct}%` }} />
-          </div>
-          <div className="text-[10px] text-slate-500 mt-1.5">Step {step + 1} of {total}</div>
-
-          {sol?.daysRemaining !== null && sol?.daysRemaining !== undefined && (
-            <div className={`mt-2 text-xs font-semibold ${sol.expired ? "text-amber-400" : "text-emerald-400"}`}>
-              {sol.expired
-                ? "⚠ Your standard filing window has passed. Exceptions may apply."
-                : "✓ Good news: you're likely still within the filing window."}
+              {started ? (
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-slate-500 text-xs">up to</span>
+                  <span className="text-2xl font-black text-emerald-400 tabular-nums leading-none">{fmt(shown)}</span>
+                </div>
+              ) : (
+                <div className="text-2xl font-black text-emerald-400 tabular-nums leading-none">$0</div>
+              )}
             </div>
-          )}
+            <div className="text-right shrink-0">
+              <span className="inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider text-emerald-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> Live
+              </span>
+              <div className="text-[10px] text-slate-500 mt-1">Step {step + 1} of {total}</div>
+            </div>
+          </div>
+
+          <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden mt-2.5">
+            <div className="h-full bg-emerald-400 transition-all duration-500 rounded-full" style={{ width: `${pct}%` }} />
+          </div>
+
+          <div className="flex items-center justify-between gap-2 mt-2">
+            <span className="text-[10px] text-slate-500">
+              {started ? `Range ${fmt(low)} – ${fmt(high)}` : "Builds with each answer"}
+            </span>
+            {sol?.daysRemaining !== null && sol?.daysRemaining !== undefined && (
+              <span className={`text-[10px] font-semibold ${sol.expired ? "text-amber-400" : "text-emerald-400"}`}>
+                {sol.expired ? "⚠ Filing window passed" : "✓ Within filing window"}
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -237,11 +237,11 @@ function ProofTicker({ items, index }) {
   if (!items || items.length === 0) return null;
   const item = items[index % items.length];
   return (
-    <div className="px-4 pt-3 flex justify-center">
-      <div key={index} className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-3.5 py-1.5 text-[11px] text-slate-300 animate-in fade-in duration-500">
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+    <div className="px-4 pt-2.5 flex justify-center">
+      <div key={index} className="inline-flex items-center gap-1.5 text-[10px] text-slate-500">
+        <span className="w-1 h-1 rounded-full bg-emerald-400/70" />
         Recent estimate in {STATE_NAME[item.state] || item.state}:{" "}
-        <strong className="text-emerald-300">{fmt(item.amount)}</strong>
+        <span className="text-emerald-400/80 font-semibold">{fmt(item.amount)}</span>
       </div>
     </div>
   );
