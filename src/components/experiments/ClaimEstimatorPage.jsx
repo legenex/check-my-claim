@@ -163,6 +163,25 @@ const FALLBACK_PROOF = [
 // Only surface meaningful figures in the ticker.
 const PROOF_MIN = 100000;
 
+// Injury tier labels are admin-authored and tend to be long, e.g.
+// "Soft tissue / strain (no surgery)". Split the parenthetical off so the
+// primary line stays short and scannable on a phone.
+function splitTierLabel(label = "") {
+  const m = label.match(/^(.*?)\s*\((.*)\)\s*$/);
+  if (m) return { main: m[1].trim(), qualifier: m[2].trim() };
+  return { main: label.trim(), qualifier: "" };
+}
+
+// Severity ramp driven by the tier's own multiplier, so it stays correct no
+// matter how many tiers an admin configures.
+function severityColor(multHigh) {
+  if (multHigh <= 2) return "bg-sky-400";
+  if (multHigh <= 3) return "bg-teal-400";
+  if (multHigh <= 4) return "bg-amber-400";
+  if (multHigh <= 5.5) return "bg-orange-400";
+  return "bg-red-400";
+}
+
 // ─── Gate A/B variant ───────────────────────────────────────────────────
 // "reveal"  → the figure is legible throughout, and is revealed in full on the
 //             form page. The primary action there is a phone call, with the
@@ -961,16 +980,21 @@ export default function ClaimEstimatorPage({ experiment }) {
           {/* INJURY TIER */}
           {currentStep.id === "injury_severity_tier" && (
             <div className="grid grid-cols-1 gap-2">
-              {injuryTiers.map(tier => (
-                <button key={tier.tier_key}
-                  onClick={() => pickAndAutoNext("injury_severity_tier", tier.tier_key)}
-                  className={`w-full text-left px-4 py-3 rounded-lg border transition-all ${currentVal === tier.tier_key ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/25"}`}>
-                  <div className={`font-semibold text-sm ${currentVal === tier.tier_key ? "text-white" : "text-slate-200"}`}>{tier.tier_label}</div>
-                  {tier.example_injuries?.length > 0 && (
-                    <div className="text-xs text-slate-500 mt-0.5 truncate">{tier.example_injuries.slice(0, 3).join(", ")}</div>
-                  )}
-                </button>
-              ))}
+              {injuryTiers.map(tier => {
+                const { main, qualifier } = splitTierLabel(tier.tier_label);
+                const active = currentVal === tier.tier_key;
+                return (
+                  <button key={tier.tier_key}
+                    onClick={() => pickAndAutoNext("injury_severity_tier", tier.tier_key)}
+                    className={`w-full flex items-center gap-3 text-left px-4 min-h-[56px] py-3 rounded-xl border transition-all active:scale-[0.99] ${active ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/25"}`}>
+                    <span className={`w-2 h-8 rounded-full shrink-0 ${severityColor(tier.multiplier_high)}`} />
+                    <span className="min-w-0">
+                      <span className={`block font-semibold text-[15px] leading-tight ${active ? "text-white" : "text-slate-200"}`}>{main}</span>
+                      {qualifier && <span className="block text-xs text-slate-500 mt-0.5">{qualifier}</span>}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           )}
 
