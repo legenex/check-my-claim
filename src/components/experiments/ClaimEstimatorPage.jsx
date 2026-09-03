@@ -350,7 +350,7 @@ function TCPADisclaimer() {
 }
 
 // ─── Opt-in gate (shown instead of results) ───────────────────────────────
-function OptInGate({ results, experiment, onSubmit, submitting, error }) {
+function OptInGate({ results, experiment, onSubmit, submitting, error, variant = "blurred" }) {
   const [form, setForm] = useState({ first_name: "", last_name: "", phone: "", email: "", zip: "" });
 
   const formatPhone = (val) => {
@@ -385,7 +385,7 @@ function OptInGate({ results, experiment, onSubmit, submitting, error }) {
               Your claim may be worth more than you think
             </h1>
             <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#2BB6F6] to-emerald-400 blur-sm select-none">
+              <div className={`text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#2BB6F6] to-emerald-400 ${variant === "blurred" ? "blur-sm select-none" : ""}`}>
                 {fmt(estimateLow)} – {fmt(estimateHigh)}
               </div>
             </div>
@@ -846,7 +846,7 @@ export default function ClaimEstimatorPage({ experiment }) {
 
   // Show opt-in gate before results
   if (showOptIn && results) {
-    return <OptInGate results={results} experiment={experiment} onSubmit={handleOptInSubmit} submitting={submitting} error={submitError} />;
+    return <OptInGate results={results} experiment={experiment} onSubmit={handleOptInSubmit} submitting={submitting} error={submitError} variant={gateVariant} />;
   }
 
   // Show results after opt-in
