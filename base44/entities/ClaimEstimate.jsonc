@@ -21,6 +21,14 @@
     "first_name": {
       "type": "string"
     },
+    "gate_variant": {
+      "type": "string",
+      "enum": [
+        "open",
+        "blurred"
+      ],
+      "description": "A/B variant for the live estimate gate. 'open' shows the running figure; 'blurred' hides it behind a blur until the form is submitted."
+    },
     "gclid": {
       "type": "string"
     },
