@@ -736,10 +736,10 @@ export default function ClaimEstimatorPage({ experiment }) {
 
   const STEPS = [
     { id: "accident_type", title: "What type of accident were you in?", subtitle: "Tap one to start calculating your estimate." },
+    { id: "state", title: "Where did the accident happen?", subtitle: "State law significantly affects value and timeline." },
     { id: "injury_severity_tier", title: "How serious are your injuries?", subtitle: "This is the single biggest driver of claim value." },
     { id: "incident_date", title: "When did the accident happen?", subtitle: "Most claims are valid for a limited time, so timing matters." },
     { id: "liability_clarity", title: "Was the accident your fault?", subtitle: "If someone else caused it, you may be owed more." },
-    { id: "state", title: "Where did the accident happen?", subtitle: "State law significantly affects value and timeline." },
     { id: "treatment_status", title: "Are you still in treatment?", subtitle: "Documented treatment is critical to your claim." },
     { id: "missed_work", title: "Have you missed work?", subtitle: "Lost wages are recoverable economic damages." },
     { id: "total_medical_bills", title: "Total medical bills so far?", subtitle: "Include ER, imaging, specialists, PT, prescriptions." },
@@ -767,9 +767,9 @@ export default function ClaimEstimatorPage({ experiment }) {
     base44.entities.ClaimEstimate.list("-created_date", 40)
       .then(rows => {
         const real = (rows || [])
-          .filter(r => r.state && r.estimate_high > 0)
+          .filter(r => r.state && r.estimate_high >= PROOF_MIN)
           .map(r => ({ state: r.state, amount: r.estimate_high }))
-          .slice(0, 12);
+          .slice(0, 20);
         if (real.length >= 4) setProofItems(real);
       })
       .catch(() => {});
@@ -900,7 +900,7 @@ export default function ClaimEstimatorPage({ experiment }) {
   }
 
   // ─── Quiz steps ───────────────────────────────────────────────────────
-  const MULTI_CHOICE_STEPS = ["injury_severity_tier", "accident_type", "incident_date", "liability_clarity", "treatment_status", "missed_work"];
+  const MULTI_CHOICE_STEPS = ["injury_severity_tier", "accident_type", "state", "incident_date", "liability_clarity", "treatment_status", "missed_work"];
   const isMultiChoice = MULTI_CHOICE_STEPS.includes(currentStep.id);
 
   return (
@@ -937,7 +937,7 @@ export default function ClaimEstimatorPage({ experiment }) {
         blurred={gateVariant === "blurred"}
       />
 
-      <ProofTicker items={proofItems} index={step} />
+      <ProofTicker items={proofItems} index={step} selectedState={answers.state} />
 
       <div className="flex-1 flex items-start justify-center px-4 py-6">
         <div className="max-w-xl w-full">
@@ -997,8 +997,14 @@ export default function ClaimEstimatorPage({ experiment }) {
 
           {/* STATE */}
           {currentStep.id === "state" && (
-            <select value={currentVal || ""} onChange={e => setAnswers(a => ({ ...a, state: e.target.value }))}
-              className="w-full bg-white border border-slate-200 rounded-xl px-4 py-4 text-slate-800 text-lg font-medium focus:outline-none focus:border-[#2BB6F6]">
+            <select value={currentVal || ""}
+              onChange={e => {
+                const v = e.target.value;
+                setAnswers(a => ({ ...a, state: v }));
+                if (autoNextTimer.current) clearTimeout(autoNextTimer.current);
+                if (v) autoNextTimer.current = setTimeout(() => setStep(s => Math.min(STEPS.length - 1, s + 1)), 400);
+              }}
+              className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3.5 text-slate-800 text-base font-medium focus:outline-none focus:border-[#2BB6F6]">
               <option value="">— Select your state —</option>
               {US_STATES.map(([code, name]) => <option key={code} value={code}>{name}</option>)}
             </select>
@@ -1069,7 +1075,7 @@ export default function ClaimEstimatorPage({ experiment }) {
               className="px-4 py-2.5 bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white font-semibold rounded-lg text-sm transition-all">
               ← Back
             </button>
-            {(!isMultiChoice || currentStep.id === "total_medical_bills" || currentStep.id === "notes" || currentStep.id === "state") && (
+            {(!isMultiChoice || currentStep.id === "total_medical_bills" || currentStep.id === "notes") && (
               <button onClick={next} disabled={!canProceed()}
                 className="px-8 py-3 bg-[#2BB6F6] hover:bg-[#1a9fd8] disabled:opacity-40 text-white font-bold rounded-xl text-sm transition-all">
                 {step === STEPS.length - 1 ? "Calculate My Estimate →" : "Next →"}
