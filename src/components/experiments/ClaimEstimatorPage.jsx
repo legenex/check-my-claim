@@ -46,7 +46,18 @@ const TREATMENT_OPTIONS = [
   { value: "er_only", label: "ER visit only", sub: "No follow-up treatment yet", futureFactor: 0.10 },
   { value: "ongoing", label: "Currently in treatment", sub: "PT, chiro, specialist visits ongoing", futureFactor: 0.50 },
   { value: "completed", label: "Treatment completed", sub: "All care has concluded", futureFactor: 0.20 },
-  { value: "none_yet", label: "Have not been treated yet", sub: "I have not seen a doctor", futureFactor: 0.40 },
+  { value: "none_yet", label: "Have not been treated yet", sub: "I have not seen a doctor", futureFactor: 0.15 },
+];
+
+// Fast tap buckets instead of a date picker (competitor pacing).
+// daysAgo is the bucket midpoint, used to derive an approximate incident date.
+const DATE_BUCKETS = [
+  { value: "last_week", label: "In the last week", daysAgo: 5 },
+  { value: "1_3_months", label: "1 to 3 months ago", daysAgo: 60 },
+  { value: "4_6_months", label: "4 to 6 months ago", daysAgo: 150 },
+  { value: "7_12_months", label: "Within the last year", daysAgo: 270 },
+  { value: "over_year", label: "More than a year ago", daysAgo: 500 },
+  { value: "over_2_years", label: "More than 2 years ago", daysAgo: 830 },
 ];
 
 const MISSED_WORK_OPTIONS = [
@@ -55,6 +66,97 @@ const MISSED_WORK_OPTIONS = [
   { value: "weeks", label: "Several weeks", wages: 6000, futureWages: 0 },
   { value: "month_plus", label: "A month or more", wages: 22000, futureWages: 18000 },
   { value: "unable_to_return", label: "Unable to return to my job", wages: 75000, futureWages: 90000 },
+];
+
+// Representation uplift band, named so it can be tuned or removed in one place
+// instead of being buried inside the math.
+const REP_LOW = 2.0;
+const REP_HIGH = 3.5;
+
+const STATE_NAME = Object.fromEntries(US_STATES);
+
+// Conservative stand-in for medical bills before the user has told us.
+// Deliberately biased LOW so the real answer almost always pushes the running
+// estimate up rather than down.
+function placeholderBills(multHigh) {
+  if (!multHigh) return 800;
+  if (multHigh <= 1.5) return 800;
+  if (multHigh <= 2.5) return 2000;
+  if (multHigh <= 3.5) return 5000;
+  if (multHigh <= 5) return 15000;
+  return 40000;
+}
+
+// Single source of truth for the damages math. Called on every tap to drive the
+// live counter, and again at the end for the final result. Unanswered fields
+// fall back to the most conservative value in their range, so answering a
+// question can only add information and therefore value.
+function computeEstimate(ans, injuryTiers, stateData) {
+  const tier = injuryTiers.find(t => t.tier_key === ans.injury_severity_tier);
+  const multLow = tier?.multiplier_low ?? 1.2;
+  const multHigh = tier?.multiplier_high ?? 1.5;
+
+  const billsAnswered = ans.total_medical_bills !== undefined && ans.total_medical_bills !== "";
+  const bills = billsAnswered ? (parseFloat(ans.total_medical_bills) || 0) : placeholderBills(multHigh);
+
+  const treatment = TREATMENT_OPTIONS.find(t => t.value === ans.treatment_status);
+  const futureFactor = treatment ? treatment.futureFactor : 0.10;
+  const futureMedical = bills * futureFactor;
+
+  const mw = MISSED_WORK_OPTIONS.find(m => m.value === ans.missed_work);
+  const lostWages = mw?.wages ?? 0;
+  const futureWages = mw?.futureWages ?? 0;
+
+  const economicDamages = bills + futureMedical + lostWages + futureWages;
+  const medicalTotal = bills + futureMedical;
+
+  const stateFactor = stateData?.base_multiplier_factor ?? 0.92;
+  const liability = LIABILITY_OPTIONS.find(l => l.value === ans.liability_clarity);
+  const liabilityFactor = liability ? liability.factor : 0.65;
+  const neoCap = stateData?.non_economic_damage_cap || null;
+
+  let nonEconLow = medicalTotal * multLow;
+  let nonEconHigh = medicalTotal * multHigh;
+  let capApplied = false;
+  if (neoCap && nonEconHigh > neoCap) { nonEconHigh = neoCap; capApplied = true; }
+  if (neoCap && nonEconLow > neoCap) nonEconLow = neoCap;
+
+  const baseLow = (economicDamages + nonEconLow) * stateFactor * liabilityFactor;
+  const baseHigh = (economicDamages + nonEconHigh) * stateFactor * liabilityFactor;
+
+  return {
+    bills, billsAnswered, futureMedical, lostWages, futureWages,
+    economicDamages, medicalTotal, multLow, multHigh,
+    stateFactor, liabilityFactor, capApplied, neoCap, injuryTier: tier,
+    nonEconLow: Math.round(nonEconLow), nonEconHigh: Math.round(nonEconHigh),
+    estimateLow: Math.round((baseLow * REP_LOW) / 500) * 500,
+    estimateHigh: Math.round((baseHigh * REP_HIGH) / 500) * 500,
+  };
+}
+
+function bucketToDate(bucketValue) {
+  const b = DATE_BUCKETS.find(x => x.value === bucketValue);
+  if (!b) return null;
+  const d = new Date();
+  d.setDate(d.getDate() - b.daysAgo);
+  return d.toISOString().split("T")[0];
+}
+
+function computeSol(incidentDate, stateData) {
+  const solYears = stateData?.statute_of_limitations_years || 2;
+  if (!incidentDate) return { solDeadline: null, daysRemaining: null, expired: false, solYears };
+  const d = new Date(incidentDate);
+  if (isNaN(d.getTime())) return { solDeadline: null, daysRemaining: null, expired: false, solYears };
+  const solDeadline = new Date(d.getFullYear() + solYears, d.getMonth(), d.getDate());
+  const raw = Math.floor((solDeadline - new Date()) / 86400000);
+  return { solDeadline, daysRemaining: Math.max(0, raw), expired: raw <= 0, solYears };
+}
+
+// Fallback proof items, used only if real recent estimates cannot be read.
+const FALLBACK_PROOF = [
+  { state: "NJ", amount: 103000 }, { state: "FL", amount: 74500 },
+  { state: "TX", amount: 84000 }, { state: "IL", amount: 122000 },
+  { state: "GA", amount: 66500 }, { state: "AZ", amount: 97500 },
 ];
 
 // ─── Header ───────────────────────────────────────────────────────────────
