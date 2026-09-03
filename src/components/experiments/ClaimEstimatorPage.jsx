@@ -35,19 +35,22 @@ const ACCIDENT_TYPES = [
 
 // Survey injury_type values. severity is a 0-4 rank used to pick the matching
 // InjuryMultiplier tier; with multi-select we take the highest rank chosen.
+// short/group drive the compact two-column picker.
 const INJURY_TYPES = [
-  { value: "fatality", label: "Fatality / Wrongful Death", severity: 4 },
-  { value: "spinal", label: "Spinal Cord Injury / Paralysis", severity: 4 },
-  { value: "amputation", label: "Loss of Limb / Amputation", severity: 4 },
-  { value: "brain", label: "Brain Injury / Memory Loss", severity: 3 },
-  { value: "fractures", label: "Fractures / Broken Bones", severity: 2 },
-  { value: "headaches", label: "Headaches / Concussion", severity: 2 },
-  { value: "back_neck_shoulder", label: "Back / Neck / Shoulder", severity: 1 },
-  { value: "cuts_bruises", label: "Cuts / Bruises / Burns", severity: 1 },
-  { value: "whiplash", label: "Whiplash", severity: 1 },
-  { value: "other", label: "Other", severity: 1 },
-  { value: "none", label: "No Injury", severity: 0 },
+  { value: "fatality", label: "Fatality / Wrongful Death", short: "Fatality", group: "Catastrophic", severity: 4 },
+  { value: "spinal", label: "Spinal Cord Injury / Paralysis", short: "Spinal / paralysis", group: "Catastrophic", severity: 4 },
+  { value: "amputation", label: "Loss of Limb / Amputation", short: "Amputation", group: "Catastrophic", severity: 4 },
+  { value: "brain", label: "Brain Injury / Memory Loss", short: "Brain injury", group: "Catastrophic", severity: 3 },
+  { value: "fractures", label: "Fractures / Broken Bones", short: "Fractures", group: "Serious", severity: 2 },
+  { value: "headaches", label: "Headaches / Concussion", short: "Concussion", group: "Serious", severity: 2 },
+  { value: "back_neck_shoulder", label: "Back / Neck / Shoulder", short: "Back / neck", group: "Soft tissue", severity: 1 },
+  { value: "whiplash", label: "Whiplash", short: "Whiplash", group: "Soft tissue", severity: 1 },
+  { value: "cuts_bruises", label: "Cuts / Bruises / Burns", short: "Cuts / burns", group: "Soft tissue", severity: 1 },
+  { value: "other", label: "Other", short: "Other", group: "Soft tissue", severity: 1 },
+  { value: "none", label: "No Injury", short: "No injury", group: "", severity: 0 },
 ];
+
+const INJURY_GROUPS = ["Catastrophic", "Serious", "Soft tissue"];
 
 const LIABILITY_OPTIONS = [
   { value: "not_at_fault", label: "No, someone else caused it", factor: 1.0, icon: "✅" },
@@ -785,11 +788,11 @@ export default function ClaimEstimatorPage({ experiment }) {
   const STEPS = [
     { id: "accident_type", title: "What type of accident were you in?", subtitle: "Tap one to start calculating your estimate." },
     { id: "state", title: "Where did the accident happen?", subtitle: "State law significantly affects value and timeline." },
-    { id: "incident_date", title: "When did the accident happen?", subtitle: "Most claims are valid for a limited time." },
     { id: "injury_types", title: "What injuries did you suffer?", subtitle: "Select all that apply." },
-    { id: "treatment_status", title: "Did you receive medical treatment?", subtitle: "Documented treatment is critical to your claim." },
     { id: "total_medical_bills", title: "Total medical bills so far?", subtitle: "Include ER, imaging, specialists, PT, prescriptions." },
     { id: "missed_work", title: "Have you missed work?", subtitle: "Lost wages are recoverable economic damages." },
+    { id: "treatment_status", title: "Did you receive medical treatment?", subtitle: "Documented treatment is critical to your claim." },
+    { id: "incident_date", title: "When did the accident happen?", subtitle: "Most claims are valid for a limited time." },
     { id: "liability_clarity", title: "Were you at fault for the accident?", subtitle: "If someone else caused it, you may be owed more." },
     { id: "attorney_status", title: "Have you worked with an attorney on this?", subtitle: "Last question." },
   ];
