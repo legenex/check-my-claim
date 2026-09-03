@@ -24,10 +24,10 @@
     "gate_variant": {
       "type": "string",
       "enum": [
-        "open",
+        "reveal",
         "blurred"
       ],
-      "description": "A/B variant for the live estimate gate. 'open' shows the running figure; 'blurred' hides it behind a blur until the form is submitted."
+      "description": "A/B variant for the live estimate gate. 'reveal' shows the figure throughout and reveals it on the form page with a call-first CTA; 'blurred' hides it for the whole flow until the form is submitted."
     },
     "gclid": {
       "type": "string"
