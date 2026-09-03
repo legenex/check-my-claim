@@ -866,7 +866,7 @@ export default function ClaimEstimatorPage({ experiment }) {
     base44.entities.ClaimEstimate.create({
       session_id: sessionId, state: ans.state, incident_date: ans.incident_date,
       accident_type: ans.accident_type, liability_clarity: ans.liability_clarity,
-      injury_type: (tier && ans.injury_types?.length) ? ans.injury_types[0] : "",
+      injury_type: (ans.injury_types || [])[0] || "",
       injury_types: (ans.injury_types || []).join(","),
       attorney_status: ans.attorney_status || "", treatment_status: ans.treatment_status,
       missed_work: ans.missed_work, total_medical_bills: bills, 
