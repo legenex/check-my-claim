@@ -990,6 +990,57 @@ export default function ClaimEstimatorPage({ experiment }) {
           <h2 className="text-xl font-extrabold text-white mb-1 leading-snug">{currentStep.title}</h2>
           <p className="text-slate-500 mb-4 text-[13px]">{currentStep.subtitle}</p>
 
+          {/* ACCIDENT TYPE */}
+          {currentStep.id === "accident_type" && (
+            <div className="grid grid-cols-2 gap-2">
+              {ACCIDENT_TYPES.map(opt => (
+                <button key={opt.value}
+                  onClick={() => pickAndAutoNext("accident_type", opt.value)}
+                  className={`flex items-center gap-2 text-left px-3 min-h-[64px] py-3 rounded-xl border font-medium transition-all active:scale-[0.99] ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
+                  <span className="text-lg shrink-0">{opt.icon}</span>
+                  <span className="text-[13px] leading-tight">{opt.label}</span>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* INJURY TYPES — multi-select */}
+          {currentStep.id === "injury_types" && (
+            <div className="grid grid-cols-1 gap-2">
+              {INJURY_TYPES.map(opt => {
+                const selected = (currentVal || []).includes(opt.value);
+                return (
+                  <button key={opt.value}
+                    onClick={() => setAnswers(a => {
+                      const cur = a.injury_types || [];
+                      if (opt.value === "none") return { ...a, injury_types: selected ? [] : ["none"] };
+                      const next = selected ? cur.filter(v => v !== opt.value) : [...cur.filter(v => v !== "none"), opt.value];
+                      return { ...a, injury_types: next };
+                    })}
+                    className={`w-full flex items-center gap-3 text-left px-4 min-h-[52px] py-2.5 rounded-xl border transition-all active:scale-[0.99] ${selected ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/25"}`}>
+                    <span className={`w-5 h-5 rounded-md border-2 shrink-0 flex items-center justify-center ${selected ? "border-[#2BB6F6] bg-[#2BB6F6]" : "border-white/25"}`}>
+                      {selected && <CheckCircle className="w-3.5 h-3.5 text-white" />}
+                    </span>
+                    <span className={`text-[15px] leading-tight ${selected ? "text-white font-semibold" : "text-slate-200"}`}>{opt.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {/* ATTORNEY STATUS */}
+          {currentStep.id === "attorney_status" && (
+            <div className="grid grid-cols-1 gap-2">
+              {ATTORNEY_OPTIONS.map(opt => (
+                <button key={opt.value}
+                  onClick={() => pickAndAutoNext("attorney_status", opt.value)}
+                  className={`w-full flex items-center text-left px-4 min-h-[56px] py-3 rounded-xl border font-medium text-[15px] transition-all active:scale-[0.99] ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          )}
+
           {/* INCIDENT DATE — fast tap buckets */}
           {currentStep.id === "incident_date" && (
             <div className="grid grid-cols-2 gap-2">
