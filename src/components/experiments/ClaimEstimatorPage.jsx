@@ -160,25 +160,26 @@ const FALLBACK_PROOF = [
 ];
 
 // ─── Gate A/B variant ───────────────────────────────────────────────────
-// "open"    → the running figure is legible the whole way through.
-// "blurred" → the figure is blurred out. Movement is still visible (it grows,
-//             it animates, the digits get wider) but the amount is unreadable
-//             until the form is submitted.
-// Sticky per session. Force with ?gate=open or ?gate=blurred for QA.
+// "reveal"  → the figure is legible throughout, and is revealed in full on the
+//             form page. The primary action there is a phone call, with the
+//             callback form as the secondary path.
+// "blurred" → the figure is blurred for the entire flow, including the form
+//             page. Submitting the form is the only way to read it.
+// Sticky per session. Force with ?gate=reveal or ?gate=blurred for QA.
 function resolveGateVariant() {
   try {
     const forced = new URLSearchParams(window.location.search).get("gate");
-    if (forced === "open" || forced === "blurred") {
+    if (forced === "reveal" || forced === "blurred") {
       sessionStorage.setItem("cmc_gate_variant", forced);
       return forced;
     }
     const existing = sessionStorage.getItem("cmc_gate_variant");
-    if (existing === "open" || existing === "blurred") return existing;
-    const assigned = Math.random() < 0.5 ? "open" : "blurred";
+    if (existing === "reveal" || existing === "blurred") return existing;
+    const assigned = Math.random() < 0.5 ? "reveal" : "blurred";
     sessionStorage.setItem("cmc_gate_variant", assigned);
     return assigned;
   } catch {
-    return "open";
+    return "reveal";
   }
 }
 
@@ -376,26 +377,51 @@ function OptInGate({ results, experiment, onSubmit, submitting, error, variant =
       <div className="flex-1 flex items-center justify-center px-4 py-10">
         <div className="max-w-xl w-full">
 
-          {/* Teaser banner — big and persuasive */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/40 text-green-400 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
-              <CheckCircle className="w-3.5 h-3.5" /> Your Estimate Is Ready
-            </div>
-            <h1 className="text-4xl md:text-5xl font-black text-white mb-3 leading-tight">
-              Your claim may be worth more than you think
-            </h1>
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <div className={`text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#2BB6F6] to-emerald-400 ${variant === "blurred" ? "blur-sm select-none" : ""}`}>
+          {/* Teaser banner — varies by A/B arm */}
+          {variant === "reveal" ? (
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/40 text-green-400 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
+                <CheckCircle className="w-3.5 h-3.5" /> Your Estimate Is Ready
+              </div>
+              <div className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500 mb-2">
+                Estimated case value
+              </div>
+              <div className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#2BB6F6] to-emerald-400 mb-5">
                 {fmt(estimateLow)} – {fmt(estimateHigh)}
               </div>
+              <h1 className="text-2xl md:text-3xl font-black text-white mb-4 leading-tight max-w-lg mx-auto">
+                Want to work with someone who can start fighting for this level of compensation?
+              </h1>
+              <a
+                href={`tel:${PHONE_RAW}`}
+                onClick={() => experiment && incrementExpClicks(experiment, base44)}
+                className="inline-flex items-center justify-center gap-2.5 w-full max-w-sm mx-auto py-4 px-6 rounded-xl font-black text-lg text-white transition-all"
+                style={{ background: "linear-gradient(135deg, #16a34a, #22c55e)", boxShadow: "0 8px 24px rgba(34,197,94,0.35)" }}>
+                <Phone className="w-5 h-5" /> Call {PHONE}
+              </a>
+              <p className="text-slate-500 text-xs mt-3">Free consultation. No obligation. No win, no fee.</p>
             </div>
-            <div className="inline-block bg-yellow-400/10 border border-yellow-400/30 text-yellow-300 text-sm font-semibold px-5 py-2 rounded-xl mb-5">
-              🔒 Unlock your full breakdown — takes 30 seconds
+          ) : (
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/40 text-green-400 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
+                <CheckCircle className="w-3.5 h-3.5" /> Your Estimate Is Ready
+              </div>
+              <h1 className="text-4xl md:text-5xl font-black text-white mb-3 leading-tight">
+                Your claim may be worth more than you think
+              </h1>
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <div className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#2BB6F6] to-emerald-400 blur-sm select-none">
+                  {fmt(estimateLow)} – {fmt(estimateHigh)}
+                </div>
+              </div>
+              <div className="inline-block bg-yellow-400/10 border border-yellow-400/30 text-yellow-300 text-sm font-semibold px-5 py-2 rounded-xl mb-5">
+                🔒 Unlock your full breakdown — takes 30 seconds
+              </div>
+              <p className="text-slate-300 text-base leading-relaxed max-w-md mx-auto">
+                Insurers count on you <strong className="text-white">not knowing this number</strong>. Their first offer is typically <span className="text-red-400 font-bold">25% or less</span> of what a represented claimant receives. Enter your info below to reveal your full estimate and get matched with a vetted attorney in your state — <span className="text-green-400 font-semibold">free, no obligation</span>.
+              </p>
             </div>
-            <p className="text-slate-300 text-base leading-relaxed max-w-md mx-auto">
-              Insurers count on you <strong className="text-white">not knowing this number</strong>. Their first offer is typically <span className="text-red-400 font-bold">25% or less</span> of what a represented claimant receives. Enter your info below to reveal your full estimate and get matched with a vetted attorney in your state — <span className="text-green-400 font-semibold">free, no obligation</span>.
-            </p>
-          </div>
+          )}
 
           {/* Trust badges */}
           <div className="flex flex-wrap justify-center gap-3 mb-8">
@@ -406,8 +432,14 @@ function OptInGate({ results, experiment, onSubmit, submitting, error, variant =
 
           {/* Form card */}
           <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm">
-            <h2 className="text-lg font-bold text-white mb-1 text-center">See Your Full Estimate</h2>
-            <p className="text-slate-400 text-sm text-center mb-5">We'll match you with the best attorney for your case.</p>
+            <h2 className="text-lg font-bold text-white mb-1 text-center">
+              {variant === "reveal" ? "Prefer we call you?" : "See Your Full Estimate"}
+            </h2>
+            <p className="text-slate-400 text-sm text-center mb-5">
+              {variant === "reveal"
+                ? "Leave your details and a vetted attorney in your state will reach out."
+                : "We'll match you with the best attorney for your case."}
+            </p>
 
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
@@ -432,7 +464,7 @@ function OptInGate({ results, experiment, onSubmit, submitting, error, variant =
               <button onClick={() => canSubmit && onSubmit(form)} disabled={!canSubmit || submitting}
                 className="w-full py-4 rounded-xl font-black text-lg text-white transition-all disabled:opacity-40 flex items-center justify-center gap-2"
                 style={{ background: canSubmit ? "linear-gradient(135deg, #2BB6F6, #1e90ff)" : "rgba(100,116,139,0.4)", boxShadow: canSubmit ? "0 8px 24px rgba(43,182,246,0.4)" : "none" }}>
-                {submitting ? "Connecting you..." : <><ArrowRight className="w-5 h-5" /> Reveal My Estimate &amp; Get Matched</>}
+                {submitting ? "Connecting you..." : <><ArrowRight className="w-5 h-5" /> {variant === "reveal" ? "Request My Callback" : "Reveal My Estimate & Get Matched"}</>}
               </button>
             </div>
 
