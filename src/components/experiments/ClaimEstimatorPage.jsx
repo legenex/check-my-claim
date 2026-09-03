@@ -967,7 +967,7 @@ export default function ClaimEstimatorPage({ experiment }) {
   }
 
   // ─── Quiz steps ───────────────────────────────────────────────────────
-  const MULTI_CHOICE_STEPS = ["injury_severity_tier", "accident_type", "state", "incident_date", "liability_clarity", "treatment_status", "missed_work"];
+  const MULTI_CHOICE_STEPS = ["accident_type", "state", "incident_date", "treatment_status", "missed_work", "liability_clarity", "attorney_status"];
   const isMultiChoice = MULTI_CHOICE_STEPS.includes(currentStep.id);
 
   return (
@@ -1021,6 +1021,44 @@ export default function ClaimEstimatorPage({ experiment }) {
                   </button>
                 );
               })}
+            </div>
+          )}
+
+          {/* INJURY TYPES — multi-select */}
+          {currentStep.id === "injury_types" && (
+            <div className="grid grid-cols-1 gap-2">
+              {INJURY_TYPES.map(opt => {
+                const selected = (currentVal || []).includes(opt.value);
+                return (
+                  <button key={opt.value}
+                    onClick={() => setAnswers(a => {
+                      const cur = a.injury_types || [];
+                      // "No Injury" is exclusive.
+                      if (opt.value === "none") return { ...a, injury_types: selected ? [] : ["none"] };
+                      const next = selected ? cur.filter(v => v !== opt.value) : [...cur.filter(v => v !== "none"), opt.value];
+                      return { ...a, injury_types: next };
+                    })}
+                    className={`w-full flex items-center gap-3 text-left px-4 min-h-[52px] py-2.5 rounded-xl border transition-all active:scale-[0.99] ${selected ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/25"}`}>
+                    <span className={`w-5 h-5 rounded-md border-2 shrink-0 flex items-center justify-center ${selected ? "border-[#2BB6F6] bg-[#2BB6F6]" : "border-white/25"}`}>
+                      {selected && <CheckCircle className="w-3.5 h-3.5 text-white" />}
+                    </span>
+                    <span className={`text-[15px] leading-tight ${selected ? "text-white font-semibold" : "text-slate-200"}`}>{opt.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {/* ATTORNEY STATUS */}
+          {currentStep.id === "attorney_status" && (
+            <div className="grid grid-cols-1 gap-2">
+              {ATTORNEY_OPTIONS.map(opt => (
+                <button key={opt.value}
+                  onClick={() => pickAndAutoNext("attorney_status", opt.value)}
+                  className={`w-full flex items-center text-left px-4 min-h-[56px] py-3 rounded-xl border font-medium text-[15px] transition-all active:scale-[0.99] ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
+                  {opt.label}
+                </button>
+              ))}
             </div>
           )}
 
@@ -1093,9 +1131,8 @@ export default function ClaimEstimatorPage({ experiment }) {
               {TREATMENT_OPTIONS.map(opt => (
                 <button key={opt.value}
                   onClick={() => pickAndAutoNext("treatment_status", opt.value)}
-                  className={`w-full text-left px-4 min-h-[56px] py-3 rounded-xl border transition-all active:scale-[0.99] ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/25"}`}>
-                  <div className={`font-semibold text-[15px] leading-tight ${currentVal === opt.value ? "text-white" : "text-slate-200"}`}>{opt.label}</div>
-                  <div className="text-xs text-slate-500 mt-0.5">{opt.sub}</div>
+                  className={`w-full flex items-center text-left px-4 min-h-[56px] py-3 rounded-xl border font-medium text-[15px] transition-all active:scale-[0.99] ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
+                  {opt.label}
                 </button>
               ))}
             </div>
@@ -1139,7 +1176,7 @@ export default function ClaimEstimatorPage({ experiment }) {
               className="px-4 py-2.5 bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white font-semibold rounded-lg text-sm transition-all">
               ← Back
             </button>
-            {(!isMultiChoice || currentStep.id === "total_medical_bills" || currentStep.id === "notes") && (
+            {(!isMultiChoice || currentStep.id === "total_medical_bills") && (
               <button onClick={next} disabled={!canProceed()}
                 className="px-8 py-3 bg-[#2BB6F6] hover:bg-[#1a9fd8] disabled:opacity-40 text-white font-bold rounded-xl text-sm transition-all">
                 {step === STEPS.length - 1 ? "Calculate My Estimate →" : "Next →"}
