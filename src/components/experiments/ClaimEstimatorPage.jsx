@@ -1046,8 +1046,8 @@ export default function ClaimEstimatorPage({ experiment }) {
               {LIABILITY_OPTIONS.map(opt => (
                 <button key={opt.value}
                   onClick={() => pickAndAutoNext("liability_clarity", opt.value)}
-                  className={`w-full text-left px-4 py-3 rounded-lg border font-medium text-sm transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
-                  <span className="mr-2">{opt.icon}</span>{opt.label}
+                  className={`w-full flex items-center text-left px-4 min-h-[56px] py-3 rounded-xl border font-medium text-[15px] transition-all active:scale-[0.99] ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
+                  <span className="mr-2.5">{opt.icon}</span>{opt.label}
                 </button>
               ))}
             </div>
@@ -1059,8 +1059,8 @@ export default function ClaimEstimatorPage({ experiment }) {
               {TREATMENT_OPTIONS.map(opt => (
                 <button key={opt.value}
                   onClick={() => pickAndAutoNext("treatment_status", opt.value)}
-                  className={`w-full text-left px-4 py-3 rounded-lg border transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/25"}`}>
-                  <div className={`font-semibold text-sm ${currentVal === opt.value ? "text-white" : "text-slate-200"}`}>{opt.label}</div>
+                  className={`w-full text-left px-4 min-h-[56px] py-3 rounded-xl border transition-all active:scale-[0.99] ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/25"}`}>
+                  <div className={`font-semibold text-[15px] leading-tight ${currentVal === opt.value ? "text-white" : "text-slate-200"}`}>{opt.label}</div>
                   <div className="text-xs text-slate-500 mt-0.5">{opt.sub}</div>
                 </button>
               ))}
@@ -1073,7 +1073,7 @@ export default function ClaimEstimatorPage({ experiment }) {
               {MISSED_WORK_OPTIONS.map(opt => (
                 <button key={opt.value}
                   onClick={() => pickAndAutoNext("missed_work", opt.value)}
-                  className={`w-full text-left px-4 py-3 rounded-lg border font-medium text-sm transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
+                  className={`w-full flex items-center text-left px-4 min-h-[56px] py-3 rounded-xl border font-medium text-[15px] transition-all active:scale-[0.99] ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
                   {opt.label}
                 </button>
               ))}
