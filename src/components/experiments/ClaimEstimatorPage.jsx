@@ -169,19 +169,31 @@ const PROOF_MIN = 100000;
 //             callback form as the secondary path.
 // "blurred" → the figure is blurred for the entire flow, including the form
 //             page. Submitting the form is the only way to read it.
-// Sticky per session. Force with ?gate=reveal or ?gate=blurred for QA.
+//
+// Resolution order:
+//   1. ?ad_label=reveal|blurred   — set this in the ad URL to pin an arm
+//   2. ?gate=reveal|blurred       — QA override
+//   3. whatever was stored earlier this session
+//   4. random 50/50
+// However it is resolved, the value is written back to cmc_ad_label so it
+// flows through to the lead record and any downstream survey URL.
+const GATE_VARIANTS = ["reveal", "blurred"];
+
 function resolveGateVariant() {
   try {
-    const forced = new URLSearchParams(window.location.search).get("gate");
-    if (forced === "reveal" || forced === "blurred") {
-      sessionStorage.setItem("cmc_gate_variant", forced);
-      return forced;
-    }
-    const existing = sessionStorage.getItem("cmc_gate_variant");
-    if (existing === "reveal" || existing === "blurred") return existing;
-    const assigned = Math.random() < 0.5 ? "reveal" : "blurred";
-    sessionStorage.setItem("cmc_gate_variant", assigned);
-    return assigned;
+    const params = new URLSearchParams(window.location.search);
+    const fromAd = params.get("ad_label");
+    const fromQa = params.get("gate");
+    const stored = sessionStorage.getItem("cmc_ad_label");
+
+    let variant = null;
+    if (GATE_VARIANTS.includes(fromAd)) variant = fromAd;
+    else if (GATE_VARIANTS.includes(fromQa)) variant = fromQa;
+    else if (GATE_VARIANTS.includes(stored)) variant = stored;
+    else variant = Math.random() < 0.5 ? "reveal" : "blurred";
+
+    sessionStorage.setItem("cmc_ad_label", variant);
+    return variant;
   } catch {
     return "reveal";
   }
@@ -826,6 +838,7 @@ export default function ClaimEstimatorPage({ experiment }) {
       state_factor: stateFactor, liability_factor: liabilityFactor,
       estimate_low: finalLow, estimate_high: finalHigh,
       gate_variant: gateVariant,
+      ad_label: gateVariant,
       utm_source: stored("utm_source") || "CMC-Site",
       utm_medium: stored("utm_medium") || "estimator",
       utm_campaign: stored("utm_campaign") || "Experiment",
@@ -869,6 +882,7 @@ export default function ClaimEstimatorPage({ experiment }) {
         estimate_low: results.estimateLow,
         estimate_high: results.estimateHigh,
         gate_variant: gateVariant,
+        ad_label: gateVariant,
         full_name: `${form.first_name} ${form.last_name}`.trim(),
         email: form.email,
         phone: form.phone,
