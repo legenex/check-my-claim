@@ -171,12 +171,12 @@ const PROOF_MIN = 100000;
 //             page. Submitting the form is the only way to read it.
 //
 // Resolution order:
-//   1. ?ad_label=reveal|blurred   — set this in the ad URL to pin an arm
+//   1. ?ad_label=reveal|blurred   — set this in the email link to pin an arm
 //   2. ?gate=reveal|blurred       — QA override
-//   3. whatever was stored earlier this session
+//   3. whatever was resolved earlier this session
 //   4. random 50/50
-// However it is resolved, the value is written back to cmc_ad_label so it
-// flows through to the lead record and any downstream survey URL.
+// The variant is stored under its own key. We never overwrite cmc_ad_label,
+// so a real campaign label (e.g. ad_label=welcome-seq-3) survives intact.
 const GATE_VARIANTS = ["reveal", "blurred"];
 
 function resolveGateVariant() {
@@ -184,15 +184,15 @@ function resolveGateVariant() {
     const params = new URLSearchParams(window.location.search);
     const fromAd = params.get("ad_label");
     const fromQa = params.get("gate");
-    const stored = sessionStorage.getItem("cmc_ad_label");
+    const stored = sessionStorage.getItem("cmc_gate_variant");
 
-    let variant = null;
+    let variant;
     if (GATE_VARIANTS.includes(fromAd)) variant = fromAd;
     else if (GATE_VARIANTS.includes(fromQa)) variant = fromQa;
     else if (GATE_VARIANTS.includes(stored)) variant = stored;
     else variant = Math.random() < 0.5 ? "reveal" : "blurred";
 
-    sessionStorage.setItem("cmc_ad_label", variant);
+    sessionStorage.setItem("cmc_gate_variant", variant);
     return variant;
   } catch {
     return "reveal";
@@ -838,7 +838,7 @@ export default function ClaimEstimatorPage({ experiment }) {
       state_factor: stateFactor, liability_factor: liabilityFactor,
       estimate_low: finalLow, estimate_high: finalHigh,
       gate_variant: gateVariant,
-      ad_label: gateVariant,
+      ad_label: stored("ad_label") || gateVariant,
       utm_source: stored("utm_source") || "CMC-Site",
       utm_medium: stored("utm_medium") || "estimator",
       utm_campaign: stored("utm_campaign") || "Experiment",
@@ -882,7 +882,7 @@ export default function ClaimEstimatorPage({ experiment }) {
         estimate_low: results.estimateLow,
         estimate_high: results.estimateHigh,
         gate_variant: gateVariant,
-        ad_label: gateVariant,
+        ad_label: stored("ad_label") || gateVariant,
         full_name: `${form.first_name} ${form.last_name}`.trim(),
         email: form.email,
         phone: form.phone,
