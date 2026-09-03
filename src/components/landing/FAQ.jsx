@@ -136,7 +136,7 @@ export default function FAQ() {
             Still have questions? Start your free claim check now.
           </p>
           <a
-            href="https://qualify.checkmyclaim.co/s/mva?utm_source=CMC-Website&utm_campaign=Home-Page&utm_medium=13th-Button"
+            href="https://qualify.checkmyclaim.co/s/auto?utm_source=CMC-Website&utm_campaign=Home-Page&utm_medium=12th-Button"
             className="group inline-flex items-center gap-3 bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-bold px-8 py-4 rounded-full hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-105"
           >
             Get Started Now

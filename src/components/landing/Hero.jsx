@@ -62,7 +62,7 @@ export default function Hero() {
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14"
           >
             <a
-              href="https://qualify.checkmyclaim.co/s/mva?utm_source=CMC-Website&utm_campaign=Home-Page&utm_medium=1st-Button"
+              href="https://qualify.checkmyclaim.co/s/auto?utm_source=CMC-Website&utm_campaign=Home-Page&utm_medium=1st-Button"
               className="group relative bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-bold text-lg px-8 py-4 rounded-full hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-105 flex items-center gap-3"
             >
               Start Your Free Claim Check

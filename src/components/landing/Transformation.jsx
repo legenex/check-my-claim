@@ -110,7 +110,7 @@ export default function Transformation() {
               Join thousands who've found clarity, justice, and compensation through Check My Claim
             </p>
             <a
-              href="https://qualify.checkmyclaim.co/s/mva?utm_source=CMC-Website&utm_campaign=Home-Page&utm_medium=8th-Button"
+              href="https://qualify.checkmyclaim.co/s/auto?utm_source=CMC-Website&utm_campaign=Home-Page&utm_medium=6th-Button"
               className="group bg-gradient-to-r from-[#4ba8ee] to-[#0486e9] text-white font-bold px-10 py-5 rounded-full hover:shadow-2xl hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105 inline-flex items-center gap-3 text-lg"
             >
               Start Your Free Claim Check Now
