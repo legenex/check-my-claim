@@ -197,24 +197,7 @@ const FALLBACK_PROOF = [
 // Only surface meaningful figures in the ticker.
 const PROOF_MIN = 100000;
 
-// Injury tier labels are admin-authored and tend to be long, e.g.
-// "Soft tissue / strain (no surgery)". Split the parenthetical off so the
-// primary line stays short and scannable on a phone.
-function splitTierLabel(label = "") {
-  const m = label.match(/^(.*?)\s*\((.*)\)\s*$/);
-  if (m) return { main: m[1].trim(), qualifier: m[2].trim() };
-  return { main: label.trim(), qualifier: "" };
-}
 
-// Severity ramp driven by the tier's own multiplier, so it stays correct no
-// matter how many tiers an admin configures.
-function severityColor(multHigh) {
-  if (multHigh <= 2) return "bg-sky-400";
-  if (multHigh <= 3) return "bg-teal-400";
-  if (multHigh <= 4) return "bg-amber-400";
-  if (multHigh <= 5.5) return "bg-orange-400";
-  return "bg-red-400";
-}
 
 // ─── Gate A/B variant ───────────────────────────────────────────────────
 // "reveal"  → the figure is legible throughout, and is revealed in full on the
@@ -679,7 +662,7 @@ function ResultsPage({ results, experiment }) {
 
         {/* Recent settlements */}
         <div className="mb-8">
-          <SettlementTickerMini stateCode={answers.state} injuryTier={answers.injury_severity_tier} accidentType={answers.accident_type} limit={5} />
+          <SettlementTickerMini stateCode={answers.state} injuryTier={(answers.injury_types || [])[0]} accidentType={answers.accident_type} limit={5} />
         </div>
 
         {/* Educational content */}
@@ -883,8 +866,10 @@ export default function ClaimEstimatorPage({ experiment }) {
     base44.entities.ClaimEstimate.create({
       session_id: sessionId, state: ans.state, incident_date: ans.incident_date,
       accident_type: ans.accident_type, liability_clarity: ans.liability_clarity,
-      injury_severity_tier: ans.injury_severity_tier, treatment_status: ans.treatment_status,
-      missed_work: ans.missed_work, total_medical_bills: bills, notes: ans.notes || "",
+      injury_type: (tier && ans.injury_types?.length) ? ans.injury_types[0] : "",
+      injury_types: (ans.injury_types || []).join(","),
+      attorney_status: ans.attorney_status || "", treatment_status: ans.treatment_status,
+      missed_work: ans.missed_work, total_medical_bills: bills, 
       economic_damages: economicDamages,
       non_economic_low: Math.round(nonEconLow), non_economic_high: Math.round(nonEconHigh),
       multiplier_low: multLow, multiplier_high: multHigh,
@@ -926,11 +911,13 @@ export default function ClaimEstimatorPage({ experiment }) {
         incident_date: answers.incident_date,
         accident_type: answers.accident_type,
         liability_clarity: answers.liability_clarity,
-        injury_severity_tier: answers.injury_severity_tier,
+        injury_type: (answers.injury_types || [])[0] || "",
+        injury_types: (answers.injury_types || []).join(","),
+        attorney_status: answers.attorney_status || "",
         treatment_status: answers.treatment_status,
         missed_work: answers.missed_work,
         total_medical_bills: parseFloat(answers.total_medical_bills) || 0,
-        notes: answers.notes || "",
+        
         economic_damages: results.economicDamages,
         estimate_low: results.estimateLow,
         estimate_high: results.estimateHigh,
@@ -1002,79 +989,6 @@ export default function ClaimEstimatorPage({ experiment }) {
         <div className="max-w-md w-full">
           <h2 className="text-xl font-extrabold text-white mb-1 leading-snug">{currentStep.title}</h2>
           <p className="text-slate-500 mb-4 text-[13px]">{currentStep.subtitle}</p>
-
-          {/* INJURY TIER */}
-          {currentStep.id === "injury_severity_tier" && (
-            <div className="grid grid-cols-1 gap-2">
-              {injuryTiers.map(tier => {
-                const { main, qualifier } = splitTierLabel(tier.tier_label);
-                const active = currentVal === tier.tier_key;
-                return (
-                  <button key={tier.tier_key}
-                    onClick={() => pickAndAutoNext("injury_severity_tier", tier.tier_key)}
-                    className={`w-full flex items-center gap-3 text-left px-4 min-h-[56px] py-3 rounded-xl border transition-all active:scale-[0.99] ${active ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/25"}`}>
-                    <span className={`w-2 h-8 rounded-full shrink-0 ${severityColor(tier.multiplier_high)}`} />
-                    <span className="min-w-0">
-                      <span className={`block font-semibold text-[15px] leading-tight ${active ? "text-white" : "text-slate-200"}`}>{main}</span>
-                      {qualifier && <span className="block text-xs text-slate-500 mt-0.5">{qualifier}</span>}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
-          {/* INJURY TYPES — multi-select */}
-          {currentStep.id === "injury_types" && (
-            <div className="grid grid-cols-1 gap-2">
-              {INJURY_TYPES.map(opt => {
-                const selected = (currentVal || []).includes(opt.value);
-                return (
-                  <button key={opt.value}
-                    onClick={() => setAnswers(a => {
-                      const cur = a.injury_types || [];
-                      // "No Injury" is exclusive.
-                      if (opt.value === "none") return { ...a, injury_types: selected ? [] : ["none"] };
-                      const next = selected ? cur.filter(v => v !== opt.value) : [...cur.filter(v => v !== "none"), opt.value];
-                      return { ...a, injury_types: next };
-                    })}
-                    className={`w-full flex items-center gap-3 text-left px-4 min-h-[52px] py-2.5 rounded-xl border transition-all active:scale-[0.99] ${selected ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/25"}`}>
-                    <span className={`w-5 h-5 rounded-md border-2 shrink-0 flex items-center justify-center ${selected ? "border-[#2BB6F6] bg-[#2BB6F6]" : "border-white/25"}`}>
-                      {selected && <CheckCircle className="w-3.5 h-3.5 text-white" />}
-                    </span>
-                    <span className={`text-[15px] leading-tight ${selected ? "text-white font-semibold" : "text-slate-200"}`}>{opt.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
-          {/* ATTORNEY STATUS */}
-          {currentStep.id === "attorney_status" && (
-            <div className="grid grid-cols-1 gap-2">
-              {ATTORNEY_OPTIONS.map(opt => (
-                <button key={opt.value}
-                  onClick={() => pickAndAutoNext("attorney_status", opt.value)}
-                  className={`w-full flex items-center text-left px-4 min-h-[56px] py-3 rounded-xl border font-medium text-[15px] transition-all active:scale-[0.99] ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* ACCIDENT TYPE */}
-          {currentStep.id === "accident_type" && (
-            <div className="grid grid-cols-2 gap-2">
-              {ACCIDENT_TYPES.map(opt => (
-                <button key={opt.value}
-                  onClick={() => pickAndAutoNext("accident_type", opt.value)}
-                  className={`flex items-center gap-2 text-left px-3 min-h-[56px] py-3 rounded-xl border font-medium transition-all active:scale-[0.99] ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
-                  <span className="text-lg shrink-0">{opt.icon}</span>
-                  <span className="text-[13px] leading-tight">{opt.label}</span>
-                </button>
-              ))}
-            </div>
-          )}
 
           {/* INCIDENT DATE — fast tap buckets */}
           {currentStep.id === "incident_date" && (
@@ -1161,13 +1075,6 @@ export default function ClaimEstimatorPage({ experiment }) {
               </div>
               <p className="text-xs text-slate-500 mt-2">Enter 0 if bills haven't arrived yet — estimate still works.</p>
             </div>
-          )}
-
-          {/* NOTES */}
-          {currentStep.id === "notes" && (
-            <textarea value={currentVal || ""} onChange={e => setAnswers(a => ({ ...a, notes: e.target.value.slice(0, 200) }))}
-              placeholder="e.g. I have a herniated disc, was rear-ended at a red light, the other driver was cited..."
-              rows={4} className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:border-[#2BB6F6] resize-none" />
           )}
 
           {/* Nav buttons */}
