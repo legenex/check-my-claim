@@ -652,22 +652,48 @@ export default function ClaimEstimatorPage({ experiment }) {
   const [sessionId] = useState(() => "est_" + Math.random().toString(36).substr(2, 12));
   const autoNextTimer = useRef(null);
 
+  const [displayHigh, setDisplayHigh] = useState(0);
+  const [proofItems, setProofItems] = useState(FALLBACK_PROOF);
+
   const STEPS = [
+    { id: "accident_type", title: "What type of accident were you in?", subtitle: "Tap one to start calculating your estimate." },
     { id: "injury_severity_tier", title: "How serious are your injuries?", subtitle: "This is the single biggest driver of claim value." },
-    { id: "accident_type", title: "What type of accident was it?", subtitle: "Different accidents carry different insurance coverage." },
-    { id: "incident_date", title: "When did it happen?", subtitle: "We use this to calculate your statute of limitations urgency." },
-    { id: "state", title: "Where did it happen?", subtitle: "State laws significantly affect your claim value and timeline." },
-    { id: "liability_clarity", title: "How clear is fault?", subtitle: "Liability clarity is one of the biggest value drivers." },
+    { id: "incident_date", title: "When did the accident happen?", subtitle: "Most claims are valid for a limited time, so timing matters." },
+    { id: "liability_clarity", title: "Was the accident your fault?", subtitle: "If someone else caused it, you may be owed more." },
+    { id: "state", title: "Where did the accident happen?", subtitle: "State law significantly affects value and timeline." },
     { id: "treatment_status", title: "Are you still in treatment?", subtitle: "Documented treatment is critical to your claim." },
     { id: "missed_work", title: "Have you missed work?", subtitle: "Lost wages are recoverable economic damages." },
     { id: "total_medical_bills", title: "Total medical bills so far?", subtitle: "Include ER, imaging, specialists, PT, prescriptions." },
     { id: "notes", title: "Anything else? (optional)", subtitle: "This helps personalize your results. 200 characters max." },
   ];
 
+  // Live estimate, recomputed on every answer.
+  const live = computeEstimate(answers, injuryTiers, stateData);
+  const sol = computeSol(answers.incident_date, stateData);
+  const started = !!answers.accident_type;
+
+  // Monotonic display: the headline figure never ticks downward. Because every
+  // unanswered field defaults to the floor of its range in computeEstimate,
+  // this clamp is a safety net rather than the mechanism.
+  useEffect(() => {
+    if (!started) return;
+    setDisplayHigh(prev => Math.max(prev, live.estimateHigh));
+  }, [live.estimateHigh, started]);
+
   useEffect(() => {
     captureIncomingParams();
     if (experiment) incrementExpViews(experiment, base44);
     base44.entities.InjuryMultiplier.list("display_order", 10).then(tiers => setInjuryTiers(tiers.filter(t => t.is_active)));
+    // Real recent estimates for the proof ticker, falling back to samples.
+    base44.entities.ClaimEstimate.list("-created_date", 40)
+      .then(rows => {
+        const real = (rows || [])
+          .filter(r => r.state && r.estimate_high > 0)
+          .map(r => ({ state: r.state, amount: r.estimate_high }))
+          .slice(0, 12);
+        if (real.length >= 4) setProofItems(real);
+      })
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
