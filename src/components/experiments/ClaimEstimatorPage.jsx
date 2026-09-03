@@ -687,6 +687,7 @@ export default function ClaimEstimatorPage({ experiment }) {
 
   const [displayHigh, setDisplayHigh] = useState(0);
   const [proofItems, setProofItems] = useState(FALLBACK_PROOF);
+  const [gateVariant] = useState(resolveGateVariant);
 
   const STEPS = [
     { id: "accident_type", title: "What type of accident were you in?", subtitle: "Tap one to start calculating your estimate." },
@@ -779,6 +780,7 @@ export default function ClaimEstimatorPage({ experiment }) {
       multiplier_low: multLow, multiplier_high: multHigh,
       state_factor: stateFactor, liability_factor: liabilityFactor,
       estimate_low: finalLow, estimate_high: finalHigh,
+      gate_variant: gateVariant,
       utm_source: stored("utm_source") || "CMC-Site",
       utm_medium: stored("utm_medium") || "estimator",
       utm_campaign: stored("utm_campaign") || "Experiment",
@@ -821,6 +823,7 @@ export default function ClaimEstimatorPage({ experiment }) {
         economic_damages: results.economicDamages,
         estimate_low: results.estimateLow,
         estimate_high: results.estimateHigh,
+        gate_variant: gateVariant,
         full_name: `${form.first_name} ${form.last_name}`.trim(),
         email: form.email,
         phone: form.phone,
@@ -886,6 +889,7 @@ export default function ClaimEstimatorPage({ experiment }) {
         step={step}
         total={STEPS.length}
         sol={sol}
+        blurred={gateVariant === "blurred"}
       />
 
       <ProofTicker items={proofItems} index={step} />
