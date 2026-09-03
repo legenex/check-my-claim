@@ -723,38 +723,17 @@ export default function ClaimEstimatorPage({ experiment }) {
   };
 
   const computeResultsFromAnswers = (ans = answers) => {
-    const bills = parseFloat(ans.total_medical_bills) || 0;
-    const treatment = TREATMENT_OPTIONS.find(t => t.value === ans.treatment_status);
-    const futureFactor = treatment?.futureFactor || 0.20;
-    const futureMedical = bills * futureFactor;
-    const missedWork = MISSED_WORK_OPTIONS.find(m => m.value === ans.missed_work);
-    const lostWages = missedWork?.wages || 0;
-    const futureWages = missedWork?.futureWages || 0;
-    const economicDamages = bills + futureMedical + lostWages + futureWages;
-    const medicalTotal = bills + futureMedical;
-    const injuryTier = injuryTiers.find(t => t.tier_key === ans.injury_severity_tier);
-    const multLow = injuryTier?.multiplier_low || 1.5;
-    const multHigh = injuryTier?.multiplier_high || 3.0;
-    const stateFactor = stateData?.base_multiplier_factor || 1.0;
-    const liabilityObj = LIABILITY_OPTIONS.find(l => l.value === ans.liability_clarity);
-    const liabilityFactor = liabilityObj?.factor || 0.75;
-    const neoCap = stateData?.non_economic_damage_cap || null;
-
-    let nonEconLow = medicalTotal * multLow;
-    let nonEconHigh = medicalTotal * multHigh;
-    let capApplied = false;
-    if (neoCap && nonEconHigh > neoCap) { nonEconHigh = neoCap; capApplied = true; }
-    if (neoCap && nonEconLow > neoCap) nonEconLow = neoCap;
-
-    const baseLow = (economicDamages + nonEconLow) * stateFactor * liabilityFactor;
-    const baseHigh = (economicDamages + nonEconHigh) * stateFactor * liabilityFactor;
-    const repLow = baseLow * 2.0;
-    const repHigh = baseHigh * 3.5;
-
-    const solYears = stateData?.statute_of_limitations_years || 2;
-    const incidentDate = ans.incident_date ? new Date(ans.incident_date) : null;
-    const solDeadline = incidentDate ? new Date(incidentDate.getFullYear() + solYears, incidentDate.getMonth(), incidentDate.getDate()) : null;
-    const daysRemaining = solDeadline ? Math.max(0, Math.floor((solDeadline - new Date()) / (1000 * 60 * 60 * 24))) : null;
+    const est = computeEstimate(ans, injuryTiers, stateData);
+    const {
+      bills, futureMedical, lostWages, futureWages, economicDamages,
+      nonEconLow, nonEconHigh, multLow, multHigh, stateFactor,
+      liabilityFactor, capApplied, neoCap, injuryTier,
+    } = est;
+    // The final headline never sits below whatever the live counter already
+    // showed the user during the quiz.
+    const finalHigh = Math.max(displayHigh, est.estimateHigh);
+    const finalLow = Math.min(est.estimateLow, finalHigh);
+    const { solDeadline, daysRemaining, expired } = computeSol(ans.incident_date, stateData);
 
     const stored = (k) => sessionStorage.getItem(`cmc_${k}`) || "";
     base44.entities.ClaimEstimate.create({
@@ -766,7 +745,7 @@ export default function ClaimEstimatorPage({ experiment }) {
       non_economic_low: Math.round(nonEconLow), non_economic_high: Math.round(nonEconHigh),
       multiplier_low: multLow, multiplier_high: multHigh,
       state_factor: stateFactor, liability_factor: liabilityFactor,
-      estimate_low: Math.round(repLow / 500) * 500, estimate_high: Math.round(repHigh / 500) * 500,
+      estimate_low: finalLow, estimate_high: finalHigh,
       utm_source: stored("utm_source") || "CMC-Site",
       utm_medium: stored("utm_medium") || "estimator",
       utm_campaign: stored("utm_campaign") || "Experiment",
@@ -775,12 +754,12 @@ export default function ClaimEstimatorPage({ experiment }) {
     }).catch(() => {});
 
     setResults({
-      estimateLow: Math.round(repLow / 500) * 500,
-      estimateHigh: Math.round(repHigh / 500) * 500,
+      estimateLow: finalLow,
+      estimateHigh: finalHigh,
       bills, futureMedical, lostWages, futureWages, economicDamages,
-      nonEconLow: Math.round(nonEconLow), nonEconHigh: Math.round(nonEconHigh),
+      nonEconLow, nonEconHigh,
       multLow, multHigh, stateFactor, liabilityFactor, capApplied, neoCap,
-      daysRemaining, solDeadline, stateData, injuryTier, sessionId, answers: ans,
+      daysRemaining, solDeadline, expired, stateData, injuryTier, sessionId, answers: ans,
     });
     setShowOptIn(true);
   };
