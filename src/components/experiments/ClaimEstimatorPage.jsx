@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { buildSurveyUrl, captureIncomingParams, incrementExpClicks, incrementExpViews } from "@/lib/surveyUrl";
-import { Clock, TrendingUp, ChevronDown, ChevronUp, CheckCircle, Star, ArrowRight, Phone } from "lucide-react";
+import { Clock, TrendingUp, ChevronDown, ChevronUp, CheckCircle, Shield, Star, ArrowRight, Phone } from "lucide-react";
 import SettlementTickerMini from "./shared/SettlementTickerMini";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/699c8efa75d8857518d34273/a32c079ff_DarkMode-PrimaryLogo_CheckMyClaim.png";
@@ -24,62 +24,29 @@ const US_STATES = [
   ["VT","Vermont"],["VA","Virginia"],["WA","Washington"],["WV","West Virginia"],["WI","Wisconsin"],["WY","Wyoming"]
 ];
 
-// Values below mirror SurveySeeder.jsx so the LeadsHook handoff needs no
-// translation layer.
 const ACCIDENT_TYPES = [
-  { value: "auto", label: "Auto / Motorcycle", icon: "🚗" },
-  { value: "commercial", label: "Commercial / Semi", icon: "🚛" },
-  { value: "rideshare_passenger", label: "Passenger / Rideshare / Pedestrian", icon: "🚕" },
-  { value: "work_other_none", label: "At Work / Other", icon: "🦺" },
+  { value: "auto", label: "Auto Accident", icon: "🚗" },
+  { value: "motorcycle", label: "Motorcycle", icon: "🏍️" },
+  { value: "rideshare_passenger", label: "Rideshare Passenger", icon: "🚕" },
+  { value: "rideshare_other", label: "Hit by Rideshare Driver", icon: "🚖" },
+  { value: "pedestrian", label: "Pedestrian Struck", icon: "🚶" },
+  { value: "cyclist", label: "Cyclist Struck", icon: "🚴" },
+  { value: "commercial_truck", label: "Commercial Truck", icon: "🚛" },
+  { value: "other", label: "Other / Unsure", icon: "❓" },
 ];
-
-// Survey injury_type values. severity is a 0-4 rank used to pick the matching
-// InjuryMultiplier tier; with multi-select we take the highest rank chosen.
-// short/group drive the compact two-column picker.
-const INJURY_TYPES = [
-  { value: "fatality", label: "Fatality / Wrongful Death", short: "Fatality", group: "Catastrophic", severity: 4 },
-  { value: "spinal", label: "Spinal Cord Injury / Paralysis", short: "Spinal / paralysis", group: "Catastrophic", severity: 4 },
-  { value: "amputation", label: "Loss of Limb / Amputation", short: "Amputation", group: "Catastrophic", severity: 4 },
-  { value: "brain", label: "Brain Injury / Memory Loss", short: "Brain injury", group: "Catastrophic", severity: 3 },
-  { value: "fractures", label: "Fractures / Broken Bones", short: "Fractures", group: "Serious", severity: 2 },
-  { value: "headaches", label: "Headaches / Concussion", short: "Concussion", group: "Serious", severity: 2 },
-  { value: "back_neck_shoulder", label: "Back / Neck / Shoulder", short: "Back / neck", group: "Soft tissue", severity: 1 },
-  { value: "whiplash", label: "Whiplash", short: "Whiplash", group: "Soft tissue", severity: 1 },
-  { value: "cuts_bruises", label: "Cuts / Bruises / Burns", short: "Cuts / burns", group: "Soft tissue", severity: 1 },
-  { value: "other", label: "Other", short: "Other", group: "Soft tissue", severity: 1 },
-  { value: "none", label: "No Injury", short: "No injury", group: "", severity: 0 },
-];
-
-const INJURY_GROUPS = ["Catastrophic", "Serious", "Soft tissue"];
 
 const LIABILITY_OPTIONS = [
-  { value: "not_at_fault", label: "No, someone else caused it", factor: 1.0, icon: "✅" },
-  { value: "both_unsure", label: "We were both at fault / not sure", factor: 0.75, icon: "⚖️" },
-  { value: "hit_run_single", label: "Hit & run / single-vehicle / animal", factor: 0.60, icon: "❓" },
-  { value: "at_fault", label: "Yes, I caused the accident", factor: 0.50, icon: "⚠️" },
-];
-
-const ATTORNEY_OPTIONS = [
-  { value: "never", label: "No, never worked with an attorney" },
-  { value: "worked_with", label: "Yes, I have worked with one" },
-  { value: "currently_represented", label: "I have one right now" },
-  { value: "rejected_or_settled", label: "My claim was rejected or settled" },
+  { value: "clear_other_fault", label: "Clearly the other party's fault", factor: 1.0, icon: "✅" },
+  { value: "disputed", label: "Disputed — liability is contested", factor: 0.65, icon: "⚖️" },
+  { value: "partial_fault", label: "I was partially at fault", factor: 0.85, icon: "⚠️" },
+  { value: "unclear", label: "Unclear — I'm not sure", factor: 0.75, icon: "❓" },
 ];
 
 const TREATMENT_OPTIONS = [
-  { value: "yes", label: "Yes, I was treated", futureFactor: 0.35 },
-  { value: "no", label: "No, I was not treated", futureFactor: 0.10 },
-];
-
-// Bands mirror the survey. "over_12_months" is what keeps the statute of
-// limitations check alive; without a long tail every claim looks in-window.
-const DATE_BUCKETS = [
-  { value: "1_7_days", label: "In the last 7 days", daysAgo: 4 },
-  { value: "7_14_days", label: "7 to 14 days ago", daysAgo: 11 },
-  { value: "1_2_months", label: "1 to 2 months ago", daysAgo: 45 },
-  { value: "3_6_months", label: "3 to 6 months ago", daysAgo: 135 },
-  { value: "6_12_months", label: "6 to 12 months ago", daysAgo: 270 },
-  { value: "over_12_months", label: "More than 12 months ago", daysAgo: 730 },
+  { value: "er_only", label: "ER visit only", sub: "No follow-up treatment yet", futureFactor: 0.10 },
+  { value: "ongoing", label: "Currently in treatment", sub: "PT, chiro, specialist visits ongoing", futureFactor: 0.50 },
+  { value: "completed", label: "Treatment completed", sub: "All care has concluded", futureFactor: 0.20 },
+  { value: "none_yet", label: "Have not been treated yet", sub: "I have not seen a doctor", futureFactor: 0.40 },
 ];
 
 const MISSED_WORK_OPTIONS = [
@@ -89,261 +56,6 @@ const MISSED_WORK_OPTIONS = [
   { value: "month_plus", label: "A month or more", wages: 22000, futureWages: 18000 },
   { value: "unable_to_return", label: "Unable to return to my job", wages: 75000, futureWages: 90000 },
 ];
-
-// Representation uplift band, named so it can be tuned or removed in one place
-// instead of being buried inside the math.
-const REP_LOW = 2.0;
-const REP_HIGH = 3.5;
-
-const STATE_NAME = Object.fromEntries(US_STATES);
-
-// Conservative stand-in for medical bills before the user has told us.
-// Deliberately biased LOW so the real answer almost always pushes the running
-// estimate up rather than down.
-function placeholderBills(multHigh) {
-  if (!multHigh) return 800;
-  if (multHigh <= 1.5) return 800;
-  if (multHigh <= 2.5) return 2000;
-  if (multHigh <= 3.5) return 5000;
-  if (multHigh <= 5) return 15000;
-  return 40000;
-}
-
-// Single source of truth for the damages math. Called on every tap to drive the
-// live counter, and again at the end for the final result. Unanswered fields
-// fall back to the most conservative value in their range, so answering a
-// question can only add information and therefore value.
-// Injuries are multi-select. Severity is driven by the worst one chosen, then
-// mapped onto whatever InjuryMultiplier tiers exist by ranking them on
-// multiplier_high. That keeps this correct if tiers are edited in admin.
-function tierForInjuries(injuryTypes, injuryTiers) {
-  if (!injuryTypes?.length || !injuryTiers?.length) return null;
-  const ranks = injuryTypes
-    .map(v => INJURY_TYPES.find(i => i.value === v)?.severity)
-    .filter(r => r !== undefined);
-  if (!ranks.length) return null;
-  const worst = Math.max(...ranks);
-  const sorted = [...injuryTiers].sort((a, b) => (a.multiplier_high || 0) - (b.multiplier_high || 0));
-  const idx = Math.round((worst / 4) * (sorted.length - 1));
-  return sorted[Math.min(sorted.length - 1, Math.max(0, idx))];
-}
-
-function computeEstimate(ans, injuryTiers, stateData) {
-  const tier = tierForInjuries(ans.injury_types, injuryTiers);
-  const multLow = tier?.multiplier_low ?? 1.2;
-  const multHigh = tier?.multiplier_high ?? 1.5;
-
-  const billsAnswered = ans.total_medical_bills !== undefined && ans.total_medical_bills !== "";
-  const bills = billsAnswered ? (parseFloat(ans.total_medical_bills) || 0) : placeholderBills(multHigh);
-
-  const treatment = TREATMENT_OPTIONS.find(t => t.value === ans.treatment_status);
-  const futureFactor = treatment ? treatment.futureFactor : 0.10;
-  const futureMedical = bills * futureFactor;
-
-  const mw = MISSED_WORK_OPTIONS.find(m => m.value === ans.missed_work);
-  const lostWages = mw?.wages ?? 0;
-  const futureWages = mw?.futureWages ?? 0;
-
-  const economicDamages = bills + futureMedical + lostWages + futureWages;
-  const medicalTotal = bills + futureMedical;
-
-  const stateFactor = stateData?.base_multiplier_factor ?? 0.92;
-  const liability = LIABILITY_OPTIONS.find(l => l.value === ans.liability_clarity);
-  const liabilityFactor = liability ? liability.factor : 0.65;
-  const neoCap = stateData?.non_economic_damage_cap || null;
-
-  let nonEconLow = medicalTotal * multLow;
-  let nonEconHigh = medicalTotal * multHigh;
-  let capApplied = false;
-  if (neoCap && nonEconHigh > neoCap) { nonEconHigh = neoCap; capApplied = true; }
-  if (neoCap && nonEconLow > neoCap) nonEconLow = neoCap;
-
-  const baseLow = (economicDamages + nonEconLow) * stateFactor * liabilityFactor;
-  const baseHigh = (economicDamages + nonEconHigh) * stateFactor * liabilityFactor;
-
-  return {
-    bills, billsAnswered, futureMedical, lostWages, futureWages,
-    economicDamages, medicalTotal, multLow, multHigh,
-    stateFactor, liabilityFactor, capApplied, neoCap, injuryTier: tier,
-    nonEconLow: Math.round(nonEconLow), nonEconHigh: Math.round(nonEconHigh),
-    estimateLow: Math.round((baseLow * REP_LOW) / 500) * 500,
-    estimateHigh: Math.round((baseHigh * REP_HIGH) / 500) * 500,
-  };
-}
-
-function bucketToDate(bucketValue) {
-  const b = DATE_BUCKETS.find(x => x.value === bucketValue);
-  if (!b) return null;
-  const d = new Date();
-  d.setDate(d.getDate() - b.daysAgo);
-  return d.toISOString().split("T")[0];
-}
-
-function computeSol(incidentDate, stateData) {
-  const solYears = stateData?.statute_of_limitations_years || 2;
-  if (!incidentDate) return { solDeadline: null, daysRemaining: null, expired: false, solYears };
-  const d = new Date(incidentDate);
-  if (isNaN(d.getTime())) return { solDeadline: null, daysRemaining: null, expired: false, solYears };
-  const solDeadline = new Date(d.getFullYear() + solYears, d.getMonth(), d.getDate());
-  const raw = Math.floor((solDeadline - new Date()) / 86400000);
-  return { solDeadline, daysRemaining: Math.max(0, raw), expired: raw <= 0, solYears };
-}
-
-// Fallback proof items. Illustrative only, used when no real record qualifies.
-const FALLBACK_PROOF = [
-  { state: "NJ", amount: 178000 }, { state: "FL", amount: 214500 },
-  { state: "TX", amount: 156000 }, { state: "IL", amount: 262000 },
-  { state: "GA", amount: 133500 }, { state: "AZ", amount: 197500 },
-  { state: "CA", amount: 288000 }, { state: "NY", amount: 241000 },
-];
-
-// Only surface meaningful figures in the ticker.
-const PROOF_MIN = 100000;
-
-
-
-// ─── Gate A/B variant ───────────────────────────────────────────────────
-// "reveal"  → the figure is legible throughout, and is revealed in full on the
-//             form page. The primary action there is a phone call, with the
-//             callback form as the secondary path.
-// "blurred" → the figure is blurred for the entire flow, including the form
-//             page. Submitting the form is the only way to read it.
-//
-// Resolution order:
-//   1. ?ad_label=reveal|blurred   — set this in the email link to pin an arm
-//   2. ?gate=reveal|blurred       — QA override
-//   3. whatever was resolved earlier this session
-//   4. random 50/50
-// The variant is stored under its own key. We never overwrite cmc_ad_label,
-// so a real campaign label (e.g. ad_label=welcome-seq-3) survives intact.
-const GATE_VARIANTS = ["reveal", "blurred"];
-
-function resolveGateVariant() {
-  try {
-    const params = new URLSearchParams(window.location.search);
-    const fromAd = params.get("ad_label");
-    const fromQa = params.get("gate");
-    const stored = sessionStorage.getItem("cmc_gate_variant");
-
-    let variant;
-    if (GATE_VARIANTS.includes(fromAd)) variant = fromAd;
-    else if (GATE_VARIANTS.includes(fromQa)) variant = fromQa;
-    else if (GATE_VARIANTS.includes(stored)) variant = stored;
-    else variant = Math.random() < 0.5 ? "reveal" : "blurred";
-
-    sessionStorage.setItem("cmc_gate_variant", variant);
-    return variant;
-  } catch {
-    return "reveal";
-  }
-}
-
-// ─── Animated count-up ────────────────────────────────────────────────────
-function useCountUp(target, duration = 750) {
-  const [val, setVal] = useState(target);
-  const fromRef = useRef(target);
-  useEffect(() => {
-    const from = fromRef.current;
-    if (from === target) return;
-    let raf, start;
-    const tick = (t) => {
-      if (!start) start = t;
-      const p = Math.min(1, (t - start) / duration);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setVal(Math.round(from + (target - from) * eased));
-      if (p < 1) raf = requestAnimationFrame(tick);
-      else { fromRef.current = target; setVal(target); }
-    };
-    raf = requestAnimationFrame(tick);
-    return () => raf && cancelAnimationFrame(raf);
-  }, [target, duration]);
-  return val;
-}
-
-// ─── Sticky live estimate card ────────────────────────────────────────────
-function EstimateCard({ high, low, started, step, total, sol, blurred }) {
-  const shown = useCountUp(high);
-  const pct = Math.round(((step + 1) / total) * 100);
-  const hide = blurred && started;
-
-  return (
-    <div className="sticky top-0 z-30 px-4 pt-3 pb-3 bg-[#0a1628]/95 backdrop-blur-sm border-b border-white/5">
-      <div className="max-w-xl mx-auto">
-        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3">
-          <div className="flex items-center justify-between gap-3">
-            <div className="min-w-0">
-              <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-slate-500 mb-0.5">
-                Estimated case value
-              </div>
-              {started ? (
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-slate-500 text-xs">up to</span>
-                  <span
-                    aria-hidden={hide ? "true" : undefined}
-                    className={`text-2xl font-black text-emerald-400 tabular-nums leading-none transition-all duration-300 ${hide ? "blur-[9px] select-none" : ""}`}
-                  >
-                    {fmt(shown)}
-                  </span>
-                </div>
-              ) : (
-                <div className="text-2xl font-black text-emerald-400 tabular-nums leading-none">$0</div>
-              )}
-            </div>
-            <div className="text-right shrink-0">
-              <span className="inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider text-emerald-300">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> Live
-              </span>
-              <div className="text-[10px] text-slate-500 mt-1">Step {step + 1} of {total}</div>
-            </div>
-          </div>
-
-          <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden mt-2.5">
-            <div className="h-full bg-emerald-400 transition-all duration-500 rounded-full" style={{ width: `${pct}%` }} />
-          </div>
-
-          <div className="flex items-center justify-between gap-2 mt-2">
-            <span className="text-[10px] text-slate-500">
-              {!started
-                ? "Builds with each answer"
-                : hide
-                  ? "🔒 Unlock your figure at the end"
-                  : `Range ${fmt(low)} – ${fmt(high)}`}
-            </span>
-            {sol?.daysRemaining !== null && sol?.daysRemaining !== undefined && (
-              <span className={`text-[10px] font-semibold ${sol.expired ? "text-amber-400" : "text-emerald-400"}`}>
-                {sol.expired ? "⚠ Filing window passed" : "✓ Within filing window"}
-              </span>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─── Rotating social proof ────────────────────────────────────────────────
-// Once the user has picked a state we prefer a real record from that state.
-// If none qualifies we fall back to another real record rather than inventing
-// a figure for their state.
-function ProofTicker({ items, index, selectedState }) {
-  if (!items || items.length === 0) return null;
-  const local = selectedState ? items.filter(i => i.state === selectedState) : [];
-  const pool = local.length > 0 ? local : items;
-  const item = pool[index % pool.length];
-  const isLocal = local.length > 0;
-
-  return (
-    <div className="px-4 pt-3 flex justify-center">
-      <div
-        key={`${item.state}-${item.amount}-${index}`}
-        className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm border ${isLocal ? "bg-emerald-500/10 border-emerald-500/30 text-slate-200" : "bg-white/5 border-white/10 text-slate-300"}`}>
-        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-        <span>Recent estimate in {STATE_NAME[item.state] || item.state}:</span>
-        <strong className="text-emerald-300 font-bold">{fmt(item.amount)}</strong>
-      </div>
-    </div>
-  );
-}
 
 // ─── Header ───────────────────────────────────────────────────────────────
 function Header({ experiment }) {
@@ -415,7 +127,7 @@ function TCPADisclaimer() {
 }
 
 // ─── Opt-in gate (shown instead of results) ───────────────────────────────
-function OptInGate({ results, experiment, onSubmit, submitting, error, variant = "blurred" }) {
+function OptInGate({ results, experiment, onSubmit, submitting, error }) {
   const [form, setForm] = useState({ first_name: "", last_name: "", phone: "", email: "", zip: "" });
 
   const formatPhone = (val) => {
@@ -441,51 +153,26 @@ function OptInGate({ results, experiment, onSubmit, submitting, error, variant =
       <div className="flex-1 flex items-center justify-center px-4 py-10">
         <div className="max-w-xl w-full">
 
-          {/* Teaser banner — varies by A/B arm */}
-          {variant === "reveal" ? (
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/40 text-green-400 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
-                <CheckCircle className="w-3.5 h-3.5" /> Your Estimate Is Ready
-              </div>
-              <div className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500 mb-2">
-                Estimated case value
-              </div>
-              <div className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#2BB6F6] to-emerald-400 mb-5">
+          {/* Teaser banner — big and persuasive */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/40 text-green-400 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
+              <CheckCircle className="w-3.5 h-3.5" /> Your Estimate Is Ready
+            </div>
+            <h1 className="text-4xl md:text-5xl font-black text-white mb-3 leading-tight">
+              Your claim may be worth more than you think
+            </h1>
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#2BB6F6] to-emerald-400 blur-sm select-none">
                 {fmt(estimateLow)} – {fmt(estimateHigh)}
               </div>
-              <h1 className="text-2xl md:text-3xl font-black text-white mb-4 leading-tight max-w-lg mx-auto">
-                Want to work with someone who can start fighting for this level of compensation?
-              </h1>
-              <a
-                href={`tel:${PHONE_RAW}`}
-                onClick={() => experiment && incrementExpClicks(experiment, base44)}
-                className="inline-flex items-center justify-center gap-2.5 w-full max-w-sm mx-auto py-4 px-6 rounded-xl font-black text-lg text-white transition-all"
-                style={{ background: "linear-gradient(135deg, #16a34a, #22c55e)", boxShadow: "0 8px 24px rgba(34,197,94,0.35)" }}>
-                <Phone className="w-5 h-5" /> Call {PHONE}
-              </a>
-              <p className="text-slate-500 text-xs mt-3">Free consultation. No obligation. No win, no fee.</p>
             </div>
-          ) : (
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/40 text-green-400 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
-                <CheckCircle className="w-3.5 h-3.5" /> Your Estimate Is Ready
-              </div>
-              <h1 className="text-4xl md:text-5xl font-black text-white mb-3 leading-tight">
-                Your claim may be worth more than you think
-              </h1>
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <div aria-hidden="true" className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#2BB6F6] to-emerald-400 blur-[26px] opacity-80 select-none pointer-events-none">
-                  {fmt(estimateLow)} – {fmt(estimateHigh)}
-                </div>
-              </div>
-              <div className="inline-block bg-yellow-400/10 border border-yellow-400/30 text-yellow-300 text-sm font-semibold px-5 py-2 rounded-xl mb-5">
-                🔒 Unlock your full breakdown — takes 30 seconds
-              </div>
-              <p className="text-slate-300 text-base leading-relaxed max-w-md mx-auto">
-                Insurers count on you <strong className="text-white">not knowing this number</strong>. Their first offer is typically <span className="text-red-400 font-bold">25% or less</span> of what a represented claimant receives. Enter your info below to reveal your full estimate and get matched with a vetted attorney in your state — <span className="text-green-400 font-semibold">free, no obligation</span>.
-              </p>
+            <div className="inline-block bg-yellow-400/10 border border-yellow-400/30 text-yellow-300 text-sm font-semibold px-5 py-2 rounded-xl mb-5">
+              🔒 Unlock your full breakdown — takes 30 seconds
             </div>
-          )}
+            <p className="text-slate-300 text-base leading-relaxed max-w-md mx-auto">
+              Insurers count on you <strong className="text-white">not knowing this number</strong>. Their first offer is typically <span className="text-red-400 font-bold">25% or less</span> of what a represented claimant receives. Enter your info below to reveal your full estimate and get matched with a vetted attorney in your state — <span className="text-green-400 font-semibold">free, no obligation</span>.
+            </p>
+          </div>
 
           {/* Trust badges */}
           <div className="flex flex-wrap justify-center gap-3 mb-8">
@@ -496,30 +183,24 @@ function OptInGate({ results, experiment, onSubmit, submitting, error, variant =
 
           {/* Form card */}
           <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm">
-            <h2 className="text-lg font-bold text-white mb-1 text-center">
-              {variant === "reveal" ? "Prefer we call you?" : "See Your Full Estimate"}
-            </h2>
-            <p className="text-slate-400 text-sm text-center mb-5">
-              {variant === "reveal"
-                ? "Leave your details and a vetted attorney in your state will reach out."
-                : "We'll match you with the best attorney for your case."}
-            </p>
+            <h2 className="text-lg font-bold text-white mb-1 text-center">See Your Full Estimate</h2>
+            <p className="text-slate-400 text-sm text-center mb-5">We'll match you with the best attorney for your case.</p>
 
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <input value={form.first_name} onChange={e => setForm(f => ({ ...f, first_name: e.target.value }))}
-                  placeholder="First Name" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-base" />
+                  placeholder="First Name" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-sm" />
                 <input value={form.last_name} onChange={e => setForm(f => ({ ...f, last_name: e.target.value }))}
-                  placeholder="Last Name" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-base" />
+                  placeholder="Last Name" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-sm" />
               </div>
               <input type="tel" value={form.phone} onChange={handlePhone}
-                placeholder="Mobile Number (US)" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-base"
+                placeholder="Mobile Number (US)" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-sm"
                 maxLength={14} />
               {form.phone && !isValidPhone && <p className="text-amber-400 text-xs px-1">Please enter a valid 10-digit US number.</p>}
               <input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                placeholder="Email Address" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-base" />
+                placeholder="Email Address" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-sm" />
               <input value={form.zip} onChange={e => setForm(f => ({ ...f, zip: e.target.value.replace(/\D/g,"").slice(0,5) }))}
-                placeholder="Zip Code" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-base"
+                placeholder="Zip Code" className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#2BB6F6] text-sm"
                 maxLength={5} />
               {form.zip.length === 5 && !isValidZip && <p className="text-amber-400 text-xs px-1">Please enter a valid 5-digit zip code.</p>}
 
@@ -528,7 +209,7 @@ function OptInGate({ results, experiment, onSubmit, submitting, error, variant =
               <button onClick={() => canSubmit && onSubmit(form)} disabled={!canSubmit || submitting}
                 className="w-full py-4 rounded-xl font-black text-lg text-white transition-all disabled:opacity-40 flex items-center justify-center gap-2"
                 style={{ background: canSubmit ? "linear-gradient(135deg, #2BB6F6, #1e90ff)" : "rgba(100,116,139,0.4)", boxShadow: canSubmit ? "0 8px 24px rgba(43,182,246,0.4)" : "none" }}>
-                {submitting ? "Connecting you..." : <><ArrowRight className="w-5 h-5" /> {variant === "reveal" ? "Request My Callback" : "Reveal My Estimate & Get Matched"}</>}
+                {submitting ? "Connecting you..." : <><ArrowRight className="w-5 h-5" /> Reveal My Estimate &amp; Get Matched</>}
               </button>
             </div>
 
@@ -665,7 +346,7 @@ function ResultsPage({ results, experiment }) {
 
         {/* Recent settlements */}
         <div className="mb-8">
-          <SettlementTickerMini stateCode={answers.state} injuryTier={(answers.injury_types || [])[0]} accidentType={answers.accident_type} limit={5} />
+          <SettlementTickerMini stateCode={answers.state} injuryTier={answers.injury_severity_tier} accidentType={answers.accident_type} limit={5} />
         </div>
 
         {/* Educational content */}
@@ -781,49 +462,22 @@ export default function ClaimEstimatorPage({ experiment }) {
   const [sessionId] = useState(() => "est_" + Math.random().toString(36).substr(2, 12));
   const autoNextTimer = useRef(null);
 
-  const [displayHigh, setDisplayHigh] = useState(0);
-  const [proofItems, setProofItems] = useState(FALLBACK_PROOF);
-  const [gateVariant] = useState(resolveGateVariant);
-
   const STEPS = [
-    { id: "accident_type", title: "What type of accident were you in?", subtitle: "Tap one to start calculating your estimate." },
-    { id: "state", title: "Where did the accident happen?", subtitle: "State law significantly affects value and timeline." },
-    { id: "injury_types", title: "What injuries did you suffer?", subtitle: "Select all that apply." },
-    { id: "total_medical_bills", title: "Total medical bills so far?", subtitle: "Include ER, imaging, specialists, PT, prescriptions." },
+    { id: "injury_severity_tier", title: "How serious are your injuries?", subtitle: "This is the single biggest driver of claim value." },
+    { id: "accident_type", title: "What type of accident was it?", subtitle: "Different accidents carry different insurance coverage." },
+    { id: "incident_date", title: "When did it happen?", subtitle: "We use this to calculate your statute of limitations urgency." },
+    { id: "state", title: "Where did it happen?", subtitle: "State laws significantly affect your claim value and timeline." },
+    { id: "liability_clarity", title: "How clear is fault?", subtitle: "Liability clarity is one of the biggest value drivers." },
+    { id: "treatment_status", title: "Are you still in treatment?", subtitle: "Documented treatment is critical to your claim." },
     { id: "missed_work", title: "Have you missed work?", subtitle: "Lost wages are recoverable economic damages." },
-    { id: "treatment_status", title: "Did you receive medical treatment?", subtitle: "Documented treatment is critical to your claim." },
-    { id: "incident_date", title: "When did the accident happen?", subtitle: "Most claims are valid for a limited time." },
-    { id: "liability_clarity", title: "Were you at fault for the accident?", subtitle: "If someone else caused it, you may be owed more." },
-    { id: "attorney_status", title: "Have you worked with an attorney on this?", subtitle: "Last question." },
+    { id: "total_medical_bills", title: "Total medical bills so far?", subtitle: "Include ER, imaging, specialists, PT, prescriptions." },
+    { id: "notes", title: "Anything else? (optional)", subtitle: "This helps personalize your results. 200 characters max." },
   ];
-
-  // Live estimate, recomputed on every answer.
-  const live = computeEstimate(answers, injuryTiers, stateData);
-  const sol = computeSol(answers.incident_date, stateData);
-  const started = !!answers.accident_type;
-
-  // Monotonic display: the headline figure never ticks downward. Because every
-  // unanswered field defaults to the floor of its range in computeEstimate,
-  // this clamp is a safety net rather than the mechanism.
-  useEffect(() => {
-    if (!started) return;
-    setDisplayHigh(prev => Math.max(prev, live.estimateHigh));
-  }, [live.estimateHigh, started]);
 
   useEffect(() => {
     captureIncomingParams();
     if (experiment) incrementExpViews(experiment, base44);
     base44.entities.InjuryMultiplier.list("display_order", 10).then(tiers => setInjuryTiers(tiers.filter(t => t.is_active)));
-    // Real recent estimates for the proof ticker, falling back to samples.
-    base44.entities.ClaimEstimate.list("-created_date", 40)
-      .then(rows => {
-        const real = (rows || [])
-          .filter(r => r.state && r.estimate_high >= PROOF_MIN)
-          .map(r => ({ state: r.state, amount: r.estimate_high }))
-          .slice(0, 20);
-        if (real.length >= 4) setProofItems(real);
-      })
-      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -836,7 +490,7 @@ export default function ClaimEstimatorPage({ experiment }) {
   const currentVal = answers[currentStep.id];
 
   const canProceed = () => {
-    if (currentStep.id === "injury_types") return (currentVal || []).length > 0;
+    if (currentStep.id === "notes") return true;
     if (currentStep.id === "total_medical_bills") return currentVal !== undefined && currentVal !== "" && !isNaN(parseFloat(currentVal)) && parseFloat(currentVal) >= 0;
     return !!currentVal;
   };
@@ -852,45 +506,51 @@ export default function ClaimEstimatorPage({ experiment }) {
     }, 300);
   };
 
-  // Multi-select toggle. "No injury" is exclusive with everything else.
-  const toggleInjury = (value) => {
-    setAnswers(a => {
-      const cur = a.injury_types || [];
-      const selected = cur.includes(value);
-      if (value === "none") return { ...a, injury_types: selected ? [] : ["none"] };
-      const next = selected ? cur.filter(v => v !== value) : [...cur.filter(v => v !== "none"), value];
-      return { ...a, injury_types: next };
-    });
-  };
-
   const computeResultsFromAnswers = (ans = answers) => {
-    const est = computeEstimate(ans, injuryTiers, stateData);
-    const {
-      bills, futureMedical, lostWages, futureWages, economicDamages,
-      nonEconLow, nonEconHigh, multLow, multHigh, stateFactor,
-      liabilityFactor, capApplied, neoCap, injuryTier,
-    } = est;
-    // The final headline never sits below whatever the live counter already
-    // showed the user during the quiz.
-    const finalHigh = Math.max(displayHigh, est.estimateHigh);
-    const finalLow = Math.min(est.estimateLow, finalHigh);
-    const { solDeadline, daysRemaining, expired } = computeSol(ans.incident_date, stateData);
+    const bills = parseFloat(ans.total_medical_bills) || 0;
+    const treatment = TREATMENT_OPTIONS.find(t => t.value === ans.treatment_status);
+    const futureFactor = treatment?.futureFactor || 0.20;
+    const futureMedical = bills * futureFactor;
+    const missedWork = MISSED_WORK_OPTIONS.find(m => m.value === ans.missed_work);
+    const lostWages = missedWork?.wages || 0;
+    const futureWages = missedWork?.futureWages || 0;
+    const economicDamages = bills + futureMedical + lostWages + futureWages;
+    const medicalTotal = bills + futureMedical;
+    const injuryTier = injuryTiers.find(t => t.tier_key === ans.injury_severity_tier);
+    const multLow = injuryTier?.multiplier_low || 1.5;
+    const multHigh = injuryTier?.multiplier_high || 3.0;
+    const stateFactor = stateData?.base_multiplier_factor || 1.0;
+    const liabilityObj = LIABILITY_OPTIONS.find(l => l.value === ans.liability_clarity);
+    const liabilityFactor = liabilityObj?.factor || 0.75;
+    const neoCap = stateData?.non_economic_damage_cap || null;
+
+    let nonEconLow = medicalTotal * multLow;
+    let nonEconHigh = medicalTotal * multHigh;
+    let capApplied = false;
+    if (neoCap && nonEconHigh > neoCap) { nonEconHigh = neoCap; capApplied = true; }
+    if (neoCap && nonEconLow > neoCap) nonEconLow = neoCap;
+
+    const baseLow = (economicDamages + nonEconLow) * stateFactor * liabilityFactor;
+    const baseHigh = (economicDamages + nonEconHigh) * stateFactor * liabilityFactor;
+    const repLow = baseLow * 2.0;
+    const repHigh = baseHigh * 3.5;
+
+    const solYears = stateData?.statute_of_limitations_years || 2;
+    const incidentDate = ans.incident_date ? new Date(ans.incident_date) : null;
+    const solDeadline = incidentDate ? new Date(incidentDate.getFullYear() + solYears, incidentDate.getMonth(), incidentDate.getDate()) : null;
+    const daysRemaining = solDeadline ? Math.max(0, Math.floor((solDeadline - new Date()) / (1000 * 60 * 60 * 24))) : null;
 
     const stored = (k) => sessionStorage.getItem(`cmc_${k}`) || "";
     base44.entities.ClaimEstimate.create({
       session_id: sessionId, state: ans.state, incident_date: ans.incident_date,
       accident_type: ans.accident_type, liability_clarity: ans.liability_clarity,
-      injury_type: (ans.injury_types || [])[0] || "",
-      injury_types: (ans.injury_types || []).join(","),
-      attorney_status: ans.attorney_status || "", treatment_status: ans.treatment_status,
-      missed_work: ans.missed_work, total_medical_bills: bills, 
+      injury_severity_tier: ans.injury_severity_tier, treatment_status: ans.treatment_status,
+      missed_work: ans.missed_work, total_medical_bills: bills, notes: ans.notes || "",
       economic_damages: economicDamages,
       non_economic_low: Math.round(nonEconLow), non_economic_high: Math.round(nonEconHigh),
       multiplier_low: multLow, multiplier_high: multHigh,
       state_factor: stateFactor, liability_factor: liabilityFactor,
-      estimate_low: finalLow, estimate_high: finalHigh,
-      gate_variant: gateVariant,
-      ad_label: stored("ad_label") || gateVariant,
+      estimate_low: Math.round(repLow / 500) * 500, estimate_high: Math.round(repHigh / 500) * 500,
       utm_source: stored("utm_source") || "CMC-Site",
       utm_medium: stored("utm_medium") || "estimator",
       utm_campaign: stored("utm_campaign") || "Experiment",
@@ -899,12 +559,12 @@ export default function ClaimEstimatorPage({ experiment }) {
     }).catch(() => {});
 
     setResults({
-      estimateLow: finalLow,
-      estimateHigh: finalHigh,
+      estimateLow: Math.round(repLow / 500) * 500,
+      estimateHigh: Math.round(repHigh / 500) * 500,
       bills, futureMedical, lostWages, futureWages, economicDamages,
-      nonEconLow, nonEconHigh,
+      nonEconLow: Math.round(nonEconLow), nonEconHigh: Math.round(nonEconHigh),
       multLow, multHigh, stateFactor, liabilityFactor, capApplied, neoCap,
-      daysRemaining, solDeadline, expired, stateData, injuryTier, sessionId, answers: ans,
+      daysRemaining, solDeadline, stateData, injuryTier, sessionId, answers: ans,
     });
     setShowOptIn(true);
   };
@@ -925,18 +585,14 @@ export default function ClaimEstimatorPage({ experiment }) {
         incident_date: answers.incident_date,
         accident_type: answers.accident_type,
         liability_clarity: answers.liability_clarity,
-        injury_type: (answers.injury_types || [])[0] || "",
-        injury_types: (answers.injury_types || []).join(","),
-        attorney_status: answers.attorney_status || "",
+        injury_severity_tier: answers.injury_severity_tier,
         treatment_status: answers.treatment_status,
         missed_work: answers.missed_work,
         total_medical_bills: parseFloat(answers.total_medical_bills) || 0,
-        
+        notes: answers.notes || "",
         economic_damages: results.economicDamages,
         estimate_low: results.estimateLow,
         estimate_high: results.estimateHigh,
-        gate_variant: gateVariant,
-        ad_label: stored("ad_label") || gateVariant,
         full_name: `${form.first_name} ${form.last_name}`.trim(),
         email: form.email,
         phone: form.phone,
@@ -959,7 +615,7 @@ export default function ClaimEstimatorPage({ experiment }) {
 
   // Show opt-in gate before results
   if (showOptIn && results) {
-    return <OptInGate results={results} experiment={experiment} onSubmit={handleOptInSubmit} submitting={submitting} error={submitError} variant={gateVariant} />;
+    return <OptInGate results={results} experiment={experiment} onSubmit={handleOptInSubmit} submitting={submitting} error={submitError} />;
   }
 
   // Show results after opt-in
@@ -968,7 +624,7 @@ export default function ClaimEstimatorPage({ experiment }) {
   }
 
   // ─── Quiz steps ───────────────────────────────────────────────────────
-  const MULTI_CHOICE_STEPS = ["accident_type", "state", "incident_date", "treatment_status", "missed_work", "liability_clarity", "attorney_status"];
+  const MULTI_CHOICE_STEPS = ["injury_severity_tier", "accident_type", "liability_clarity", "treatment_status", "missed_work"];
   const isMultiChoice = MULTI_CHOICE_STEPS.includes(currentStep.id);
 
   return (
@@ -977,131 +633,71 @@ export default function ClaimEstimatorPage({ experiment }) {
 
       {/* Hero — step 0 only */}
       {step === 0 && (
-        <div className="text-center px-5 pt-8 pb-2 max-w-md mx-auto">
-          <h1 className="text-2xl sm:text-3xl font-black text-white leading-tight mb-2">
+        <div className="text-center px-4 pt-10 pb-4 max-w-3xl mx-auto">
+          <div className="inline-flex items-center gap-2 bg-[#2BB6F6]/15 border border-[#2BB6F6]/30 text-[#2BB6F6] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
+            <Shield className="w-3.5 h-3.5" /> Free — No Obligation
+          </div>
+          <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-3">
             {experiment?.hero_headline || "What Is Your Injury Claim Actually Worth?"}
           </h1>
-          <p className="text-slate-400 text-sm">
-            9 quick taps. Free, private, no obligation.
+          <p className="text-slate-300 text-lg mb-2">
+            {experiment?.hero_subheadline || "Answer 9 quick questions. Get a transparent, methodology-backed estimate in under 2 minutes."}
           </p>
+          <div className="flex flex-wrap justify-center gap-3 mt-5">
+            {["✓ Based on real case data", "✓ State-adjusted", "✓ Includes pain & suffering", "✓ 100% private"].map(b => (
+              <span key={b} className="bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold px-3 py-1.5 rounded-full">{b}</span>
+            ))}
+          </div>
         </div>
       )}
 
-      <EstimateCard
-        high={displayHigh}
-        low={live.estimateLow}
-        started={started}
-        step={step}
-        total={STEPS.length}
-        sol={sol}
-        blurred={gateVariant === "blurred"}
-      />
+      <ProgressBar step={step} total={STEPS.length} />
 
-      <ProofTicker items={proofItems} index={step} selectedState={answers.state} />
+      <div className="flex-1 flex items-start justify-center px-4 py-8">
+        <div className="max-w-2xl w-full">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-2">{currentStep.title}</h2>
+          <p className="text-slate-400 mb-6 text-sm">{currentStep.subtitle}</p>
 
-      <div className="flex-1 flex items-start justify-center px-5 py-6">
-        <div className="max-w-md w-full">
-          <h2 className="text-xl font-extrabold text-white mb-1 leading-snug">{currentStep.title}</h2>
-          <p className="text-slate-500 mb-4 text-[13px]">{currentStep.subtitle}</p>
+          {/* INJURY TIER */}
+          {currentStep.id === "injury_severity_tier" && (
+            <div className="grid grid-cols-1 gap-3">
+              {injuryTiers.map(tier => (
+                <button key={tier.tier_key}
+                  onClick={() => pickAndAutoNext("injury_severity_tier", tier.tier_key)}
+                  className={`w-full text-left px-5 py-4 rounded-xl border-2 transition-all ${currentVal === tier.tier_key ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/30"}`}>
+                  <div className={`font-bold text-base mb-1 ${currentVal === tier.tier_key ? "text-white" : "text-slate-200"}`}>{tier.tier_label}</div>
+                  {tier.description && <div className="text-xs text-slate-400 mb-1">{tier.description}</div>}
+                  {tier.example_injuries?.length > 0 && <div className="text-xs text-slate-500">e.g. {tier.example_injuries.slice(0, 3).join(", ")}</div>}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* ACCIDENT TYPE */}
           {currentStep.id === "accident_type" && (
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-3">
               {ACCIDENT_TYPES.map(opt => (
                 <button key={opt.value}
                   onClick={() => pickAndAutoNext("accident_type", opt.value)}
-                  className={`flex items-center gap-2 text-left px-3 min-h-[64px] py-3 rounded-xl border font-medium transition-all active:scale-[0.99] ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
-                  <span className="text-lg shrink-0">{opt.icon}</span>
-                  <span className="text-[13px] leading-tight">{opt.label}</span>
+                  className={`text-left px-4 py-4 rounded-xl border-2 font-medium transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/30"}`}>
+                  <div className="text-2xl mb-1">{opt.icon}</div>
+                  <div className="text-sm">{opt.label}</div>
                 </button>
               ))}
             </div>
           )}
 
-          {/* INJURY TYPES — grouped, two per row */}
-          {currentStep.id === "injury_types" && (
-            <div className="space-y-3">
-              {INJURY_GROUPS.map(group => (
-                <div key={group}>
-                  <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-500 mb-1.5">{group}</div>
-                  <div className="grid grid-cols-2 gap-2">
-                    {INJURY_TYPES.filter(i => i.group === group).map(opt => {
-                      const selected = (currentVal || []).includes(opt.value);
-                      return (
-                        <button key={opt.value}
-                          onClick={() => toggleInjury(opt.value)}
-                          className={`flex items-center gap-2 text-left px-3 min-h-[48px] py-2 rounded-xl border transition-all active:scale-[0.99] ${selected ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/25"}`}>
-                          <span className={`w-4 h-4 rounded shrink-0 border-2 flex items-center justify-center ${selected ? "border-[#2BB6F6] bg-[#2BB6F6]" : "border-white/25"}`}>
-                            {selected && <CheckCircle className="w-3 h-3 text-white" />}
-                          </span>
-                          <span className={`text-[13px] leading-tight ${selected ? "text-white font-semibold" : "text-slate-200"}`}>{opt.short}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-
-              {INJURY_TYPES.filter(i => !i.group).map(opt => {
-                const selected = (currentVal || []).includes(opt.value);
-                return (
-                  <button key={opt.value}
-                    onClick={() => toggleInjury(opt.value)}
-                    className={`w-full flex items-center gap-2 text-left px-3 min-h-[48px] py-2 rounded-xl border transition-all active:scale-[0.99] ${selected ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/25"}`}>
-                    <span className={`w-4 h-4 rounded shrink-0 border-2 flex items-center justify-center ${selected ? "border-[#2BB6F6] bg-[#2BB6F6]" : "border-white/25"}`}>
-                      {selected && <CheckCircle className="w-3 h-3 text-white" />}
-                    </span>
-                    <span className={`text-[13px] ${selected ? "text-white font-semibold" : "text-slate-400"}`}>{opt.short}</span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
-          {/* ATTORNEY STATUS */}
-          {currentStep.id === "attorney_status" && (
-            <div className="grid grid-cols-1 gap-2">
-              {ATTORNEY_OPTIONS.map(opt => (
-                <button key={opt.value}
-                  onClick={() => pickAndAutoNext("attorney_status", opt.value)}
-                  className={`w-full flex items-center text-left px-4 min-h-[56px] py-3 rounded-xl border font-medium text-[15px] transition-all active:scale-[0.99] ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* INCIDENT DATE — fast tap buckets */}
+          {/* INCIDENT DATE */}
           {currentStep.id === "incident_date" && (
-            <div className="grid grid-cols-2 gap-2">
-              {DATE_BUCKETS.map(opt => {
-                const active = answers.date_bucket === opt.value;
-                return (
-                  <button key={opt.value}
-                    onClick={() => {
-                      const derived = bucketToDate(opt.value);
-                      setAnswers(a => ({ ...a, date_bucket: opt.value, incident_date: derived }));
-                      if (autoNextTimer.current) clearTimeout(autoNextTimer.current);
-                      autoNextTimer.current = setTimeout(() => setStep(s => Math.min(STEPS.length - 1, s + 1)), 300);
-                    }}
-                    className={`flex items-center text-left px-3 min-h-[56px] py-3 rounded-xl border font-medium transition-all text-[13px] leading-tight active:scale-[0.99] ${active ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
-                    {opt.label}
-                  </button>
-                );
-              })}
-            </div>
+            <input type="date" value={currentVal || ""} onChange={e => setAnswers(a => ({ ...a, incident_date: e.target.value }))}
+              max={new Date().toISOString().split("T")[0]}
+              className="w-full bg-white border border-slate-200 rounded-xl px-4 py-4 text-slate-800 text-lg font-medium focus:outline-none focus:border-[#2BB6F6]" />
           )}
 
           {/* STATE */}
           {currentStep.id === "state" && (
-            <select value={currentVal || ""}
-              onChange={e => {
-                const v = e.target.value;
-                setAnswers(a => ({ ...a, state: v }));
-                if (autoNextTimer.current) clearTimeout(autoNextTimer.current);
-                if (v) autoNextTimer.current = setTimeout(() => setStep(s => Math.min(STEPS.length - 1, s + 1)), 400);
-              }}
-              className="w-full bg-white border border-slate-200 rounded-xl px-4 min-h-[56px] py-3.5 text-slate-800 text-base font-medium focus:outline-none focus:border-[#2BB6F6]">
+            <select value={currentVal || ""} onChange={e => setAnswers(a => ({ ...a, state: e.target.value }))}
+              className="w-full bg-white border border-slate-200 rounded-xl px-4 py-4 text-slate-800 text-lg font-medium focus:outline-none focus:border-[#2BB6F6]">
               <option value="">— Select your state —</option>
               {US_STATES.map(([code, name]) => <option key={code} value={code}>{name}</option>)}
             </select>
@@ -1109,12 +705,12 @@ export default function ClaimEstimatorPage({ experiment }) {
 
           {/* LIABILITY */}
           {currentStep.id === "liability_clarity" && (
-            <div className="grid grid-cols-1 gap-2">
+            <div className="grid grid-cols-1 gap-3">
               {LIABILITY_OPTIONS.map(opt => (
                 <button key={opt.value}
                   onClick={() => pickAndAutoNext("liability_clarity", opt.value)}
-                  className={`w-full flex items-center text-left px-4 min-h-[56px] py-3 rounded-xl border font-medium text-[15px] transition-all active:scale-[0.99] ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
-                  <span className="mr-2.5">{opt.icon}</span>{opt.label}
+                  className={`w-full text-left px-5 py-4 rounded-xl border-2 font-medium transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/30"}`}>
+                  <span className="mr-2">{opt.icon}</span>{opt.label}
                 </button>
               ))}
             </div>
@@ -1122,12 +718,13 @@ export default function ClaimEstimatorPage({ experiment }) {
 
           {/* TREATMENT */}
           {currentStep.id === "treatment_status" && (
-            <div className="grid grid-cols-1 gap-2">
+            <div className="grid grid-cols-1 gap-3">
               {TREATMENT_OPTIONS.map(opt => (
                 <button key={opt.value}
                   onClick={() => pickAndAutoNext("treatment_status", opt.value)}
-                  className={`w-full flex items-center text-left px-4 min-h-[56px] py-3 rounded-xl border font-medium text-[15px] transition-all active:scale-[0.99] ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
-                  {opt.label}
+                  className={`w-full text-left px-5 py-4 rounded-xl border-2 transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15" : "border-white/10 bg-white/5 hover:border-white/30"}`}>
+                  <div className={`font-semibold ${currentVal === opt.value ? "text-white" : "text-slate-200"}`}>{opt.label}</div>
+                  <div className="text-xs text-slate-400">{opt.sub}</div>
                 </button>
               ))}
             </div>
@@ -1135,12 +732,13 @@ export default function ClaimEstimatorPage({ experiment }) {
 
           {/* MISSED WORK */}
           {currentStep.id === "missed_work" && (
-            <div className="grid grid-cols-1 gap-2">
+            <div className="grid grid-cols-1 gap-3">
               {MISSED_WORK_OPTIONS.map(opt => (
                 <button key={opt.value}
                   onClick={() => pickAndAutoNext("missed_work", opt.value)}
-                  className={`w-full flex items-center text-left px-4 min-h-[56px] py-3 rounded-xl border font-medium text-[15px] transition-all active:scale-[0.99] ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/25"}`}>
-                  {opt.label}
+                  className={`w-full text-left px-5 py-4 rounded-xl border-2 font-medium transition-all ${currentVal === opt.value ? "border-[#2BB6F6] bg-[#2BB6F6]/15 text-white" : "border-white/10 bg-white/5 text-slate-200 hover:border-white/30"}`}>
+                  <span>{opt.label}</span>
+                  {opt.wages > 0 && <span className="ml-2 text-xs text-slate-400">(~{fmt(opt.wages)} assumed)</span>}
                 </button>
               ))}
             </div>
@@ -1158,13 +756,20 @@ export default function ClaimEstimatorPage({ experiment }) {
             </div>
           )}
 
+          {/* NOTES */}
+          {currentStep.id === "notes" && (
+            <textarea value={currentVal || ""} onChange={e => setAnswers(a => ({ ...a, notes: e.target.value.slice(0, 200) }))}
+              placeholder="e.g. I have a herniated disc, was rear-ended at a red light, the other driver was cited..."
+              rows={4} className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:border-[#2BB6F6] resize-none" />
+          )}
+
           {/* Nav buttons */}
-          <div className="flex items-center justify-between mt-6">
+          <div className="flex items-center justify-between mt-8">
             <button onClick={() => setStep(s => Math.max(0, s - 1))} disabled={step === 0}
-              className="px-4 py-2.5 bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white font-semibold rounded-lg text-sm transition-all">
+              className="px-5 py-3 bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white font-semibold rounded-xl text-sm transition-all">
               ← Back
             </button>
-            {(!isMultiChoice || currentStep.id === "total_medical_bills") && (
+            {(!isMultiChoice || currentStep.id === "total_medical_bills" || currentStep.id === "notes" || currentStep.id === "incident_date" || currentStep.id === "state") && (
               <button onClick={next} disabled={!canProceed()}
                 className="px-8 py-3 bg-[#2BB6F6] hover:bg-[#1a9fd8] disabled:opacity-40 text-white font-bold rounded-xl text-sm transition-all">
                 {step === STEPS.length - 1 ? "Calculate My Estimate →" : "Next →"}
