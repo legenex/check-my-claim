@@ -79,6 +79,12 @@ export default function Footer() {
               <Link to={createPageUrl("AdvertisingDisclosure")} onClick={() => window.scrollTo(0, 0)} className="text-[#0285E9] hover:underline text-sm font-medium whitespace-nowrap">
                 Advertising Disclosure
               </Link>
+              <Link to={createPageUrl("PartnerList")} onClick={() => window.scrollTo(0, 0)} className="text-[#0285E9] hover:underline text-sm font-medium whitespace-nowrap">
+                Partner List
+              </Link>
+              <Link to={createPageUrl("sb-37-list")} onClick={() => window.scrollTo(0, 0)} className="text-[#0285E9] hover:underline text-sm font-medium whitespace-nowrap">
+                SB-37 List
+              </Link>
             </div>
           </div>
         </div>
